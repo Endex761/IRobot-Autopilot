@@ -1,13 +1,21 @@
 from vehicle import Driver
+import math
 from Utils import DistanceSensors, PositionSensors
 from Utils import Logger, Status
 
 # constants 
 MAX_SPEED = 1.8
 MAX_ANGLE = 0.5
+PI2 = math.pi * 2
+
+# vehicle dimentions in meters
+WHEEL_RADIUS = 0.020
+LENGTH = 0.180
+WIDTH = 0.098
+HEIGHT = 0.061
 
 logger = Logger()
-logger.DEBUG_ENABLED = True
+logger.DEBUG_ENABLED = False
 
 class Altino:
 
@@ -64,6 +72,10 @@ class Altino:
         self.speed = 0.0
         self.angle = 0.0
 
+        # initial wheel lenght used to calcule how many m the wheels have traveled
+        self.leftWheelLenght = 0.0
+        self.rightWheelLenght = 0.0
+
         # set starting and steering angle to 0
         self.driver.setSteeringAngle(self.speed)
         self.driver.setCruisingSpeed(self.angle)
@@ -90,7 +102,7 @@ class Altino:
         self.driver.setSteeringAngle(self.angle)
 
     def avoidObstacle(self):
-        threshold = 900
+        threshold = 950
         ds = self.distanceSensors
         fl = ds.frontLeft.getValue()
         fc = ds.frontCenter.getValue()
@@ -103,13 +115,27 @@ class Altino:
         
         if rear > threshold:
             return True
+    
+    def updateDistanceTraveled(self):
+        ps = self.positionSensors
+        deltaFLW = ps.frontLeft.getValue()
+        deltaFRW = ps.frontRight.getValue()
 
+        self.leftWheelLenght = deltaFLW * WHEEL_RADIUS
+        self.rightWheelLenght = deltaFRW * WHEEL_RADIUS
+
+        logger.log("Left Wheel Lenght: " + str(self.leftWheelLenght) + " m", logger.DEBUG)
+
+        
         
     # running
     def run(self):
         logger.log("Running..")
         park = False
+        parkLength = 0.0 # lenght of the parking lot
         while self.driver.step() != -1:
+
+            self.updateDistanceTraveled()
 
             if self.avoidObstacle():
                 self.status = Status.STOP
@@ -135,16 +161,22 @@ class Altino:
                 ds = self.distanceSensors
                 logger.log("Left Distance Sensor: " + str(ds.sideLeft.getValue()), logger.DEBUG)
                 ps = self.positionSensors
-                logger.log("Left Position Sensor: " + str(ps.frontLeft.getValue()), logger.DEBUG)
+                logger.log("Left Position Sensor: " + str(ps.frontLeft.getValue()) + " rad", logger.DEBUG)
 
-                if ds.sideLeft.getValue() < 650:
+                threshold = 650
+                logger.log("Parking Lot Length: " + str(self.leftWheelLenght - parkLength), logger.DEBUG)
+                if ds.sideLeft.getValue() < threshold and not park:
                     park = True
+                    parkLength = self.leftWheelLenght
 
                 # park found
-                if park == True and ds.sideLeft.getValue() > 650:
-                    logger.log("Park Found!")
-                    logger.log("Start Parking..")
-                    self.status = Status.PARKING
+                if park == True and ds.sideLeft.getValue() > threshold:
+                    if self.leftWheelLenght - parkLength > LENGTH + 0.02:
+                        logger.log("Park Found!")
+                        logger.log("Start Parking..")
+                        parkLength = self.leftWheelLenght
+                        
+                        self.status = Status.PARKING
 
             if self.status == Status.PARKING:
                 

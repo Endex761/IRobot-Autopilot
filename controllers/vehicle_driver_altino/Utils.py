@@ -1,13 +1,15 @@
-from enum import Enum
+from enum import Enum, auto
 
 class Status(Enum):
-    INIT = 1
-    PARK_FOUND = 2
-    SEARCHING_PARK = 3
-    PARKING = 4
-    PARKING2 = 5
-    FORWARD = 6
-    STOP = 7
+    INIT = auto()
+    PARK_FOUND = auto()
+    SEARCHING_PARK = auto()
+    PARKING = auto()
+    PARKING2 = auto()
+    FORWARD = auto()
+    FORWARD2 = auto()
+    STOP = auto()
+    
 
 class DistanceSensors:
 

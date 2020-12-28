@@ -5,7 +5,7 @@ from Utils import Logger, Status
 
 # constants 
 MAX_SPEED = 1.8
-MAX_ANGLE = 0.5
+MAX_ANGLE = 0.52 # ~30°
 PI2 = math.pi * 2
 
 # vehicle dimentions in meters
@@ -15,7 +15,7 @@ WIDTH = 0.098
 HEIGHT = 0.061
 
 logger = Logger()
-logger.DEBUG_ENABLED = False
+logger.DEBUG_ENABLED = True
 
 class Altino:
 
@@ -68,6 +68,10 @@ class Altino:
         self.positionSensors.rearLeft.enable(self.sensorTimestep)
         self.positionSensors.rearRight.enable(self.sensorTimestep)
 
+        # this ensure sensors are correctily initializated
+        for i in range(int(self.sensorTimestep/self.timestep) + 1):
+            self.driver.step()
+
         # initial speed and steering angle values
         self.speed = 0.0
         self.angle = 0.0
@@ -75,10 +79,7 @@ class Altino:
         # initial wheel lenght used to calcule how many m the wheels have traveled
         self.leftWheelLenght = 0.0
         self.rightWheelLenght = 0.0
-
-        # set starting and steering angle to 0
-        self.driver.setSteeringAngle(self.speed)
-        self.driver.setCruisingSpeed(self.angle)
+        self.updateDistanceTraveled()
 
     # update cruising speed
     def setSpeed(self, speed):
@@ -124,18 +125,16 @@ class Altino:
         self.leftWheelLenght = deltaFLW * WHEEL_RADIUS
         self.rightWheelLenght = deltaFRW * WHEEL_RADIUS
 
-        logger.log("Left Wheel Lenght: " + str(self.leftWheelLenght) + " m", logger.DEBUG)
+        # logger.log("Distance Updated - Left Wheel Lenght: " + str(self.leftWheelLenght) + " m", logger.DEBUG)
 
-        
-        
     # running
     def run(self):
         logger.log("Running..")
-        park = False
-        parkLength = 0.0 # lenght of the parking lot
+        empty = False
+        startingPosition = 0.0 # lenght of the parking lot
         while self.driver.step() != -1:
 
-            self.updateDistanceTraveled()
+            
 
             if self.avoidObstacle():
                 self.status = Status.STOP
@@ -151,6 +150,7 @@ class Altino:
 
                 # set new status
                 self.status = Status.FORWARD
+                continue
 
             if self.status == Status.FORWARD:
                 logger.log("FORWARD status", logger.DEBUG)
@@ -158,32 +158,52 @@ class Altino:
                 self.status = Status.SEARCHING_PARK
             
             if self.status == Status.SEARCHING_PARK:
+ 
                 ds = self.distanceSensors
-                logger.log("Left Distance Sensor: " + str(ds.sideLeft.getValue()), logger.DEBUG)
                 ps = self.positionSensors
+
+                #log info for debug
+                logger.log("Left Distance Sensor: " + str(ds.sideLeft.getValue()), logger.DEBUG)
                 logger.log("Left Position Sensor: " + str(ps.frontLeft.getValue()) + " rad", logger.DEBUG)
+                logger.log("Left Wheel Lenght: " + str(self.leftWheelLenght) + " m", logger.DEBUG)
+                logger.log("Starting position: " + str(startingPosition) + " m", logger.DEBUG)
+                logger.log("Parking Lot Length: " + str(self.leftWheelLenght - startingPosition) + " m", logger.DEBUG)
 
                 threshold = 650
-                logger.log("Parking Lot Length: " + str(self.leftWheelLenght - parkLength), logger.DEBUG)
-                if ds.sideLeft.getValue() < threshold and not park:
-                    park = True
-                    parkLength = self.leftWheelLenght
+                leftSensorValue = ds.sideLeft.getValue()
+                
+                if leftSensorValue < threshold and not empty:
+                    logger.log("leftSensorValue is lower than threshold", logger.DEBUG)
+                    empty = True
+                    logger.log("empty: " + str(empty), logger.DEBUG) 
+                    startingPosition = self.leftWheelLenght
+                    logger.log("startingPosition: " + str(startingPosition), logger.DEBUG)
+                
+                if leftSensorValue > threshold and empty:
+                    logger.log("leftSensorValue is greater than threshold", logger.DEBUG)
+                    empty = False
 
-                # park found
-                if park == True and ds.sideLeft.getValue() > threshold:
-                    if self.leftWheelLenght - parkLength > LENGTH + 0.02:
-                        logger.log("Park Found!")
-                        logger.log("Start Parking..")
-                        parkLength = self.leftWheelLenght
-                        
-                        self.status = Status.PARKING
+                if empty and self.leftWheelLenght - startingPosition > LENGTH + LENGTH/3:
+                    self.status = Status.FORWARD2
+                    startingPosition = self.leftWheelLenght
+                    logger.log("Case all empty", logger.DEBUG)
+
+                if empty and leftSensorValue > threshold and self.leftWheelLenght - startingPosition > LENGTH + LENGTH/3:
+                    self.status = Status.FORWARD2
+                    logger.log("Case a car i infront")
+
+            # going a little bit further to maximise lenght
+            if self.status == Status.FORWARD2:
+                distance = 0.13
+                if self.leftWheelLenght - startingPosition > distance:
+                    self.status = Status.PARKING
 
             if self.status == Status.PARKING:
-                
                 self.setSpeed(0.0)
-                self.setAngle(-0.5)
+                self.setAngle(- MAX_ANGLE)
                 self.setSpeed(-0.1)
 
+                # when should it turn the other way
                 threshold = 600
                 ds = self.distanceSensors
                 rear = ds.back.getValue()
@@ -192,11 +212,13 @@ class Altino:
                     self.status = Status.PARKING2
 
             if self.status == Status.PARKING2:
-                self.setAngle(0.5)
+                self.setAngle(MAX_ANGLE)
 
             if self.status == Status.STOP:
                 self.setSpeed(0.0)
                 self.setAngle(0.0)
+
+            self.updateDistanceTraveled()
         
 
     

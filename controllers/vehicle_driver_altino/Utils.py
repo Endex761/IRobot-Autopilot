@@ -1,6 +1,6 @@
-from enum import Enum, auto
+from enum import IntEnum, auto
 
-class Status(Enum):
+class Status(IntEnum):
     INIT = auto()
     PARK_FOUND = auto()
     SEARCHING_PARK = auto()
@@ -60,6 +60,18 @@ class Logger:
             print(self.ERROR_COLOR + "ERROR: " + str(message) + self.ENDC)
         elif level == self.DEBUG and self.DEBUG_ENABLED:
             print(self.DEBUG_COLOR + "DEBUG: " + str(message) + self.ENDC)
+
+    def error(self, message):
+        self.log(message, self.ERROR)
+
+    def warning(self, message):
+        self.log(message, self.WARNING)
+
+    def info(self, message):
+        self.log(message, self.INFO)
+
+    def debug(self, message):
+        self.log(message, self.DEBUG)
 
 
 

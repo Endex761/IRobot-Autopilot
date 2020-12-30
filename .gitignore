@@ -1,3 +1,5 @@
 /controllers/vehicle_driver_altino/__pycache__
 /protos/*.cache
 /worlds/*.wbproj
+*.vscode
+.gitignore

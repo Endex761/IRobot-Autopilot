@@ -1,30 +1,38 @@
-from vehicle import Driver
-import math
 from Utils import DistanceSensors, PositionSensors
 from Utils import Logger, Status
+import math
+
+logger = Logger()
+logger.DEBUG_ENABLED = False # True
+
+try:
+    from vehicle import Driver
+except ImportError:
+    logger.error("Cannot find vehicle. Make sure you run this inside Webots.")
+    exit(1)
 
 # constants 
 MAX_SPEED = 1.8
-MAX_ANGLE = 0.52 # ~30°
-PI2 = math.pi * 2
+MAX_ANGLE = 0.52 # rads ~ 30°
+LEFT = -1
+RIGHT = 1
 
-# vehicle dimentions in meters
+# vehicle dimensions in meters
 WHEEL_RADIUS = 0.020
 LENGTH = 0.180
 WIDTH = 0.098
 HEIGHT = 0.061
 
-logger = Logger()
-logger.DEBUG_ENABLED = True
 
 class Altino:
 
     def __init__(self):
-        # get Driver object
+        # get Driver object from Webots
         self.driver = Driver()
 
         # set vehicle status
         self.status = Status.INIT
+        self.prevStatus = Status.INIT
 
         # get timestep
         self.timestep = int(self.driver.getBasicTimeStep())
@@ -33,8 +41,11 @@ class Altino:
         self.sensorTimestep = 4 * self.timestep
 
         # get lights
-        headLights = self.driver.getLED("headlights")
-        backLights = self.driver.getLED("backlights")
+        self.headLights = self.driver.getLED("headlights")
+        self.backLights = self.driver.getLED("backlights")
+
+        # turn on headLights
+        # headLights.set(1)
 
         # get distance sensors
         self.distanceSensors = DistanceSensors()
@@ -68,7 +79,7 @@ class Altino:
         self.positionSensors.rearLeft.enable(self.sensorTimestep)
         self.positionSensors.rearRight.enable(self.sensorTimestep)
 
-        # this ensure sensors are correctily initializated
+        # this ensure sensors are correctly initialized
         for i in range(int(self.sensorTimestep/self.timestep) + 1):
             self.driver.step()
 
@@ -76,9 +87,9 @@ class Altino:
         self.speed = 0.0
         self.angle = 0.0
 
-        # initial wheel lenght used to calcule how many m the wheels have traveled
-        self.leftWheelLenght = 0.0
-        self.rightWheelLenght = 0.0
+        # initial wheel length used to calculate how many m the wheels have traveled
+        self.leftWheelDistance = 0.0
+        self.rightWheelDistance = 0.0
         self.updateDistanceTraveled()
 
     # update cruising speed
@@ -91,9 +102,9 @@ class Altino:
             self.speed = -1 * MAX_SPEED
         self.driver.setCruisingSpeed(self.speed)
 
-    
     # update steering angle
     def setAngle(self, angle):
+        # ensure angle stays between -MAX_ANGLE and MAX_ANGLE
         if (angle >= -1 * MAX_ANGLE and angle <= MAX_ANGLE):
             self.angle = angle
         elif (angle > MAX_ANGLE):
@@ -101,6 +112,18 @@ class Altino:
         elif (angle < -1 * MAX_ANGLE):
             self.angle = -1 * MAX_ANGLE
         self.driver.setSteeringAngle(self.angle)
+
+    def setStatus(self, status):
+        # check if new status is a valid state.
+        if status not in list(map(int, Status)):
+            logger.warning("Status: " + str(status) + " is invalid, status is unchanged.")
+            return
+        
+        # backup last status
+        self.prevStatus = self.status
+
+        # set new status
+        self.status = status
 
     def avoidObstacle(self):
         threshold = 950
@@ -117,90 +140,128 @@ class Altino:
         if rear > threshold:
             return True
     
+    # compute distance traveled by wheel in meters
     def updateDistanceTraveled(self):
+        # get position sensors
         ps = self.positionSensors
-        deltaFLW = ps.frontLeft.getValue()
-        deltaFRW = ps.frontRight.getValue()
 
-        self.leftWheelLenght = deltaFLW * WHEEL_RADIUS
-        self.rightWheelLenght = deltaFRW * WHEEL_RADIUS
+        # get radiants from wheel
+        radFLW = ps.frontLeft.getValue()
+        radFRW = ps.frontRight.getValue()
 
-        # logger.log("Distance Updated - Left Wheel Lenght: " + str(self.leftWheelLenght) + " m", logger.DEBUG)
+        # compute distance traveled
+        self.leftWheelDistance = radFLW * WHEEL_RADIUS
+        self.rightWheelDistance = radFRW * WHEEL_RADIUS
+
+        # logger.debug("Distance Updated - Left Wheel Length: " + str(self.leftWheelLength) + " m")
 
     # running
     def run(self):
-        logger.log("Running..")
-        empty = False
-        startingPosition = 0.0 # lenght of the parking lot
-        while self.driver.step() != -1:
+        logger.info("Running..")
+        leftIsEmpty = False  # flag used to detect left parking lot
+        rightIsEmpty = False # flag used to detect right parking lot
+        leftStartingPosition = 0.0  # length of the left parking lot
+        rightStartingPosition = 0.0 # length of the right parking lot
+        sideOfParkingLot = 0 # indicates the side of the parking lot found: -1 left, 1 right, 0 not found yet
 
+        while self.driver.step() != -1:
             
+            ## here goes code that should be executed each step ##
+
+            # update wheels' distance traveled in the current step
+            self.updateDistanceTraveled()
 
             if self.avoidObstacle():
-                self.status = Status.STOP
+                self.setStatus(Status.STOP)
 
+            # here goes code for each STATUS
+            # INIT STATUS 
             if self.status == Status.INIT:
-                logger.log("INIT status", logger.DEBUG)
-                # this ensure distance sensors are correctily created
-                for i in range(int(self.sensorTimestep/self.timestep)):
-                    self.driver.step()
+                logger.debug("INIT status")
                 
-                # set speed going forward
+                # set wheel angle
+                self.setAngle(0.0)
+
+                # set cruise speed 
                 self.setSpeed(0.2)
 
                 # set new status
-                self.status = Status.FORWARD
+                self.setStatus(Status.FORWARD)
+
+                # skip to next cycle to ensure everything is working fine
                 continue
 
+            # FORWARD STATUS
             if self.status == Status.FORWARD:
-                logger.log("FORWARD status", logger.DEBUG)
+                logger.debug("FORWARD status")
 
-                self.status = Status.SEARCHING_PARK
+                self.setStatus( Status.SEARCHING_PARK)
             
+            # SEARCHING_PARK STATUS
             if self.status == Status.SEARCHING_PARK:
  
                 ds = self.distanceSensors
                 ps = self.positionSensors
 
                 #log info for debug
-                logger.log("Left Distance Sensor: " + str(ds.sideLeft.getValue()), logger.DEBUG)
-                logger.log("Left Position Sensor: " + str(ps.frontLeft.getValue()) + " rad", logger.DEBUG)
-                logger.log("Left Wheel Lenght: " + str(self.leftWheelLenght) + " m", logger.DEBUG)
-                logger.log("Starting position: " + str(startingPosition) + " m", logger.DEBUG)
-                logger.log("Parking Lot Length: " + str(self.leftWheelLenght - startingPosition) + " m", logger.DEBUG)
+                logger.debug("Left Distance Sensor: " + str(ds.sideLeft.getValue()))
+                logger.debug("Left Position Sensor: " + str(ps.frontLeft.getValue()) + " rad")
+                logger.debug("Left Wheel Length: " + str(self.leftWheelDistance) + " m")
+                logger.debug("Starting position: " + str(leftStartingPosition) + " m")
+                logger.debug("Parking Lot Length: " + str(self.leftWheelDistance - leftStartingPosition) + " m")
 
                 threshold = 650
                 leftSensorValue = ds.sideLeft.getValue()
+                rightSensorValue = ds.sideRight.getValue()
                 
-                if leftSensorValue < threshold and not empty:
-                    logger.log("leftSensorValue is lower than threshold", logger.DEBUG)
-                    empty = True
-                    logger.log("empty: " + str(empty), logger.DEBUG) 
-                    startingPosition = self.leftWheelLenght
-                    logger.log("startingPosition: " + str(startingPosition), logger.DEBUG)
+                # checking parking lot on the LEFT side
+                if leftSensorValue < threshold and not leftIsEmpty:
+                    leftIsEmpty = True
+                    leftStartingPosition = self.leftWheelDistance
                 
-                if leftSensorValue > threshold and empty:
-                    logger.log("leftSensorValue is greater than threshold", logger.DEBUG)
-                    empty = False
+                elif leftSensorValue > threshold and leftIsEmpty:
+                    leftIsEmpty = False
 
-                if empty and self.leftWheelLenght - startingPosition > LENGTH + LENGTH/3:
-                    self.status = Status.FORWARD2
-                    startingPosition = self.leftWheelLenght
-                    logger.log("Case all empty", logger.DEBUG)
+                elif leftIsEmpty and self.leftWheelDistance - leftStartingPosition > LENGTH + LENGTH/3:
+                    leftStartingPosition = self.leftWheelDistance
+                    sideOfParkingLot = LEFT
+                    self.setStatus(Status.FORWARD2)
 
-                if empty and leftSensorValue > threshold and self.leftWheelLenght - startingPosition > LENGTH + LENGTH/3:
-                    self.status = Status.FORWARD2
-                    logger.log("Case a car i infront")
+                # checking parking lot on the RIGHT side
+                if rightSensorValue < threshold and not rightIsEmpty:
+                    rightIsEmpty = True
+                    rightStartingPosition = self.rightWheelDistance
+                
+                elif rightSensorValue > threshold and rightIsEmpty:
+                    rightIsEmpty = False
 
-            # going a little bit further to maximise lenght
+                elif rightIsEmpty and self.rightWheelDistance - rightStartingPosition > LENGTH + LENGTH/3:
+                    rightStartingPosition = self.rightWheelDistance
+                    sideOfParkingLot = RIGHT
+                    self.setStatus(Status.FORWARD2)
+
+            # this ensure that the parking manoeuvre starts after going forward and not as soon as the parking lot is detected
             if self.status == Status.FORWARD2:
                 distance = 0.13
-                if self.leftWheelLenght - startingPosition > distance:
-                    self.status = Status.PARKING
+                if sideOfParkingLot == LEFT:
+                    if self.leftWheelDistance - leftStartingPosition > distance:
+                        self.status = Status.PARKING
+                elif sideOfParkingLot == RIGHT:
+                    if self.rightWheelDistance - rightStartingPosition > distance:
+                        self.status = Status.PARKING
+                else:
+                    logger.warning("Parking lot not found! I don't know if right or left.")
+                    self.setStatus(Status.SEARCHING_PARK)
 
+            # starting the parking manoeuvre
             if self.status == Status.PARKING:
+                if sideOfParkingLot != LEFT and sideOfParkingLot != RIGHT:
+                    logger.error("side of parking lot unknown.")
+                    exit(1)
+                
+                # stop the vehicle, turn the wheels and go back
                 self.setSpeed(0.0)
-                self.setAngle(- MAX_ANGLE)
+                self.setAngle(sideOfParkingLot * MAX_ANGLE)
                 self.setSpeed(-0.1)
 
                 # when should it turn the other way
@@ -212,17 +273,12 @@ class Altino:
                     self.status = Status.PARKING2
 
             if self.status == Status.PARKING2:
-                self.setAngle(MAX_ANGLE)
+                self.setAngle(-1 * sideOfParkingLot * MAX_ANGLE)
 
             if self.status == Status.STOP:
                 self.setSpeed(0.0)
                 self.setAngle(0.0)
 
-            self.updateDistanceTraveled()
-        
-
-    
-
-
-    
-    
+                # if obstacle is cleared go forward
+                if not self.avoidObstacle():
+                    self.status = Status.FORWARD

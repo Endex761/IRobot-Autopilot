@@ -1,9 +1,10 @@
+from typing import Counter
 from Utils import DistanceSensors, PositionSensors
 from Utils import Logger, Status
 import math
 
 logger = Logger()
-logger.DEBUG_ENABLED = False # True
+logger.DEBUG_ENABLED = True # False
 
 try:
     from vehicle import Driver
@@ -79,6 +80,10 @@ class Altino:
         self.positionSensors.rearLeft.enable(self.sensorTimestep)
         self.positionSensors.rearRight.enable(self.sensorTimestep)
 
+        # get and enable keyboard controll
+        self.keyboard = self.driver.getKeyboard()
+        self.keyboard.enable(self.sensorTimestep)
+
         # this ensure sensors are correctly initialized
         for i in range(int(self.sensorTimestep/self.timestep) + 1):
             self.driver.step()
@@ -116,7 +121,8 @@ class Altino:
     def setStatus(self, status):
         # check if new status is a valid state.
         if status not in list(map(int, Status)):
-            logger.warning("Status: " + str(status) + " is invalid, status is unchanged.")
+            logger.warning("Status: " + str(status) + " is invalid, setting STOP status.")
+            self.status = Status.STOP
             return
         
         # backup last status
@@ -140,7 +146,7 @@ class Altino:
         if rear > threshold:
             return True
     
-    # compute distance traveled by wheel in meters
+    # compute distance traveled by wheels in meters
     def updateDistanceTraveled(self):
         # get position sensors
         ps = self.positionSensors
@@ -154,6 +160,16 @@ class Altino:
         self.rightWheelDistance = radFRW * WHEEL_RADIUS
 
         # logger.debug("Distance Updated - Left Wheel Length: " + str(self.leftWheelLength) + " m")
+    
+    # check keyboard pressed keys and change status
+    def keyboardCommands(self):
+
+        currentKey = self.keyboard.getKey()
+
+        if currentKey == ord('p') or currentKey == ord('P'):
+            logger.info("Looking for a parking lot")
+            self.setStatus( Status.SEARCHING_PARK)
+            return
 
     # running
     def run(self):
@@ -171,10 +187,14 @@ class Altino:
             # update wheels' distance traveled in the current step
             self.updateDistanceTraveled()
 
+            # check keyboard pressed keys and change status
+            self.keyboardCommands()
+
+            # stop vehicle if too close to an obstacle
             if self.avoidObstacle():
                 self.setStatus(Status.STOP)
 
-            # here goes code for each STATUS
+            ## here goes code for each STATUS ##
             # INIT STATUS 
             if self.status == Status.INIT:
                 logger.debug("INIT status")
@@ -182,8 +202,8 @@ class Altino:
                 # set wheel angle
                 self.setAngle(0.0)
 
-                # set cruise speed 
-                self.setSpeed(0.2)
+                # set starting speed
+                self.setSpeed(0.0)
 
                 # set new status
                 self.setStatus(Status.FORWARD)
@@ -193,9 +213,38 @@ class Altino:
 
             # FORWARD STATUS
             if self.status == Status.FORWARD:
-                logger.debug("FORWARD status")
+                # logger.debug("FORWARD status")
 
-                self.setStatus( Status.SEARCHING_PARK)
+                # set cruise speed 
+                self.setSpeed(0.2)
+                
+                ds = self.distanceSensors
+
+                frontLeftSensor = ds.frontLeft.getValue()
+                frontRightSensor = ds.frontRight.getValue()
+                sideLeftSensor = ds.sideLeft.getValue()
+                sideRightSensor = ds.sideRight.getValue()
+
+                frontThreshold = 200
+                tolerance = 10
+                sideThreshold = 950
+                if frontLeftSensor > frontThreshold and frontLeftSensor > frontRightSensor + tolerance:
+                    self.setAngle(RIGHT * frontLeftSensor / 1000.0 * MAX_ANGLE)
+                    logger.debug("Steering angle: " + str(RIGHT * frontLeftSensor / 1000.0 * MAX_ANGLE))
+
+                elif frontRightSensor > frontThreshold and frontRightSensor > frontLeftSensor + tolerance:
+                    self.setAngle(LEFT * frontRightSensor / 1000.0 * MAX_ANGLE)
+                    logger.debug("Steering angle: " + str(LEFT * frontRightSensor / 1000.0 * MAX_ANGLE))
+
+                elif sideLeftSensor > sideThreshold:
+                    self.setAngle(RIGHT * sideLeftSensor / 4000.0 * MAX_ANGLE)
+
+                elif sideRightSensor > sideThreshold:
+                    self.setAngle(LEFT * sideRightSensor / 4000.0 * MAX_ANGLE)
+
+                else:
+                    self.setAngle(0.0)
+
             
             # SEARCHING_PARK STATUS
             if self.status == Status.SEARCHING_PARK:
@@ -210,16 +259,16 @@ class Altino:
                 logger.debug("Starting position: " + str(leftStartingPosition) + " m")
                 logger.debug("Parking Lot Length: " + str(self.leftWheelDistance - leftStartingPosition) + " m")
 
-                threshold = 650
+                frontThreshold = 650
                 leftSensorValue = ds.sideLeft.getValue()
                 rightSensorValue = ds.sideRight.getValue()
                 
                 # checking parking lot on the LEFT side
-                if leftSensorValue < threshold and not leftIsEmpty:
+                if leftSensorValue < frontThreshold and not leftIsEmpty:
                     leftIsEmpty = True
                     leftStartingPosition = self.leftWheelDistance
                 
-                elif leftSensorValue > threshold and leftIsEmpty:
+                elif leftSensorValue > frontThreshold and leftIsEmpty:
                     leftIsEmpty = False
 
                 elif leftIsEmpty and self.leftWheelDistance - leftStartingPosition > LENGTH + LENGTH/3:
@@ -228,11 +277,11 @@ class Altino:
                     self.setStatus(Status.FORWARD2)
 
                 # checking parking lot on the RIGHT side
-                if rightSensorValue < threshold and not rightIsEmpty:
+                if rightSensorValue < frontThreshold and not rightIsEmpty:
                     rightIsEmpty = True
                     rightStartingPosition = self.rightWheelDistance
                 
-                elif rightSensorValue > threshold and rightIsEmpty:
+                elif rightSensorValue > frontThreshold and rightIsEmpty:
                     rightIsEmpty = False
 
                 elif rightIsEmpty and self.rightWheelDistance - rightStartingPosition > LENGTH + LENGTH/3:
@@ -265,11 +314,11 @@ class Altino:
                 self.setSpeed(-0.1)
 
                 # when should it turn the other way
-                threshold = 600
+                frontThreshold = 600
                 ds = self.distanceSensors
                 rear = ds.back.getValue()
 
-                if rear > threshold:
+                if rear > frontThreshold:
                     self.status = Status.PARKING2
 
             if self.status == Status.PARKING2:
@@ -280,5 +329,5 @@ class Altino:
                 self.setAngle(0.0)
 
                 # if obstacle is cleared go forward
-                if not self.avoidObstacle():
+                if not self.avoidObstacle() and self.prevStatus == Status.PARKING2:
                     self.status = Status.FORWARD

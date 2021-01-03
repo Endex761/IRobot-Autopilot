@@ -9,6 +9,7 @@ class Status(IntEnum):
     FORWARD = auto()
     FORWARD2 = auto()
     STOP = auto()
+    MANUAL = auto()
     
 
 class DistanceSensors:

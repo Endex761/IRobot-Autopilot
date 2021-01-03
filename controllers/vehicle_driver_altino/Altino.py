@@ -3,8 +3,10 @@ from Utils import DistanceSensors, PositionSensors
 from Utils import Logger, Status
 import math
 
+DEBUG = True
+
 logger = Logger()
-logger.DEBUG_ENABLED = True # False
+logger.DEBUG_ENABLED = DEBUG
 
 try:
     from vehicle import Driver
@@ -131,6 +133,7 @@ class Altino:
         # set new status
         self.status = status
 
+    # check if vehicle is too close to an obstacle
     def avoidObstacle(self):
         threshold = 950
         ds = self.distanceSensors
@@ -163,13 +166,30 @@ class Altino:
     
     # check keyboard pressed keys and change status
     def keyboardCommands(self):
-
+        
+        # get current key
         currentKey = self.keyboard.getKey()
 
+        if DEBUG and (currentKey == ord('s') or currentKey == ord('S')):
+            logger.debug("Current status: " + str(self.status))
+
+        # press P to find parking lot
         if currentKey == ord('p') or currentKey == ord('P'):
             logger.info("Looking for a parking lot")
-            self.setStatus( Status.SEARCHING_PARK)
-            return
+            self.setStatus(Status.SEARCHING_PARK)
+        
+        # press M to manual control
+        elif currentKey == ord('m') or currentKey == ord('M'):
+            logger.info("Manual")
+            self.setStatus(Status.MANUAL)
+
+        # press A to auto control
+        elif currentKey == ord('a') or currentKey == ord('A'):
+            logger.info("Auto")
+            self.setStatus(Status.FORWARD)
+
+        # return current key to allow other controls 
+        return currentKey
 
     # running
     def run(self):
@@ -187,12 +207,12 @@ class Altino:
             # update wheels' distance traveled in the current step
             self.updateDistanceTraveled()
 
-            # check keyboard pressed keys and change status
-            self.keyboardCommands()
-
-            # stop vehicle if too close to an obstacle
-            if self.avoidObstacle():
+            # stop vehicle if too close to an obstacle, disable if in manual
+            if self.avoidObstacle() and self.status != Status.MANUAL:
                 self.setStatus(Status.STOP)
+                
+            # check keyboard pressed keys and change status
+            currentKey = self.keyboardCommands()
 
             ## here goes code for each STATUS ##
             # INIT STATUS 
@@ -217,38 +237,53 @@ class Altino:
 
                 # set cruise speed 
                 self.setSpeed(0.2)
-                
+
+                # avoing obstacles
                 ds = self.distanceSensors
 
+                # get distance sensors values
                 frontLeftSensor = ds.frontLeft.getValue()
                 frontRightSensor = ds.frontRight.getValue()
                 sideLeftSensor = ds.sideLeft.getValue()
                 sideRightSensor = ds.sideRight.getValue()
 
+                # set values of thresholds
                 frontThreshold = 200
                 tolerance = 10
                 sideThreshold = 950
+
+                # check if front left obstacle, turn right
                 if frontLeftSensor > frontThreshold and frontLeftSensor > frontRightSensor + tolerance:
                     self.setAngle(RIGHT * frontLeftSensor / 1000.0 * MAX_ANGLE)
                     logger.debug("Steering angle: " + str(RIGHT * frontLeftSensor / 1000.0 * MAX_ANGLE))
 
+                # check if front right obstacle, turn left
                 elif frontRightSensor > frontThreshold and frontRightSensor > frontLeftSensor + tolerance:
                     self.setAngle(LEFT * frontRightSensor / 1000.0 * MAX_ANGLE)
                     logger.debug("Steering angle: " + str(LEFT * frontRightSensor / 1000.0 * MAX_ANGLE))
 
+                # check if side left obstacle, turn slight right
                 elif sideLeftSensor > sideThreshold:
                     self.setAngle(RIGHT * sideLeftSensor / 4000.0 * MAX_ANGLE)
 
+                # check if side right obstacle, turn slight left
                 elif sideRightSensor > sideThreshold:
                     self.setAngle(LEFT * sideRightSensor / 4000.0 * MAX_ANGLE)
 
+                # if no obstacle go straight
                 else:
                     self.setAngle(0.0)
-
             
             # SEARCHING_PARK STATUS
             if self.status == Status.SEARCHING_PARK:
- 
+
+                # set slow speed 
+                self.setSpeed(0.2)
+
+                # set straight wheels
+                self.setAngle(0.0)
+
+                # get distance and position sensors
                 ds = self.distanceSensors
                 ps = self.positionSensors
 
@@ -330,4 +365,41 @@ class Altino:
 
                 # if obstacle is cleared go forward
                 if not self.avoidObstacle() and self.prevStatus == Status.PARKING2:
-                    self.status = Status.FORWARD
+                    self.setStatus(Status.FORWARD)
+
+            if self.status == Status.MANUAL:
+                # get current state
+                speed = self.speed
+                angle = self.angle
+                # logger.debug("Current Key: " + str(currentKey))
+
+                # keyboard controlls 
+                # accelerate
+                if currentKey == self.keyboard.UP:
+                    if speed < 0:
+                        speed += 0.02
+                    else:
+                        speed += 0.008
+                
+                # break
+                elif currentKey == self.keyboard.DOWN:
+                    if speed > 0:
+                        speed -= 0.02
+                    else:
+                        speed -= 0.008
+                
+                # turn left
+                elif currentKey == self.keyboard.LEFT:
+                    angle -= 0.01
+
+                # turn right
+                elif currentKey == self.keyboard.RIGHT:
+                    angle += 0.01
+                
+                # handbreak
+                elif currentKey == ord(' '):
+                    speed /= 4
+                
+                # update state
+                self.setSpeed(speed)
+                self.setAngle(angle)

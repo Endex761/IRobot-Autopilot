@@ -87,7 +87,7 @@ class Altino:
         self.keyboard.enable(self.sensorTimestep)
 
         # this ensure sensors are correctly initialized
-        for i in range(int(self.sensorTimestep/self.timestep) + 1):
+        for in range(int(self.sensorTimestep/self.timestep) + 1):
             self.driver.step()
 
         # initial speed and steering angle values

@@ -1,85 +1,468 @@
-#VRML_SIM R2020b utf8
+#VRML_SIM R2021a utf8
 WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.3413275910633877 -0.8940856581087341 -0.29001088176676515 1.5406215739577038
-  position -1.678049242607924 1.4049707837544123 0.04425178082835579
+  orientation -0.2958282573846439 -0.9202975126510978 -0.25600416078838883 1.7388703888820602
+  position -13.01668760275925 7.711268598350239 -3.1864638629302218
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
 RectangleArena {
-  floorSize 2.5 2.5
+  floorSize 8 12
   floorTileSize 0.35 0.35
-  floorAppearance Parquetry {
-    type "light strip"
+  floorAppearance Grass {
   }
 }
+RoadIntersection {
+  translation -3.5 0.001 -2.65
+  rotation 0 1 0 -0.7853996938995746
+  connectedRoadIDs [
+    "3"
+  ]
+  roadsWidth 0.5
+  startRoads FALSE
+  startRoadsLength [
+    0.1
+  ]
+  startRoadsNumberOfLanes 0
+  startRoadsStartLine [
+    "1"
+  ]
+  startRoadsLine [
+    RoadLine {
+      type "continuous"
+    }
+  ]
+  startRoadBorderHeight 0.05
+  startRoadBorderWidth 0.01
+  appearance Asphalt {
+    textureTransform TextureTransform {
+      rotation 3.5
+    }
+  }
+}
+Wall {
+  translation -3.755 0 -2.65
+  rotation 0 1 0 1.5708
+  size 0.5 0.05 0.01
+  appearance Roughcast {
+    textureTransform TextureTransform {
+      scale 1 2.4
+    }
+    IBLStrength 7
+  }
+}
+Wall {
+  translation 3.755 0 -2.65
+  rotation 0 1 0 1.5708
+  name "wall(1)"
+  size 0.5 0.05 0.01
+  appearance Roughcast {
+    textureTransform TextureTransform {
+      scale 1 2.4
+    }
+    IBLStrength 7
+  }
+}
+RoadLine {
+  width 0.41
+}
 Altino {
-  translation -0.22976712973133484 0.01951831693885448 -0.12999999992515782
+  translation -0.199767 0.019503 -4.31
   rotation 0.00025255988963596084 0.9999999362135692 0.0002525596164512584 -1.570795308918225
   name "vehicle(2)"
   controller ""
 }
+StraightRoadSegment {
+  translation -2.9 0.001 -5.5
+  rotation 0 1 0 1.5707996938995747
+  id "1"
+  width 0.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 5.8
+}
+StraightRoadSegment {
+  translation -3.25 0.001 -2.65
+  rotation 0 1 0 1.5707996938995747
+  name "road(12)"
+  id "1"
+  width 0.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 6.5
+}
+StraightRoadSegment {
+  translation 3.25 0.0001 -2.65
+  rotation 0 1 0 1.5707996938995747
+  name "roadInters"
+  id "27"
+  width 0.5
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0
+  startingRoadBorderWidth 0
+  endingRoadBorderWidth 0
+  length 0.25
+}
+StraightRoadSegment {
+  translation -2.9 0.001 5.5
+  rotation 0 1 0 1.5707996938995747
+  name "road(6)"
+  id "2"
+  width 0.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 5.8
+}
+StraightRoadSegment {
+  translation -3.5 0.001 -4.9
+  name "road(1)"
+  id "3"
+  width 0.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 2
+}
+StraightRoadSegment {
+  translation -3.5 0.001 -2.4
+  name "road(9)"
+  id "3"
+  width 0.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 2
+}
+StraightRoadSegment {
+  translation 3.5 0.001 -2.9
+  name "road(10)"
+  id "3"
+  width 0.5
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0
+  startingRoadBorderWidth 0
+  endingRoadBorderWidth 0
+  length 0.5
+}
+StraightRoadSegment {
+  translation 3.5 0.001 -2.4
+  name "road(11)"
+  id "3"
+  width 0.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 2
+}
+StraightRoadSegment {
+  translation 3.5 0.001 -4.9
+  name "road(3)"
+  id "4"
+  width 0.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 2
+}
+CurvedRoadSegment {
+  translation 2.9 0.001 -4.9
+  rotation 0 1 0 1.5708043867199883
+  name "road(4)"
+  width 0.5
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  roadBorderWidth [
+    0.01
+  ]
+  curvatureRadius 0.6
+  subdivision 100
+}
+CurvedRoadSegment {
+  translation 2.9 0.001 4.9
+  name "road(5)"
+  width 0.5
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  roadBorderWidth [
+    0.01
+  ]
+  curvatureRadius 0.6
+  subdivision 100
+}
+CurvedRoadSegment {
+  translation -2.9 0.001 -4.9
+  rotation 0 1 0 3.141592653589793
+  name "road(2)"
+  width 0.5
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  roadBorderWidth [
+    0.01
+  ]
+  curvatureRadius 0.6
+  subdivision 100
+}
+CurvedRoadSegment {
+  translation -2.9 0.001 4.9
+  rotation 0 1 0 -1.570795613280012
+  name "road(7)"
+  width 0.5
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  roadBorderWidth [
+    0.01
+  ]
+  curvatureRadius 0.6
+  subdivision 100
+}
+CurvedRoadSegment {
+  translation -2.9 0.001 -0.4
+  rotation 0 1 0 -1.570795613280012
+  name "road(8)"
+  width 0.5
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  roadBorderWidth [
+    0.01
+  ]
+  curvatureRadius 0.6
+  subdivision 100
+}
 Altino {
-  translation -0.12976703835291983 0.019518312949420632 -0.40999999999995873
+  translation -0.129767 0.0195183 -4.69
   rotation 0.0002525599157001727 0.9999999362135559 0.00025255964251641943 -1.5707953089182312
   name "vehicle(3)"
   controller ""
 }
-Wall {
-  translation 0 0 -0.05
-  size 1 0.17 0.02
-}
-Wall {
-  translation 0 0 -0.49
-  name "wall(1)"
-  size 1 0.17 0.02
-}
 Altino {
-  hidden rotation_1 -1.2637193947653616e-13 1 2.912929053592623e-13 3.960246410631986
-  hidden rotation_2 -1.260820117756985e-13 -1 -2.906246091754515e-13 3.960246410683126
-  hidden rotation_3 0 1 0 3.960246441923993
-  hidden rotation_4 0 -1 0 3.9602464419151735
-  translation 0.34943796165953467 0.019518316938811453 -0.1299999999999585
+  translation 0.349438 0.0195183 -4.31
   rotation 0.0002525598900105956 0.9999999362135691 0.0002525596164497706 -1.570795307423541
   name "vehicle(1)"
   controller ""
 }
 Altino {
-  translation 0.449438 0.0195183 -0.26
+  translation 0.449438 0.0195183 -4.5
   rotation 0.0002525598900105956 0.9999999362135691 0.0002525596164497706 -1.570795307423541
   name "SF71H"
   color 1 0.157 0
 }
 Altino {
-  hidden rotation_1 -1.2628677938747822e-13 0.9999999999999999 2.910966075893863e-13 3.9602464106346122
-  hidden rotation_2 -1.2662498558880386e-13 -1 -2.918761878096364e-13 3.9602464106857536
-  hidden rotation_3 0 1 0 3.960246441921018
-  hidden rotation_4 0 -1 0 3.960246441912189
-  translation 0.44943796164999567 0.019518312949420726 -0.4099999999999582
+  translation 0.449438 0.0195183 -4.69
   rotation 0.0002525599160766004 0.9999999362135559 0.0002525596425156139 -1.57079530742356
   name "vehicle(4)"
   controller ""
 }
 Altino {
-  hidden rotation_1 -1.2667682139449034e-13 0.9999999999999999 2.919956716530106e-13 3.9602464106346122
-  hidden rotation_2 -1.2626558555958555e-13 -1 -2.910477548590717e-13 3.960246410685754
-  hidden rotation_3 0 1 0 3.9602464419210337
-  hidden rotation_4 0 -1 0 3.960246441912187
-  translation 0.1494379616499565 0.019518313101949215 -0.4099999999999584
+  translation 0.149438 0.0195183 -4.69
   rotation 0.00025255991847257606 0.9999999362135548 0.00025255964491086773 -1.5707953074235563
   name "vehicle(5)"
   controller ""
 }
 Altino {
-  hidden rotation_1 -1.2661026939918035e-13 1 2.918422663625896e-13 3.960246410634719
-  hidden rotation_2 -1.2634521427065083e-13 -0.9999999999999999 -2.9123130255712224e-13 3.96024641068586
-  hidden rotation_3 0 1 0 3.9602464419208934
-  hidden rotation_4 0 -1 0 3.9602464419120658
-  translation 0.06943796164677385 0.01951831232153696 -0.12999999999995862
+  translation 0.0694342 0.0195183 -4.31
   rotation 0.00025255992974590165 0.999999936213549 0.00025255965618306217 -1.5707953074235628
   name "vehicle(6)"
   controller ""

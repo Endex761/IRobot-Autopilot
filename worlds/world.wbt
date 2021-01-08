@@ -534,7 +534,7 @@ Altino {
 StraightRoadSegment {
   translation -2.9 0.001 -5.5
   rotation 0 1 0 1.5707996938995747
-  id "1"
+  id "Road1"
   width 0.5
   numberOfLanes 4
   lines [
@@ -560,7 +560,7 @@ StraightRoadSegment {
   translation -3.25 0.001 -2.65
   rotation 0 1 0 1.5707996938995747
   name "road(12)"
-  id "1"
+  id "Road2"
   width 0.5
   numberOfLanes 4
   lines [
@@ -586,7 +586,7 @@ StraightRoadSegment {
   translation -2.9 0.001 0
   rotation 0 1 0 1.5707996938995747
   name "road(18)"
-  id "1"
+  id "Road3"
   width 0.5
   numberOfLanes 4
   lines [
@@ -612,7 +612,7 @@ StraightRoadSegment {
   translation -1.55 0.001 0
   rotation 0 1 0 1.5707996938995747
   name "road(22)"
-  id "1"
+  id "Road4"
   width 0.5
   numberOfLanes 4
   lines [
@@ -638,7 +638,7 @@ StraightRoadSegment {
   translation -1.55 0.001 2.65
   rotation 0 1 0 1.5707996938995747
   name "road(25)"
-  id "1"
+  id "Road5"
   width 0.5
   numberOfLanes 4
   lines [
@@ -664,7 +664,7 @@ StraightRoadSegment {
   translation -1.55 0.001 5.5
   rotation 0 1 0 1.5707996938995747
   name "road(31)"
-  id "1"
+  id "Road6"
   width 0.5
   numberOfLanes 4
   lines [
@@ -690,7 +690,7 @@ StraightRoadSegment {
   translation -2.9 0.001 2.65
   rotation 0 1 0 1.5707996938995747
   name "road(16)"
-  id "1"
+  id "Road7"
   width 0.5
   numberOfLanes 4
   lines [
@@ -716,7 +716,7 @@ StraightRoadSegment {
   translation -2.9 0.001 5.5
   rotation 0 1 0 1.5707996938995747
   name "road(28)"
-  id "1"
+  id "Road8"
   width 0.5
   numberOfLanes 4
   lines [
@@ -742,7 +742,7 @@ StraightRoadSegment {
   translation 2 0.001 -2.65
   rotation 0 1 0 1.5707996938995747
   name "road(13)"
-  id "1"
+  id "Road9"
   width 0.5
   numberOfLanes 4
   lines [
@@ -768,7 +768,7 @@ StraightRoadSegment {
   translation 0.25 0.001 -2.65
   rotation 0 1 0 1.5707996938995747
   name "road(17)"
-  id "1"
+  id "Road10"
   width 0.5
   numberOfLanes 4
   lines [
@@ -794,7 +794,7 @@ StraightRoadSegment {
   translation 0.25 0.001 0
   rotation 0 1 0 1.5707996938995747
   name "road(20)"
-  id "1"
+  id "Road11"
   width 0.5
   numberOfLanes 4
   lines [
@@ -820,7 +820,7 @@ StraightRoadSegment {
   translation 0.25 0.001 2.65
   rotation 0 1 0 1.5707996938995747
   name "road(26)"
-  id "1"
+  id "Road12"
   width 0.5
   numberOfLanes 4
   lines [
@@ -846,7 +846,7 @@ StraightRoadSegment {
   translation 2 0.001 -5.5
   rotation 0 1 0 1.5707996938995747
   name "road(14)"
-  id "1"
+  id "Road13"
   width 0.5
   numberOfLanes 4
   lines [
@@ -872,7 +872,7 @@ StraightRoadSegment {
   translation 0.25 0.001 5.5
   rotation 0 1 0 1.5707996938995747
   name "road(6)"
-  id "2"
+  id "Road14"
   width 0.5
   numberOfLanes 4
   lines [
@@ -897,7 +897,7 @@ StraightRoadSegment {
 StraightRoadSegment {
   translation -3.5 0.001 -4.9
   name "road(1)"
-  id "3"
+  id "Road15"
   width 0.5
   numberOfLanes 4
   lines [
@@ -922,7 +922,7 @@ StraightRoadSegment {
 StraightRoadSegment {
   translation -3.5 0.001 -2.4
   name "road(9)"
-  id "3"
+  id "Road16"
   width 0.5
   numberOfLanes 4
   lines [
@@ -947,7 +947,7 @@ StraightRoadSegment {
 StraightRoadSegment {
   translation -3.5 0.001 3.25
   name "road(24)"
-  id "3"
+  id "Road17"
   width 0.5
   numberOfLanes 4
   lines [
@@ -972,7 +972,7 @@ StraightRoadSegment {
 StraightRoadSegment {
   translation 3.5 0.001 2.9
   name "road(30)"
-  id "3"
+  id "Road18"
   width 0.5
   numberOfLanes 4
   lines [
@@ -997,7 +997,7 @@ StraightRoadSegment {
 StraightRoadSegment {
   translation 0 0.001 -2.4
   name "road(15)"
-  id "3"
+  id "Road19"
   width 0.5
   numberOfLanes 4
   lines [
@@ -1022,7 +1022,7 @@ StraightRoadSegment {
 StraightRoadSegment {
   translation 0 0.001 0.25
   name "road(19)"
-  id "3"
+  id "Road20"
   width 0.5
   numberOfLanes 4
   lines [
@@ -1047,7 +1047,7 @@ StraightRoadSegment {
 StraightRoadSegment {
   translation 3.5 0.001 0.25
   name "road(29)"
-  id "3"
+  id "Road21"
   width 0.5
   numberOfLanes 4
   lines [
@@ -1072,7 +1072,7 @@ StraightRoadSegment {
 StraightRoadSegment {
   translation -1.8 0.001 0.25
   name "road(21)"
-  id "3"
+  id "Road22"
   width 0.5
   numberOfLanes 4
   lines [
@@ -1097,7 +1097,7 @@ StraightRoadSegment {
 StraightRoadSegment {
   translation -1.8 0.001 2.9
   name "road(27)"
-  id "3"
+  id "Road23"
   width 0.5
   numberOfLanes 4
   lines [
@@ -1122,7 +1122,7 @@ StraightRoadSegment {
 StraightRoadSegment {
   translation 0 0.001 2.9
   name "road(32)"
-  id "3"
+  id "Road24"
   width 0.5
   numberOfLanes 4
   lines [
@@ -1147,7 +1147,7 @@ StraightRoadSegment {
 StraightRoadSegment {
   translation 3.5 0.001 -2.4
   name "road(11)"
-  id "3"
+  id "Road25"
   width 0.5
   numberOfLanes 4
   lines [
@@ -1172,7 +1172,7 @@ StraightRoadSegment {
 StraightRoadSegment {
   translation 3.5 0.001 -4.9
   name "road(3)"
-  id "4"
+  id "Road26"
   width 0.5
   numberOfLanes 4
   lines [
@@ -1197,7 +1197,7 @@ StraightRoadSegment {
 StraightRoadSegment {
   translation 1.75 0.001 -5.25
   name "road(10)"
-  id "4"
+  id "Road27"
   width 0.5
   numberOfLanes 4
   lines [
@@ -1223,6 +1223,7 @@ CurvedRoadSegment {
   translation 2.9 0.001 -4.9
   rotation 0 1 0 1.5708043867199883
   name "road(4)"
+  id "CurvRoad1"
   width 0.5
   lines [
     RoadLine {
@@ -1248,6 +1249,7 @@ CurvedRoadSegment {
 CurvedRoadSegment {
   translation 2.9 0.001 4.9
   name "road(5)"
+  id "CurvRoad2"
   width 0.5
   lines [
     RoadLine {
@@ -1274,6 +1276,7 @@ CurvedRoadSegment {
   translation -2.9 0.001 -4.9
   rotation 0 1 0 3.141592653589793
   name "road(2)"
+  id "CurvRoad3"
   width 0.5
   lines [
     RoadLine {
@@ -1300,6 +1303,7 @@ CurvedRoadSegment {
   translation -2.9 0.001 3.25
   rotation 0 1 0 3.141592653589793
   name "road(23)"
+  id "CurvRoad4"
   width 0.5
   lines [
     RoadLine {
@@ -1326,6 +1330,7 @@ CurvedRoadSegment {
   translation -2.9 0.001 4.9
   rotation 0 1 0 -1.570795613280012
   name "road(7)"
+  id "CurvRoad5"
   width 0.5
   lines [
     RoadLine {
@@ -1352,6 +1357,7 @@ CurvedRoadSegment {
   translation -2.9 0.001 -0.6
   rotation 0 1 0 -1.570795613280012
   name "road(8)"
+  id "CurvRoad6"
   width 0.5
   lines [
     RoadLine {

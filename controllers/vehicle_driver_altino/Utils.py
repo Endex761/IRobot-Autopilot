@@ -10,6 +10,7 @@ class Status(IntEnum):
     FORWARD2 = auto()
     STOP = auto()
     MANUAL = auto()
+    FOLLOW_LINE = auto()
     
 
 class DistanceSensors:
@@ -75,4 +76,38 @@ class Logger:
         self.log(message, self.DEBUG)
 
 
+class Color:
+    """def __init__(self, red, green, blue):
+        self.setRed(red)
+        self.setGreen(green)
+        self.setBlue(blue)"""
+
+    def __init__(self, array):
+        self.red = 0
+        self.green = 0
+        self.blue = 0
+        self.setRed(array[0])
+        self.setGreen(array[1])
+        self.setBlue(array[2])
+        
+    def setRed(self, red):
+        if red >= 0 and red <= 255:
+            self.red = red
+    
+    def setGreen(self, green):
+        if green >= 0 and green <= 255:
+            self.green = green
+    
+    def setBlue(self, blue):
+        if blue >= 0 and blue <= 255:
+            self.blue = blue
+
+    def getRed(self):
+        return self.red
+
+    def getGreen(self):
+        return self.green
+
+    def getBlue(self):
+        return self.blue
 

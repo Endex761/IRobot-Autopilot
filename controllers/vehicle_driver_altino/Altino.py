@@ -1,12 +1,14 @@
 from typing import Counter
 from Utils import DistanceSensors, PositionSensors
 from Utils import Logger, Status
+from LineForward import LineForwarder
 import math
 
 DEBUG = True
 
 logger = Logger()
 logger.DEBUG_ENABLED = DEBUG
+
 
 try:
     from vehicle import Driver
@@ -50,6 +52,10 @@ class Altino:
         # turn on headLights
         # headLights.set(1)
 
+        # get and enable camera
+        self.camera = self.driver.getCamera("camera")
+        self.camera.enable(self.sensorTimestep)
+
         # get distance sensors
         self.distanceSensors = DistanceSensors()
         self.distanceSensors.frontLeft = self.driver.getDistanceSensor("front_left_sensor")
@@ -87,7 +93,7 @@ class Altino:
         self.keyboard.enable(self.sensorTimestep)
 
         # this ensure sensors are correctly initialized
-        for in range(int(self.sensorTimestep/self.timestep) + 1):
+        for i in range(int(self.sensorTimestep/self.timestep) + 1):
             self.driver.step()
 
         # initial speed and steering angle values
@@ -98,6 +104,9 @@ class Altino:
         self.leftWheelDistance = 0.0
         self.rightWheelDistance = 0.0
         self.updateDistanceTraveled()
+
+        # line forwared
+        self.lineForwarder = LineForwarder(self.camera)
 
     # update cruising speed
     def setSpeed(self, speed):
@@ -226,10 +235,24 @@ class Altino:
                 self.setSpeed(0.0)
 
                 # set new status
-                self.setStatus(Status.FORWARD)
+                self.setStatus(Status.FOLLOW_LINE)
 
                 # skip to next cycle to ensure everything is working fine
                 continue
+            
+            #FOLLOW LINE STATUS
+            if self.status == Status.FOLLOW_LINE:
+
+                # set cruise speed
+                self.setSpeed(1)
+
+                # compute new angle
+                newAngle = self.lineForwarder.getNewSteeringAngle()
+
+                # logger.debug("new steering angle: " + str(newAngle))
+
+                # set new steering angle
+                self.setAngle(newAngle)
 
             # FORWARD STATUS
             if self.status == Status.FORWARD:
@@ -253,14 +276,16 @@ class Altino:
                 sideThreshold = 950
 
                 # check if front left obstacle, turn right
-                if frontLeftSensor > frontThreshold and frontLeftSensor > frontRightSensor + tolerance:
-                    self.setAngle(RIGHT * frontLeftSensor / 1000.0 * MAX_ANGLE)
-                    logger.debug("Steering angle: " + str(RIGHT * frontLeftSensor / 1000.0 * MAX_ANGLE))
+                if frontLeftSensor > frontRightSensor + tolerance:
+                    self.setAngle(RIGHT * frontLeftSensor / 500.0 * MAX_ANGLE)
+                    # logger.debug("Steering angle: " + str(RIGHT * frontLeftSensor / 1000.0 * MAX_ANGLE))
+                    logger.debug("Steering angle: " + str(self.angle))
 
                 # check if front right obstacle, turn left
-                elif frontRightSensor > frontThreshold and frontRightSensor > frontLeftSensor + tolerance:
-                    self.setAngle(LEFT * frontRightSensor / 1000.0 * MAX_ANGLE)
-                    logger.debug("Steering angle: " + str(LEFT * frontRightSensor / 1000.0 * MAX_ANGLE))
+                elif frontRightSensor > frontLeftSensor + tolerance:
+                    self.setAngle(LEFT * frontRightSensor / 500.0 * MAX_ANGLE)
+                    # logger.debug("Steering angle: " + str(LEFT * frontRightSensor / 1000.0 * MAX_ANGLE))
+                    logger.debug("Steering angle: " + str(self.angle))
 
                 # check if side left obstacle, turn slight right
                 elif sideLeftSensor > sideThreshold:
@@ -272,7 +297,7 @@ class Altino:
 
                 # if no obstacle go straight
                 else:
-                    self.setAngle(0.0)
+                    self.setAngle(self.angle / 1.5)
             
             # SEARCHING_PARK STATUS
             if self.status == Status.SEARCHING_PARK:
@@ -301,13 +326,13 @@ class Altino:
                 # checking parking lot on the LEFT side
                 if leftSensorValue < frontThreshold and not leftIsEmpty:
                     leftIsEmpty = True
-                    leftStartingPosition = self.leftWheelDistance
+                    leftStartingPosition = self.leftWheelDistance # 100
                 
                 elif leftSensorValue > frontThreshold and leftIsEmpty:
                     leftIsEmpty = False
 
                 elif leftIsEmpty and self.leftWheelDistance - leftStartingPosition > LENGTH + LENGTH/3:
-                    leftStartingPosition = self.leftWheelDistance
+                    leftStartingPosition = self.leftWheelDistance # 200 - 100 
                     sideOfParkingLot = LEFT
                     self.setStatus(Status.FORWARD2)
 
@@ -326,7 +351,7 @@ class Altino:
 
             # this ensure that the parking manoeuvre starts after going forward and not as soon as the parking lot is detected
             if self.status == Status.FORWARD2:
-                distance = 0.13
+                distance = 0.135
                 if sideOfParkingLot == LEFT:
                     if self.leftWheelDistance - leftStartingPosition > distance:
                         self.status = Status.PARKING
@@ -349,7 +374,7 @@ class Altino:
                 self.setSpeed(-0.1)
 
                 # when should it turn the other way
-                frontThreshold = 600
+                frontThreshold = 650
                 ds = self.distanceSensors
                 rear = ds.back.getValue()
 
@@ -358,7 +383,7 @@ class Altino:
 
             if self.status == Status.PARKING2:
                 self.setAngle(-1 * sideOfParkingLot * MAX_ANGLE)
-
+                
             if self.status == Status.STOP:
                 self.setSpeed(0.0)
                 self.setAngle(0.0)

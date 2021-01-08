@@ -1,7 +1,7 @@
 from typing import Counter
 from Utils import DistanceSensors, PositionSensors
 from Utils import Logger, Status
-from LineForward import LineForwarder
+from LineForward import LineForwarder, UNKNOWN
 import math
 
 DEBUG = True
@@ -21,6 +21,7 @@ MAX_SPEED = 1.8
 MAX_ANGLE = 0.52 # rads ~ 30°
 LEFT = -1
 RIGHT = 1
+UNKNOWN = -2
 
 # vehicle dimensions in meters
 WHEEL_RADIUS = 0.020
@@ -249,10 +250,14 @@ class Altino:
                 # compute new angle
                 newAngle = self.lineForwarder.getNewSteeringAngle()
 
+                
                 # logger.debug("new steering angle: " + str(newAngle))
 
                 # set new steering angle
-                self.setAngle(newAngle)
+                if newAngle != UNKNOWN:
+                    self.setAngle(newAngle)
+                else:
+                    self.setAngle(0.0)
 
             # FORWARD STATUS
             if self.status == Status.FORWARD:

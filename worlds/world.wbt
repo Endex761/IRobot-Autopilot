@@ -1,11 +1,11 @@
-#VRML_SIM R2021a utf8
+#VRML_SIM R2020b utf8
 WorldInfo {
   FPS 30
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.34862009341112665 -0.8708887107559301 -0.3464345305362781 1.7107645870501649
-  position -13.527783854206595 12.117651762552335 -0.6679453756505649
+  orientation -0.2561358850599163 -0.7174160579926429 -0.6478492171168154 2.5933348298287404
+  position -2.3311600229635983 16.526769436394375 2.079632597353877
 }
 TexturedBackground {
 }
@@ -543,6 +543,7 @@ StraightRoadSegment {
       width 0.005
     }
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -569,6 +570,7 @@ StraightRoadSegment {
       width 0.005
     }
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -595,7 +597,8 @@ StraightRoadSegment {
       width 0.005
     }
     RoadLine {
-      type "continuous"
+      color 1 1 0
+      type "double"
       width 0.005
     }
     RoadLine {
@@ -621,6 +624,7 @@ StraightRoadSegment {
       width 0.005
     }
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -647,6 +651,7 @@ StraightRoadSegment {
       width 0.005
     }
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -673,6 +678,7 @@ StraightRoadSegment {
       width 0.005
     }
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -699,6 +705,7 @@ StraightRoadSegment {
       width 0.005
     }
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -725,6 +732,7 @@ StraightRoadSegment {
       width 0.005
     }
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -751,6 +759,7 @@ StraightRoadSegment {
       width 0.005
     }
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -777,6 +786,7 @@ StraightRoadSegment {
       width 0.005
     }
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -803,6 +813,7 @@ StraightRoadSegment {
       width 0.005
     }
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -829,6 +840,7 @@ StraightRoadSegment {
       width 0.005
     }
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -855,6 +867,7 @@ StraightRoadSegment {
       width 0.005
     }
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -881,6 +894,7 @@ StraightRoadSegment {
       width 0.005
     }
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -906,6 +920,7 @@ StraightRoadSegment {
       width 0.005
     }
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -931,6 +946,7 @@ StraightRoadSegment {
       width 0.005
     }
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -956,6 +972,7 @@ StraightRoadSegment {
       width 0.005
     }
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -981,6 +998,7 @@ StraightRoadSegment {
       width 0.005
     }
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -1006,6 +1024,7 @@ StraightRoadSegment {
       width 0.005
     }
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -1031,6 +1050,7 @@ StraightRoadSegment {
       width 0.005
     }
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -1056,6 +1076,7 @@ StraightRoadSegment {
       width 0.005
     }
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -1081,6 +1102,7 @@ StraightRoadSegment {
       width 0.005
     }
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -1106,6 +1128,7 @@ StraightRoadSegment {
       width 0.005
     }
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -1131,6 +1154,7 @@ StraightRoadSegment {
       width 0.005
     }
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -1156,6 +1180,7 @@ StraightRoadSegment {
       width 0.005
     }
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -1181,6 +1206,7 @@ StraightRoadSegment {
       width 0.005
     }
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -1206,6 +1232,7 @@ StraightRoadSegment {
       width 0.005
     }
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -1227,14 +1254,7 @@ CurvedRoadSegment {
   width 0.5
   lines [
     RoadLine {
-      type "continuous"
-      width 0.005
-    }
-    RoadLine {
-      type "continuous"
-      width 0.005
-    }
-    RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -1253,6 +1273,7 @@ CurvedRoadSegment {
   width 0.5
   lines [
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -1280,6 +1301,7 @@ CurvedRoadSegment {
   width 0.5
   lines [
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -1307,6 +1329,7 @@ CurvedRoadSegment {
   width 0.5
   lines [
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -1334,6 +1357,7 @@ CurvedRoadSegment {
   width 0.5
   lines [
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -1361,6 +1385,7 @@ CurvedRoadSegment {
   width 0.5
   lines [
     RoadLine {
+      color 1 1 0
       type "continuous"
       width 0.005
     }
@@ -1393,8 +1418,8 @@ Altino {
   controller ""
 }
 Altino {
-  translation -0.200835 0.0198507 -5.31356
-  rotation 0.00025255998389013334 0.9999999362137052 0.0002525589838901972 -1.5707953071795862
+  translation 1.89916 0.0187868 -5.50356
+  rotation 0.0002525589838901972 0.9999999362137052 -0.00025255998389013334 1.5708
   name "SF71H"
   color 1 0.157 0
 }

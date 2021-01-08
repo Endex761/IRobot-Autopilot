@@ -37,10 +37,10 @@ PROTO Altino [
         translation 0.0 0.05 0.14
         rotation 0 -1 -0.5 3.14159
         name "camera"
-        width 256
-        height 64
+        width 128
+        height 16
         near 0.0055
-        fieldOfView 1
+        fieldOfView 1.2
       }
       DistanceSensor {
         name "front_left_sensor"

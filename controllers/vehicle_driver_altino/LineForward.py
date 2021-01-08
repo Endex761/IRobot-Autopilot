@@ -1,10 +1,9 @@
 # Compute steering angle using camera images
-
 UNKNOWN = -2
 FILTER_SIZE = 3
 NUM_ZONES = 15
-MAX_STEERING_ANGLE = 1
-MIN_STEERING_ANGLE = -1
+MAX_STEERING_ANGLE = 0.8
+MIN_STEERING_ANGLE = -0.8
 
 STEERING_ANGLE_STEP = ((MAX_STEERING_ANGLE - MIN_STEERING_ANGLE) / NUM_ZONES)
 
@@ -86,7 +85,6 @@ class LineForwarder:
         difference += abs(pixelColor[2] - LINE_REFERENCE_COLOR[2])
 
         return difference
-
 
     def getNewSteeringAngle(self):
         return self.processCameraImage()

@@ -1,7 +1,7 @@
 from typing import Counter
 from Utils import DistanceSensors, PositionSensors
 from Utils import Logger, Status
-from LineForward import LineForwarder, UNKNOWN
+from LineFollower import LineFollower, UNKNOWN
 import math
 
 DEBUG = True
@@ -107,7 +107,7 @@ class Altino:
         self.updateDistanceTraveled()
 
         # line forwared
-        self.lineForwarder = LineForwarder(self.camera)
+        self.lineForwarder = LineFollower(self.camera)
 
     # update cruising speed
     def setSpeed(self, speed):
@@ -250,7 +250,6 @@ class Altino:
                 # compute new angle
                 newAngle = self.lineForwarder.getNewSteeringAngle()
 
-                
                 # logger.debug("new steering angle: " + str(newAngle))
 
                 # set new steering angle

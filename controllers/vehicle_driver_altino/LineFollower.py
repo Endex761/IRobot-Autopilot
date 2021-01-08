@@ -12,7 +12,7 @@ MIDDLE_ZONE = int(NUM_ZONES/2)
 LINE_REFERENCE_COLOR = [228, 228, 42] # yellow
 LINE_COLOR_TOLERANCE = 30
 
-class LineForwarder:
+class LineFollower:
 
     def __init__(self, camera):
         # get camera from Altino
@@ -33,7 +33,6 @@ class LineForwarder:
     # process data from camera
     def processCameraImage(self):
         # if no pixel of line reference color is found, the line is lost
-        lineNotFund = True
 
         # clear zone's pixel count
         for i in range(NUM_ZONES):
@@ -43,14 +42,13 @@ class LineForwarder:
         image = self.camera.getImageArray()
 
         # scanning column by column
-        for j in range(self.cameraHeight):
-            for i in range(self.cameraWidth):
+        for i in range(self.cameraWidth):
+            for j in range(self.cameraHeight):
                 # if pixel is similar to line reference color add pixel to zone count
                 if self.colorDifference(image[i][j]) < LINE_COLOR_TOLERANCE:
                     self.zones[int(i / self.zoneSpace)] += 1
-                    lineNotFund = False
         
-        if lineNotFund:
+        if sum(self.zones) == 0:
             return UNKNOWN
 
         # find index of greatest zone

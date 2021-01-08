@@ -1,10 +1,11 @@
 #VRML_SIM R2021a utf8
 WorldInfo {
+  FPS 30
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.3057178383617059 -0.9039619368811761 -0.298980634786734 1.8057177614003792
-  position -17.171137487069725 12.970550820613694 -1.942813246204153
+  orientation -0.34862009341112665 -0.8708887107559301 -0.3464345305362781 1.7107645870501649
+  position -13.527783854206595 12.117651762552335 -0.6679453756505649
 }
 TexturedBackground {
 }
@@ -19,6 +20,367 @@ RectangleArena {
 RoadIntersection {
   translation -3.5 0.001 -2.65
   rotation 0 1 0 -0.7853996938995746
+  id "Int.1"
+  connectedRoadIDs [
+    "3"
+  ]
+  roadsWidth 0.5
+  startRoads FALSE
+  startRoadsLength [
+    0.1
+  ]
+  startRoadsNumberOfLanes 0
+  startRoadsStartLine [
+    "1"
+  ]
+  startRoadsLine [
+    RoadLine {
+      type "continuous"
+    }
+  ]
+  startRoadBorderHeight 0.05
+  startRoadBorderWidth 0.01
+  appearance Asphalt {
+    textureTransform TextureTransform {
+      rotation 3.5
+    }
+  }
+}
+RoadIntersection {
+  translation 3.5 0.001 -2.65
+  rotation 0 1 0 -0.7853996938995746
+  name "road intersection(1)"
+  id "Int.2"
+  connectedRoadIDs [
+    "3"
+  ]
+  roadsWidth 0.5
+  startRoads FALSE
+  startRoadsLength [
+    0.1
+  ]
+  startRoadsNumberOfLanes 0
+  startRoadsStartLine [
+    "1"
+  ]
+  startRoadsLine [
+    RoadLine {
+      type "continuous"
+    }
+  ]
+  startRoadBorderHeight 0.05
+  startRoadBorderWidth 0.01
+  appearance Asphalt {
+    textureTransform TextureTransform {
+      rotation 3.5
+    }
+  }
+}
+RoadIntersection {
+  translation 1.75 0.001 -2.65
+  rotation 0 1 0 -0.7853996938995746
+  name "road intersection(2)"
+  id "Int.3"
+  connectedRoadIDs [
+    "3"
+  ]
+  roadsWidth 0.5
+  startRoads FALSE
+  startRoadsLength [
+    0.1
+  ]
+  startRoadsNumberOfLanes 0
+  startRoadsStartLine [
+    "1"
+  ]
+  startRoadsLine [
+    RoadLine {
+      type "continuous"
+    }
+  ]
+  startRoadBorderHeight 0.05
+  startRoadBorderWidth 0.01
+  appearance Asphalt {
+    textureTransform TextureTransform {
+      rotation 3.5
+    }
+  }
+}
+RoadIntersection {
+  translation 0 0.001 -2.65
+  rotation 0 1 0 -0.7853996938995746
+  name "road intersection(4)"
+  id "Int.4"
+  connectedRoadIDs [
+    "3"
+  ]
+  roadsWidth 0.5
+  startRoads FALSE
+  startRoadsLength [
+    0.1
+  ]
+  startRoadsNumberOfLanes 0
+  startRoadsStartLine [
+    "1"
+  ]
+  startRoadsLine [
+    RoadLine {
+      type "continuous"
+    }
+  ]
+  startRoadBorderHeight 0.05
+  startRoadBorderWidth 0.01
+  appearance Asphalt {
+    textureTransform TextureTransform {
+      rotation 3.5
+    }
+  }
+}
+RoadIntersection {
+  translation 0 0.001 2.65
+  rotation 0 1 0 -0.7853996938995746
+  name "road intersection(5)"
+  id "Int.5"
+  connectedRoadIDs [
+    "3"
+  ]
+  roadsWidth 0.5
+  startRoads FALSE
+  startRoadsLength [
+    0.1
+  ]
+  startRoadsNumberOfLanes 0
+  startRoadsStartLine [
+    "1"
+  ]
+  startRoadsLine [
+    RoadLine {
+      type "continuous"
+    }
+  ]
+  startRoadBorderHeight 0.05
+  startRoadBorderWidth 0.01
+  appearance Asphalt {
+    textureTransform TextureTransform {
+      rotation 3.5
+    }
+  }
+}
+RoadIntersection {
+  translation 0 0.001 5.5
+  rotation 0 1 0 -0.7853996938995746
+  name "road intersection(12)"
+  id "Int.5"
+  connectedRoadIDs [
+    "3"
+  ]
+  roadsWidth 0.5
+  startRoads FALSE
+  startRoadsLength [
+    0.1
+  ]
+  startRoadsNumberOfLanes 0
+  startRoadsStartLine [
+    "1"
+  ]
+  startRoadsLine [
+    RoadLine {
+      type "continuous"
+    }
+  ]
+  startRoadBorderHeight 0.05
+  startRoadBorderWidth 0.01
+  appearance Asphalt {
+    textureTransform TextureTransform {
+      rotation 3.5
+    }
+  }
+}
+RoadIntersection {
+  translation 3.5 0.001 2.65
+  rotation 0 1 0 -0.7853996938995746
+  name "road intersection(11)"
+  id "Int.5"
+  connectedRoadIDs [
+    "3"
+  ]
+  roadsWidth 0.5
+  startRoads FALSE
+  startRoadsLength [
+    0.1
+  ]
+  startRoadsNumberOfLanes 0
+  startRoadsStartLine [
+    "1"
+  ]
+  startRoadsLine [
+    RoadLine {
+      type "continuous"
+    }
+  ]
+  startRoadBorderHeight 0.05
+  startRoadBorderWidth 0.01
+  appearance Asphalt {
+    textureTransform TextureTransform {
+      rotation 3.5
+    }
+  }
+}
+RoadIntersection {
+  translation 0 0.001 0
+  rotation 0 1 0 -0.7853996938995746
+  name "road intersection(7)"
+  id "Int.6"
+  connectedRoadIDs [
+    "3"
+  ]
+  roadsWidth 0.5
+  startRoads FALSE
+  startRoadsLength [
+    0.1
+  ]
+  startRoadsNumberOfLanes 0
+  startRoadsStartLine [
+    "1"
+  ]
+  startRoadsLine [
+    RoadLine {
+      type "continuous"
+    }
+  ]
+  startRoadBorderHeight 0.05
+  startRoadBorderWidth 0.01
+  appearance Asphalt {
+    textureTransform TextureTransform {
+      rotation 3.5
+    }
+  }
+}
+RoadIntersection {
+  translation 3.5 0.001 0
+  rotation 0 1 0 -0.7853996938995746
+  name "road intersection(10)"
+  id "Int.7"
+  connectedRoadIDs [
+    "3"
+  ]
+  roadsWidth 0.5
+  startRoads FALSE
+  startRoadsLength [
+    0.1
+  ]
+  startRoadsNumberOfLanes 0
+  startRoadsStartLine [
+    "1"
+  ]
+  startRoadsLine [
+    RoadLine {
+      type "continuous"
+    }
+  ]
+  startRoadBorderHeight 0.05
+  startRoadBorderWidth 0.01
+  appearance Asphalt {
+    textureTransform TextureTransform {
+      rotation 3.5
+    }
+  }
+}
+RoadIntersection {
+  translation -1.8 0.001 0
+  rotation 0 1 0 -0.7853996938995746
+  name "road intersection(6)"
+  id "Int.8"
+  connectedRoadIDs [
+    "3"
+  ]
+  roadsWidth 0.5
+  startRoads FALSE
+  startRoadsLength [
+    0.1
+  ]
+  startRoadsNumberOfLanes 0
+  startRoadsStartLine [
+    "1"
+  ]
+  startRoadsLine [
+    RoadLine {
+      type "continuous"
+    }
+  ]
+  startRoadBorderHeight 0.05
+  startRoadBorderWidth 0.01
+  appearance Asphalt {
+    textureTransform TextureTransform {
+      rotation 3.5
+    }
+  }
+}
+RoadIntersection {
+  translation -1.8 0.001 2.65
+  rotation 0 1 0 -0.7853996938995746
+  name "road intersection(8)"
+  id "Int.9"
+  connectedRoadIDs [
+    "3"
+  ]
+  roadsWidth 0.5
+  startRoads FALSE
+  startRoadsLength [
+    0.1
+  ]
+  startRoadsNumberOfLanes 0
+  startRoadsStartLine [
+    "1"
+  ]
+  startRoadsLine [
+    RoadLine {
+      type "continuous"
+    }
+  ]
+  startRoadBorderHeight 0.05
+  startRoadBorderWidth 0.01
+  appearance Asphalt {
+    textureTransform TextureTransform {
+      rotation 3.5
+    }
+  }
+}
+RoadIntersection {
+  translation -1.8 0.001 5.5
+  rotation 0 1 0 -0.7853996938995746
+  name "road intersection(9)"
+  id "Int.10"
+  connectedRoadIDs [
+    "3"
+  ]
+  roadsWidth 0.5
+  startRoads FALSE
+  startRoadsLength [
+    0.1
+  ]
+  startRoadsNumberOfLanes 0
+  startRoadsStartLine [
+    "1"
+  ]
+  startRoadsLine [
+    RoadLine {
+      type "continuous"
+    }
+  ]
+  startRoadBorderHeight 0.05
+  startRoadBorderWidth 0.01
+  appearance Asphalt {
+    textureTransform TextureTransform {
+      rotation 3.5
+    }
+  }
+}
+RoadIntersection {
+  translation 1.75 0.001 -5.5
+  rotation 0 1 0 -0.7853996938995746
+  name "road intersection(3)"
+  id "Int.11"
   connectedRoadIDs [
     "3"
   ]
@@ -67,11 +429,104 @@ Wall {
     IBLStrength 7
   }
 }
-RoadLine {
-  width 0.41
+Wall {
+  translation 3.755 0 -6.74634e-14
+  rotation 0 1 0 1.5708
+  name "wall(8)"
+  size 0.5 0.05 0.01
+  appearance Roughcast {
+    textureTransform TextureTransform {
+      scale 1 2.4
+    }
+    IBLStrength 7
+  }
+}
+Wall {
+  translation 3.755 0 2.65
+  rotation 0 1 0 1.5708
+  name "wall(9)"
+  size 0.5 0.05 0.01
+  appearance Roughcast {
+    textureTransform TextureTransform {
+      scale 1 2.4
+    }
+    IBLStrength 7
+  }
+}
+Wall {
+  translation 1.75 0 -2.395
+  rotation 0 1 0 -3.1415853071795863
+  name "wall(2)"
+  size 0.5 0.05 0.01
+  appearance Roughcast {
+    textureTransform TextureTransform {
+      scale 1 2.4
+    }
+    IBLStrength 7
+  }
+}
+Wall {
+  translation -2.69848e-13 0 -2.905
+  rotation 0 1 0 -3.1415853071795863
+  name "wall(4)"
+  size 0.5 0.05 0.01
+  appearance Roughcast {
+    textureTransform TextureTransform {
+      scale 1 2.4
+    }
+    IBLStrength 7
+  }
+}
+Wall {
+  translation -1.8 0 -0.255
+  rotation 0 1 0 -3.1415853071795863
+  name "wall(5)"
+  size 0.5 0.05 0.01
+  appearance Roughcast {
+    textureTransform TextureTransform {
+      scale 1 2.4
+    }
+    IBLStrength 7
+  }
+}
+Wall {
+  translation -1.8 0 5.755
+  rotation 0 1 0 -3.1415853071795863
+  name "wall(6)"
+  size 0.5 0.05 0.01
+  appearance Roughcast {
+    textureTransform TextureTransform {
+      scale 1 2.4
+    }
+    IBLStrength 7
+  }
+}
+Wall {
+  translation -2.69848e-13 0 5.755
+  rotation 0 1 0 -3.1415853071795863
+  name "wall(7)"
+  size 0.5 0.05 0.01
+  appearance Roughcast {
+    textureTransform TextureTransform {
+      scale 1 2.4
+    }
+    IBLStrength 7
+  }
+}
+Wall {
+  translation 1.75 0 -5.755
+  rotation 0 1 0 -3.1415853071795863
+  name "wall(3)"
+  size 0.5 0.05 0.01
+  appearance Roughcast {
+    textureTransform TextureTransform {
+      scale 1 2.4
+    }
+    IBLStrength 7
+  }
 }
 Altino {
-  translation -0.199767 0.019503 -4.31
+  translation -0.479767 0.0196458 -5.31
   rotation 0.00025255988963596084 0.9999999362135692 0.0002525596164512584 -1.570795308918225
   name "vehicle(2)"
   controller ""
@@ -99,7 +554,7 @@ StraightRoadSegment {
   roadBorderHeight 0.05
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
-  length 5.8
+  length 4.4
 }
 StraightRoadSegment {
   translation -3.25 0.001 -2.65
@@ -125,14 +580,15 @@ StraightRoadSegment {
   roadBorderHeight 0.05
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
-  length 6.5
+  length 3
 }
 StraightRoadSegment {
-  translation 3.25 0.0001 -2.65
+  translation -2.9 0.001 0
   rotation 0 1 0 1.5707996938995747
-  name "roadInters"
-  id "27"
+  name "road(18)"
+  id "1"
   width 0.5
+  numberOfLanes 4
   lines [
     RoadLine {
       type "continuous"
@@ -147,13 +603,273 @@ StraightRoadSegment {
       width 0.005
     }
   ]
-  roadBorderHeight 0
-  startingRoadBorderWidth 0
-  endingRoadBorderWidth 0
-  length 0.25
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 0.85
+}
+StraightRoadSegment {
+  translation -1.55 0.001 0
+  rotation 0 1 0 1.5707996938995747
+  name "road(22)"
+  id "1"
+  width 0.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 1.3
+}
+StraightRoadSegment {
+  translation -1.55 0.001 2.65
+  rotation 0 1 0 1.5707996938995747
+  name "road(25)"
+  id "1"
+  width 0.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 1.3
+}
+StraightRoadSegment {
+  translation -1.55 0.001 5.5
+  rotation 0 1 0 1.5707996938995747
+  name "road(31)"
+  id "1"
+  width 0.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 1.3
+}
+StraightRoadSegment {
+  translation -2.9 0.001 2.65
+  rotation 0 1 0 1.5707996938995747
+  name "road(16)"
+  id "1"
+  width 0.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 0.85
 }
 StraightRoadSegment {
   translation -2.9 0.001 5.5
+  rotation 0 1 0 1.5707996938995747
+  name "road(28)"
+  id "1"
+  width 0.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 0.85
+}
+StraightRoadSegment {
+  translation 2 0.001 -2.65
+  rotation 0 1 0 1.5707996938995747
+  name "road(13)"
+  id "1"
+  width 0.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 1.25
+}
+StraightRoadSegment {
+  translation 0.25 0.001 -2.65
+  rotation 0 1 0 1.5707996938995747
+  name "road(17)"
+  id "1"
+  width 0.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 1.25
+}
+StraightRoadSegment {
+  translation 0.25 0.001 0
+  rotation 0 1 0 1.5707996938995747
+  name "road(20)"
+  id "1"
+  width 0.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 3
+}
+StraightRoadSegment {
+  translation 0.25 0.001 2.65
+  rotation 0 1 0 1.5707996938995747
+  name "road(26)"
+  id "1"
+  width 0.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 3
+}
+StraightRoadSegment {
+  translation 2 0.001 -5.5
+  rotation 0 1 0 1.5707996938995747
+  name "road(14)"
+  id "1"
+  width 0.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 0.9
+}
+StraightRoadSegment {
+  translation 0.25 0.001 5.5
   rotation 0 1 0 1.5707996938995747
   name "road(6)"
   id "2"
@@ -176,7 +892,7 @@ StraightRoadSegment {
   roadBorderHeight 0.05
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
-  length 5.8
+  length 2.65
 }
 StraightRoadSegment {
   translation -3.5 0.001 -4.9
@@ -226,13 +942,14 @@ StraightRoadSegment {
   roadBorderHeight 0.05
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
-  length 2
+  length 1.8
 }
 StraightRoadSegment {
-  translation 3.5 0.001 -2.9
-  name "road(10)"
+  translation -3.5 0.001 3.25
+  name "road(24)"
   id "3"
   width 0.5
+  numberOfLanes 4
   lines [
     RoadLine {
       type "continuous"
@@ -247,10 +964,185 @@ StraightRoadSegment {
       width 0.005
     }
   ]
-  roadBorderHeight 0
-  startingRoadBorderWidth 0
-  endingRoadBorderWidth 0
-  length 0.5
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 1.65
+}
+StraightRoadSegment {
+  translation 3.5 0.001 2.9
+  name "road(30)"
+  id "3"
+  width 0.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 2
+}
+StraightRoadSegment {
+  translation 0 0.001 -2.4
+  name "road(15)"
+  id "3"
+  width 0.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 2.15
+}
+StraightRoadSegment {
+  translation 0 0.001 0.25
+  name "road(19)"
+  id "3"
+  width 0.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 2.15
+}
+StraightRoadSegment {
+  translation 3.5 0.001 0.25
+  name "road(29)"
+  id "3"
+  width 0.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 2.15
+}
+StraightRoadSegment {
+  translation -1.8 0.001 0.25
+  name "road(21)"
+  id "3"
+  width 0.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 2.15
+}
+StraightRoadSegment {
+  translation -1.8 0.001 2.9
+  name "road(27)"
+  id "3"
+  width 0.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 2.35
+}
+StraightRoadSegment {
+  translation 0 0.001 2.9
+  name "road(32)"
+  id "3"
+  width 0.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 2.35
 }
 StraightRoadSegment {
   translation 3.5 0.001 -2.4
@@ -275,7 +1167,7 @@ StraightRoadSegment {
   roadBorderHeight 0.05
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
-  length 2
+  length 2.15
 }
 StraightRoadSegment {
   translation 3.5 0.001 -4.9
@@ -301,6 +1193,31 @@ StraightRoadSegment {
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
   length 2
+}
+StraightRoadSegment {
+  translation 1.75 0.001 -5.25
+  name "road(10)"
+  id "4"
+  width 0.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 2.35
 }
 CurvedRoadSegment {
   translation 2.9 0.001 -4.9
@@ -380,6 +1297,32 @@ CurvedRoadSegment {
   subdivision 100
 }
 CurvedRoadSegment {
+  translation -2.9 0.001 3.25
+  rotation 0 1 0 3.141592653589793
+  name "road(23)"
+  width 0.5
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  roadBorderWidth [
+    0.01
+  ]
+  curvatureRadius 0.6
+  subdivision 100
+}
+CurvedRoadSegment {
   translation -2.9 0.001 4.9
   rotation 0 1 0 -1.570795613280012
   name "road(7)"
@@ -406,7 +1349,7 @@ CurvedRoadSegment {
   subdivision 100
 }
 CurvedRoadSegment {
-  translation -2.9 0.001 -0.4
+  translation -2.9 0.001 -0.6
   rotation 0 1 0 -1.570795613280012
   name "road(8)"
   width 0.5
@@ -432,37 +1375,37 @@ CurvedRoadSegment {
   subdivision 100
 }
 Altino {
-  translation -0.129767 0.0195183 -4.69
+  translation -0.129767 0.0195183 -5.69
   rotation 0.0002525599157001727 0.9999999362135559 0.00025255964251641943 -1.5707953089182312
   name "vehicle(3)"
   controller ""
 }
 Altino {
-  translation 0.349438 0.0195183 -4.31
+  translation 0.349438 0.0195183 -5.31
   rotation 0.0002525598900105956 0.9999999362135691 0.0002525596164497706 -1.570795307423541
   name "vehicle(1)"
   controller ""
 }
 Altino {
-  translation 0.449438 0.0195183 -4.5
-  rotation 0.0002525598900105956 0.9999999362135691 0.0002525596164497706 -1.570795307423541
+  translation -0.200835 0.0198507 -5.31356
+  rotation 0.00025255998389013334 0.9999999362137052 0.0002525589838901972 -1.5707953071795862
   name "SF71H"
   color 1 0.157 0
 }
 Altino {
-  translation 0.449438 0.0195183 -4.69
+  translation 0.449438 0.0195183 -5.69
   rotation 0.0002525599160766004 0.9999999362135559 0.0002525596425156139 -1.57079530742356
   name "vehicle(4)"
   controller ""
 }
 Altino {
-  translation 0.149438 0.0195183 -4.69
+  translation 0.149438 0.0195183 -5.69
   rotation 0.00025255991847257606 0.9999999362135548 0.00025255964491086773 -1.5707953074235563
   name "vehicle(5)"
   controller ""
 }
 Altino {
-  translation 0.0694342 0.0195183 -4.31
+  translation 0.0694341 0.0195183 -5.31
   rotation 0.00025255992974590165 0.999999936213549 0.00025255965618306217 -1.5707953074235628
   name "vehicle(6)"
   controller ""

@@ -47,25 +47,25 @@ class Altino:
         self.sensorTimestep = 2 * self.timestep
 
         # get lights
-        self.headLights = self.driver.getLED("headlights")
-        self.backLights = self.driver.getLED("backlights")
+        self.headLights = self.driver.getDevice("headlights")
+        self.backLights = self.driver.getDevice("backlights")
 
         # turn on headLights
         # headLights.set(1)
 
         # get and enable camera
-        self.camera = self.driver.getCamera("camera")
+        self.camera = self.driver.getDevice("camera")
         self.camera.enable(self.sensorTimestep)
 
         # get distance sensors
         self.distanceSensors = DistanceSensors()
-        self.distanceSensors.frontLeft = self.driver.getDistanceSensor("front_left_sensor")
-        self.distanceSensors.frontCenter = self.driver.getDistanceSensor('front_center_sensor')
-        self.distanceSensors.frontRight = self.driver.getDistanceSensor('front_right_sensor')
+        self.distanceSensors.frontLeft = self.driver.getDevice("front_left_sensor")
+        self.distanceSensors.frontCenter = self.driver.getDevice('front_center_sensor')
+        self.distanceSensors.frontRight = self.driver.getDevice('front_right_sensor')
 
-        self.distanceSensors.sideLeft = self.driver.getDistanceSensor('side_left_sensor')
-        self.distanceSensors.sideRight = self.driver.getDistanceSensor('side_right_sensor')
-        self.distanceSensors.back = self.driver.getDistanceSensor('back_sensor')
+        self.distanceSensors.sideLeft = self.driver.getDevice('side_left_sensor')
+        self.distanceSensors.sideRight = self.driver.getDevice('side_right_sensor')
+        self.distanceSensors.back = self.driver.getDevice('back_sensor')
 
         # enable distance sensors
         self.distanceSensors.frontLeft.enable(self.sensorTimestep)
@@ -78,10 +78,10 @@ class Altino:
 
         # get position sensors
         self.positionSensors = PositionSensors()
-        self.positionSensors.frontLeft  = self.driver.getPositionSensor('left_front_sensor')
-        self.positionSensors.frontRight = self.driver.getPositionSensor('right_front_sensor')
-        self.positionSensors.rearLeft   = self.driver.getPositionSensor('left_rear_sensor')
-        self.positionSensors.rearRight  = self.driver.getPositionSensor('right_rear_sensor')
+        self.positionSensors.frontLeft  = self.driver.getDevice('left_front_sensor')
+        self.positionSensors.frontRight = self.driver.getDevice('right_front_sensor')
+        self.positionSensors.rearLeft   = self.driver.getDevice('left_rear_sensor')
+        self.positionSensors.rearRight  = self.driver.getDevice('right_rear_sensor')
 
         # enable position sensors
         self.positionSensors.frontLeft.enable(self.sensorTimestep)

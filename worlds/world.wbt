@@ -525,18 +525,6 @@ Wall {
     IBLStrength 7
   }
 }
-Altino {
-  hidden position_0_0 8.553895633078596e-16
-  hidden position2_0_0 1.4229841734319657e-12
-  hidden position_0_1 -1.2436836537328477e-15
-  hidden position2_0_1 1.4228176590364357e-12
-  hidden position_0_2 -3.3331436401780915e-12
-  hidden position_0_3 -3.3349829216679837e-12
-  translation -0.47976702419712586 0.020517608738739427 -5.309999999999973
-  rotation 0.0002524754094635336 0.9999999362562344 0.0002524751363706362 -1.5707953088755535
-  name "vehicle(2)"
-  controller ""
-}
 StraightRoadSegment {
   translation -2.9 0.001 -5.5
   rotation 0 1 0 1.5707996938995747
@@ -591,7 +579,7 @@ StraightRoadSegment {
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
   length 3
-  roadBoundingObject TRUE
+  roadBoundingObject FALSE
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -621,7 +609,7 @@ StraightRoadSegment {
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
   length 0.85
-  roadBoundingObject TRUE
+  roadBoundingObject FALSE
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -651,7 +639,7 @@ StraightRoadSegment {
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
   length 1.3
-  roadBoundingObject TRUE
+  roadBoundingObject FALSE
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -736,7 +724,7 @@ StraightRoadSegment {
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
   length 0.85
-  roadBoundingObject TRUE
+  roadBoundingObject FALSE
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -766,7 +754,7 @@ StraightRoadSegment {
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
   length 0.85
-  roadBoundingObject TRUE
+  roadBoundingObject FALSE
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -796,7 +784,7 @@ StraightRoadSegment {
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
   length 1.25
-  roadBoundingObject TRUE
+  roadBoundingObject FALSE
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -826,7 +814,7 @@ StraightRoadSegment {
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
   length 1.25
-  roadBoundingObject TRUE
+  roadBoundingObject FALSE
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -856,7 +844,7 @@ StraightRoadSegment {
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
   length 3
-  roadBoundingObject TRUE
+  roadBoundingObject FALSE
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -886,7 +874,7 @@ StraightRoadSegment {
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
   length 3
-  roadBoundingObject TRUE
+  roadBoundingObject FALSE
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -916,7 +904,7 @@ StraightRoadSegment {
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
   length 0.9
-  roadBoundingObject TRUE
+  roadBoundingObject FALSE
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -946,7 +934,7 @@ StraightRoadSegment {
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
   length 2.65
-  roadBoundingObject TRUE
+  roadBoundingObject FALSE
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -975,7 +963,7 @@ StraightRoadSegment {
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
   length 2
-  roadBoundingObject TRUE
+  roadBoundingObject FALSE
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -1004,7 +992,7 @@ StraightRoadSegment {
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
   length 1.8
-  roadBoundingObject TRUE
+  roadBoundingObject FALSE
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -1033,7 +1021,7 @@ StraightRoadSegment {
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
   length 1.65
-  roadBoundingObject TRUE
+  roadBoundingObject FALSE
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -1062,7 +1050,7 @@ StraightRoadSegment {
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
   length 2
-  roadBoundingObject TRUE
+  roadBoundingObject FALSE
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -1091,7 +1079,7 @@ StraightRoadSegment {
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
   length 2.15
-  roadBoundingObject TRUE
+  roadBoundingObject FALSE
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -1120,7 +1108,7 @@ StraightRoadSegment {
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
   length 2.15
-  roadBoundingObject TRUE
+  roadBoundingObject FALSE
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -1149,7 +1137,7 @@ StraightRoadSegment {
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
   length 2.15
-  roadBoundingObject TRUE
+  roadBoundingObject FALSE
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -1178,7 +1166,7 @@ StraightRoadSegment {
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
   length 2.15
-  roadBoundingObject TRUE
+  roadBoundingObject FALSE
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -1207,7 +1195,7 @@ StraightRoadSegment {
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
   length 2.35
-  roadBoundingObject TRUE
+  roadBoundingObject FALSE
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -1236,7 +1224,7 @@ StraightRoadSegment {
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
   length 2.35
-  roadBoundingObject TRUE
+  roadBoundingObject FALSE
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -1265,7 +1253,7 @@ StraightRoadSegment {
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
   length 2.15
-  roadBoundingObject TRUE
+  roadBoundingObject FALSE
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -1294,7 +1282,7 @@ StraightRoadSegment {
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
   length 2
-  roadBoundingObject TRUE
+  roadBoundingObject FALSE
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -1323,7 +1311,7 @@ StraightRoadSegment {
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
   length 2.35
-  roadBoundingObject TRUE
+  roadBoundingObject FALSE
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -1371,10 +1359,10 @@ CurvedRoadSegment {
     0.01
   ]
   curvatureRadius 0.6
-  subdivision 100
-  roadBoundingObject TRUE
-  rightBorderBoundingObject TRUE
-  leftBorderBoundingObject TRUE
+  subdivision 16
+  roadBoundingObject FALSE
+  rightBorderBoundingObject FALSE
+  leftBorderBoundingObject FALSE
 }
 CurvedRoadSegment {
   translation -2.9 0.001 -4.9
@@ -1402,7 +1390,7 @@ CurvedRoadSegment {
     0.01
   ]
   curvatureRadius 0.6
-  subdivision 100
+  subdivision 16
 }
 CurvedRoadSegment {
   translation -2.9 0.001 3.25
@@ -1430,10 +1418,10 @@ CurvedRoadSegment {
     0.01
   ]
   curvatureRadius 0.6
-  subdivision 100
-  roadBoundingObject TRUE
-  rightBorderBoundingObject TRUE
-  leftBorderBoundingObject TRUE
+  subdivision 16
+  roadBoundingObject FALSE
+  rightBorderBoundingObject FALSE
+  leftBorderBoundingObject FALSE
 }
 CurvedRoadSegment {
   translation -2.9 0.001 4.9
@@ -1461,10 +1449,10 @@ CurvedRoadSegment {
     0.01
   ]
   curvatureRadius 0.6
-  subdivision 100
-  roadBoundingObject TRUE
-  rightBorderBoundingObject TRUE
-  leftBorderBoundingObject TRUE
+  subdivision 16
+  roadBoundingObject FALSE
+  rightBorderBoundingObject FALSE
+  leftBorderBoundingObject FALSE
 }
 CurvedRoadSegment {
   translation -2.9 0.001 -0.6
@@ -1492,34 +1480,10 @@ CurvedRoadSegment {
     0.01
   ]
   curvatureRadius 0.6
-  subdivision 100
-  roadBoundingObject TRUE
-  rightBorderBoundingObject TRUE
-  leftBorderBoundingObject TRUE
-}
-Altino {
-  hidden position_0_0 1.4263094628713943e-15
-  hidden position2_0_0 1.421814128473574e-12
-  hidden position_0_1 -7.295892871761994e-16
-  hidden position2_0_1 1.4218141393011365e-12
-  hidden position_0_2 -3.340933959708607e-12
-  hidden position_0_3 -3.3377745012330706e-12
-  translation -0.12976702423589495 0.02051748427920602 -5.689999999999973
-  rotation 0.00025247445866127095 0.9999999362567146 0.0002524741855686478 -1.570795308875071
-  name "vehicle(3)"
-  controller ""
-}
-Altino {
-  hidden position_0_0 1.111236499130351e-15
-  hidden position2_0_0 1.4217551673348253e-12
-  hidden position_0_1 -8.949851768445641e-16
-  hidden position2_0_1 1.42181065920547e-12
-  hidden position_0_2 -3.343765658496679e-12
-  hidden position_0_3 -3.33138122977052e-12
-  translation 0.34943797576514546 0.020517484279206 -5.309999999999973
-  rotation 0.0002524744590112308 0.9999999362567146 0.00025247418554483214 -1.5707953073803942
-  name "vehicle(1)"
-  controller ""
+  subdivision 16
+  roadBoundingObject FALSE
+  rightBorderBoundingObject FALSE
+  leftBorderBoundingObject FALSE
 }
 Altino {
   hidden position_0_0 2.5838002695566242e-05
@@ -1536,6 +1500,42 @@ Altino {
   rotation 0.0002548962672567561 0.999999935803609 0.0002518346102216524 -1.5635505067938191
   name "SF71H"
   color 1 0.157 0
+}
+Altino {
+  hidden position_0_0 1.4263094628713943e-15
+  hidden position2_0_0 1.421814128473574e-12
+  hidden position_0_1 -7.295892871761994e-16
+  hidden position2_0_1 1.4218141393011365e-12
+  hidden position_0_2 -3.340933959708607e-12
+  hidden position_0_3 -3.3377745012330706e-12
+  translation -0.12976702423589495 0.02051748427920602 -5.689999999999973
+  rotation 0.00025247445866127095 0.9999999362567146 0.0002524741855686478 -1.570795308875071
+  name "vehicle(1)"
+  controller ""
+}
+Altino {
+  hidden position_0_0 1.111236499130351e-15
+  hidden position2_0_0 1.4217551673348253e-12
+  hidden position_0_1 -8.949851768445641e-16
+  hidden position2_0_1 1.42181065920547e-12
+  hidden position_0_2 -3.343765658496679e-12
+  hidden position_0_3 -3.33138122977052e-12
+  translation 0.34943797576514546 0.020517484279206 -5.309999999999973
+  rotation 0.0002524744590112308 0.9999999362567146 0.00025247418554483214 -1.5707953073803942
+  name "vehicle(2)"
+  controller ""
+}
+Altino {
+  hidden position_0_0 8.553895633078596e-16
+  hidden position2_0_0 1.4229841734319657e-12
+  hidden position_0_1 -1.2436836537328477e-15
+  hidden position2_0_1 1.4228176590364357e-12
+  hidden position_0_2 -3.3331436401780915e-12
+  hidden position_0_3 -3.3349829216679837e-12
+  translation -0.47976702419712586 0.020517608738739427 -5.309999999999973
+  rotation 0.0002524754094635336 0.9999999362562344 0.0002524751363706362 -1.5707953088755535
+  name "vehicle(3)"
+  controller ""
 }
 Altino {
   hidden position_0_0 8.083684338955245e-16

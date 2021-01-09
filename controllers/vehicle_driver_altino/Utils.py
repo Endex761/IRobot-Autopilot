@@ -14,7 +14,6 @@ class Status(IntEnum):
     CENTER = auto()
     TURN = auto()
     
-
 class DistanceSensors:
 
     def __init__(self):
@@ -132,3 +131,9 @@ class Position:
 
     def setY(self, y):
         self.y = y
+
+    def getPositionArray(self):
+        return (self.x, self.y)
+
+
+       

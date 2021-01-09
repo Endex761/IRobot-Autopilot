@@ -1,7 +1,7 @@
 from Utils import DistanceSensors, PositionSensors
 from Utils import Logger, Status
 from LineFollower import LineFollower, UNKNOWN
-from Navigation import Navigation, NORD, EST, SOUTH, WEST
+from Navigation import Navigation, NORD, EST, SOUTH, WEST, LEFT, RIGHT, FORWARD
 
 DEBUG = True
 
@@ -18,8 +18,8 @@ except ImportError:
 # constants 
 MAX_SPEED = 1.8
 MAX_ANGLE = 0.52 # rads ~ 30°
-LEFT = -1
-RIGHT = 1
+# LEFT = -1
+# RIGHT = 1
 UNKNOWN = -2
 
 # vehicle dimensions in meters
@@ -110,8 +110,10 @@ class Altino:
         # navigation
         self.nav = Navigation()
         self.nav.setRobotPosition([8, 12])
+        self.nav.setGoalPosition([15, 23])
         self.nav.setRobotOrientation(SOUTH)
         self.nav.printStatus()
+        logger.debug(self.nav.getFastestRoute())
 
     # update cruising speed
     def setSpeed(self, speed):

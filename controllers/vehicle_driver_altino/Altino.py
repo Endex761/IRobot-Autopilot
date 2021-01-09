@@ -44,7 +44,7 @@ class Altino:
         self.timestep = int(self.driver.getBasicTimeStep())
 
         # set sensor timestep
-        self.sensorTimestep = 4 * self.timestep
+        self.sensorTimestep = 2 * self.timestep
 
         # get lights
         self.headLights = self.driver.getLED("headlights")
@@ -209,6 +209,7 @@ class Altino:
         leftStartingPosition = 0.0  # length of the left parking lot
         rightStartingPosition = 0.0 # length of the right parking lot
         sideOfParkingLot = 0 # indicates the side of the parking lot found: -1 left, 1 right, 0 not found yet
+        turningDirection = 0 # indicates the turning direction: -1 left, 1 right, 0 streight
 
         while self.driver.step() != -1:
             
@@ -218,7 +219,7 @@ class Altino:
             self.updateDistanceTraveled()
 
             # stop vehicle if too close to an obstacle, disable if in manual
-            if self.avoidObstacle() and self.status != Status.MANUAL:
+            if self.avoidObstacle() and self.status != Status.MANUAL and False:
                 self.setStatus(Status.STOP)
                 
             # check keyboard pressed keys and change status
@@ -245,7 +246,7 @@ class Altino:
             if self.status == Status.FOLLOW_LINE:
 
                 # set cruise speed
-                self.setSpeed(1)
+                self.setSpeed(0.5)
 
                 # compute new angle
                 newAngle = self.lineForwarder.getNewSteeringAngle()
@@ -256,7 +257,11 @@ class Altino:
                 if newAngle != UNKNOWN:
                     self.setAngle(newAngle)
                 else:
-                    self.setAngle(0.0)
+                    self.setAngle(0.5 * RIGHT * MAX_ANGLE)
+            
+            # TURN STATUS
+            if self.status == Status.TURN:
+                self.setAngle(turningDirection * 0.5 * MAX_ANGLE)
 
             # FORWARD STATUS
             if self.status == Status.FORWARD:
@@ -275,7 +280,6 @@ class Altino:
                 sideRightSensor = ds.sideRight.getValue()
 
                 # set values of thresholds
-                frontThreshold = 200
                 tolerance = 10
                 sideThreshold = 950
 
@@ -323,16 +327,16 @@ class Altino:
                 logger.debug("Starting position: " + str(leftStartingPosition) + " m")
                 logger.debug("Parking Lot Length: " + str(self.leftWheelDistance - leftStartingPosition) + " m")
 
-                frontThreshold = 650
+                sideThreshold = 650
                 leftSensorValue = ds.sideLeft.getValue()
                 rightSensorValue = ds.sideRight.getValue()
                 
                 # checking parking lot on the LEFT side
-                if leftSensorValue < frontThreshold and not leftIsEmpty:
+                if leftSensorValue < sideThreshold and not leftIsEmpty:
                     leftIsEmpty = True
                     leftStartingPosition = self.leftWheelDistance # 100
                 
-                elif leftSensorValue > frontThreshold and leftIsEmpty:
+                elif leftSensorValue > sideThreshold and leftIsEmpty:
                     leftIsEmpty = False
 
                 elif leftIsEmpty and self.leftWheelDistance - leftStartingPosition > LENGTH + LENGTH/3:
@@ -341,11 +345,11 @@ class Altino:
                     self.setStatus(Status.FORWARD2)
 
                 # checking parking lot on the RIGHT side
-                if rightSensorValue < frontThreshold and not rightIsEmpty:
+                if rightSensorValue < sideThreshold and not rightIsEmpty:
                     rightIsEmpty = True
                     rightStartingPosition = self.rightWheelDistance
                 
-                elif rightSensorValue > frontThreshold and rightIsEmpty:
+                elif rightSensorValue > sideThreshold and rightIsEmpty:
                     rightIsEmpty = False
 
                 elif rightIsEmpty and self.rightWheelDistance - rightStartingPosition > LENGTH + LENGTH/3:
@@ -355,7 +359,7 @@ class Altino:
 
             # this ensure that the parking manoeuvre starts after going forward and not as soon as the parking lot is detected
             if self.status == Status.FORWARD2:
-                distance = 0.135
+                distance = 0.19
                 if sideOfParkingLot == LEFT:
                     if self.leftWheelDistance - leftStartingPosition > distance:
                         self.status = Status.PARKING
@@ -378,15 +382,33 @@ class Altino:
                 self.setSpeed(-0.1)
 
                 # when should it turn the other way
-                frontThreshold = 650
+                backThreshold = 400
                 ds = self.distanceSensors
                 rear = ds.back.getValue()
 
-                if rear > frontThreshold:
+                logger.debug("Back sensor: " + str(rear))
+
+                if rear > backThreshold:
                     self.status = Status.PARKING2
 
             if self.status == Status.PARKING2:
                 self.setAngle(-1 * sideOfParkingLot * MAX_ANGLE)
+
+                threshold = 945
+                rear = self.distanceSensors.back.getValue()
+                if rear > threshold:
+                    self.setStatus(Status.CENTER)
+
+            if self.status == Status.CENTER:
+                
+                self.setAngle(0.0)
+                self.setSpeed(0.2)
+
+                rear = self.distanceSensors.back.getValue()
+                front = self.distanceSensors.frontCenter.getValue()
+
+                if rear - front < 20:
+                    self.setStatus(Status.STOP)
                 
             if self.status == Status.STOP:
                 self.setSpeed(0.0)

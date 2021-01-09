@@ -11,6 +11,8 @@ class Status(IntEnum):
     STOP = auto()
     MANUAL = auto()
     FOLLOW_LINE = auto()
+    CENTER = auto()
+    TURN = auto()
     
 
 class DistanceSensors:

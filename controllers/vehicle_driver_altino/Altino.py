@@ -1,8 +1,7 @@
-from typing import Counter
 from Utils import DistanceSensors, PositionSensors
 from Utils import Logger, Status
 from LineFollower import LineFollower, UNKNOWN
-import math
+from Navigation import Navigation, NORD, EST, SOUTH, WEST
 
 DEBUG = True
 
@@ -28,7 +27,6 @@ WHEEL_RADIUS = 0.020
 LENGTH = 0.180
 WIDTH = 0.098
 HEIGHT = 0.061
-
 
 class Altino:
 
@@ -108,6 +106,12 @@ class Altino:
 
         # line forwared
         self.lineForwarder = LineFollower(self.camera)
+
+        # navigation
+        self.nav = Navigation()
+        self.nav.setRobotPosition([8, 12])
+        self.nav.setRobotOrientation(SOUTH)
+        self.nav.printStatus()
 
     # update cruising speed
     def setSpeed(self, speed):

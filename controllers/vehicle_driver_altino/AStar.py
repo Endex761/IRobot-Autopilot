@@ -1,5 +1,7 @@
+# AStar Algorithm 
+
+# Value of Wall
 WALL = 10
-I = 2
 
 class Node():
     """A node class for A* Pathfinding"""

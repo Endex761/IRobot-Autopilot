@@ -1,13 +1,7 @@
 from Utils import DistanceSensors, PositionSensors
-from Utils import Logger, Status
+from Utils import logger, Status, DEBUG
 from LineFollower import LineFollower, UNKNOWN
 from Navigation import Navigation, NORD, EST, SOUTH, WEST, LEFT, RIGHT, FORWARD
-
-DEBUG = True
-
-logger = Logger()
-logger.DEBUG_ENABLED = DEBUG
-
 
 try:
     from vehicle import Driver
@@ -111,7 +105,7 @@ class Altino:
         self.nav = Navigation()
         self.nav.setRobotPosition([8, 12])
         self.nav.setGoalPosition([15, 23])
-        self.nav.setRobotOrientation(SOUTH)
+        self.nav.setRobotOrientation(EST)
         self.nav.printStatus()
         logger.debug(self.nav.getFastestRoute())
 

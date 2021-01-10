@@ -1,30 +1,36 @@
 from Utils import Position
 import AStar
 
-B = 10
-O = 10
-R = 1
-I = 2
+# CARDINAL POINTS
+NORD = 0
+EST = 1
+SOUTH = 2
+WEST = 3
 
-NORD = 10
-EST = 11
-SOUTH = 12
-WEST = 13
-
+# TURNS
 LEFT = -1
 RIGHT = 1
 FORWARD = 0
 U_TURN = 99
 
+# MAP DIMENSIONS
 WIDTH = 25
 HEIGHT = 17
+
+# MAP CONSTANS
+B = AStar.WALL
+O = AStar.WALL
+R = 1
+I = 2
+
+# --- MAP ---
 # o-----> Y      ^ N
 # |              | 
 # |        W <-- o --> E
 # v X            |
 #                v S
 #                                       
-#      Y= 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24     X    map[X][Y]
+#      Y  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24     X    map[X][Y]
 MAP =   [[B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B], # 0
          [B, R, R, R, R, R, I, R, R, R, R, R, I, R, R, R, R, I, R, R, R, R, R, R, B], # 1
          [B, R, O, O, O, O, R, O, O, O, O, O, R, O, O, O, O, R, O, O, O, O, O, R, B], # 2
@@ -42,65 +48,85 @@ MAP =   [[B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B
          [B, R, O, O, O, O, R, O, O, O, O, O, R, O, O, O, O, R, O, O, O, O, O, R, B], # 14
          [B, R, R, R, R, R, I, R, R, R, R, R, R, O, O, O, O, R, R, R, R, R, R, R, B], # 15
          [B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B]] # 16
-# [(8, 12), (8, 17), (12, 17), (12, 23), (15,23)]
-# [(8, 12), (8, 13), (8, 14), (8, 15), (8, 16), (8, 17), (9, 17), (10, 17), (11, 17), (12, 17), (12, 18), (12, 19), (12, 20), (12, 21), (12, 22), (12, 23), (13, 23), (14, 23), (15, 23)]         
+
+ # Navigation class
 class Navigation:
 
     def __init__(self):
         self.map = MAP
 
         self.robotPosition = Position(0, 0)
-        self.robotOrientation = WEST
+        self.robotOrientation = NORD
         self.goalPosition = Position (0, 0)
+    
+    # return array containing a turn for each intersection in the path between robot position and goal
+    def getFastestRoute(self):
+        
+        # get fastest route from AStar giving map, start position and goal position
+        route = AStar.findPath(self.map, self.robotPosition.getPositionArray(), self.goalPosition.getPositionArray())
 
-    def getIntersectionNodes(self, route):
+        # get only intersection nodes from AStar route
+        intersections = self.getIntersectionNodesFromRoute(route)
+
+        # get cardinal points directions based on intersection nodes
+        directions = self.getDirectionsFromIntersections(intersections)
+        
+        # get turns based on robot directions and robot orientation
+        turns = self.getTurnsFromDirections(directions)
+
+        # return the turns
+        return turns
+
+    # return first, last and intersection nodes from AStar route
+    def getIntersectionNodesFromRoute(self, route):
         intersections = []
+        # get first node
         intersections.append(route[0])
 
-        for i in range(1, len(route) - 1):
-            node = route[i]
+        # get intersection nodes
+        for node in route[1:-1]:
             if self.map[node[0]][node[1]] == I:
                 intersections.append(node)
-        
+
+        # get last node
         intersections.append(route[-1]) 
         
+        # return intersections
         return intersections
 
-    def getFastestRoute(self):
+    # return cardinal points direction from one intersection to another
+    def getDirectionsFromIntersections(self, intersections):
         directions = []
-        # directions.append(self.robotOrientation)
-        
-        route = AStar.findPath(self.map, self.robotPosition.getPositionArray(), self.goalPosition.getPositionArray())
-        print("AStar: " + str(route))
 
-        route = self.getIntersectionNodes(route)
-        print("Intersecitons:" + str(route))
-
-        prevNode = route[0]
-        for i in range(1,len(route)):
-            currentNode = route[i]
-            print("currentNode: " + str(currentNode))
-            print("prevNode: " + str(prevNode))
+        # for each cople of nodes compute cardinal points direction between them
+        prevNode = intersections[0]
+        for currentNode in intersections[1:]:
+            # check if X has changed
             if currentNode[0] > prevNode[0]:
                 directions.append(SOUTH)
             elif currentNode[0] < prevNode[0]:
                 directions.append(NORD)
+            # check if Y has changed
             elif currentNode[1] > prevNode[1]:
                 directions.append(EST)
             elif currentNode[1] < prevNode[1]:
                 directions.append(WEST)
             else:
-                print("WTF?!?")
+                print("ERROR: Invalid intersetions")
+            # go to next couple of node
             prevNode = currentNode
         
-        print("directions: " + str(directions))
-            
+        return directions
+
+    # contains a list of turns (RIGHT, LEFT, FORWARD, U_TURN) for each intersection based on robot orientation and next direction
+    def getTurnsFromDirections(self, directions):
         turns = []
+
+        # get actual robot orientation
         actualDirection = self.robotOrientation
-        for i in range(len(directions)):
-            direction = directions[i]
-            print("actualDirection: " + str(actualDirection))
-            print("direction: " + str(direction))
+        
+        # for each cardinal point direction compute turn based on robot current and future orientation
+        for direction in directions:
             # FORWARD case
             if actualDirection == direction:
                 turns.append(FORWARD)
@@ -132,37 +158,12 @@ class Navigation:
                 turns.append(RIGHT)
             elif actualDirection == SOUTH and direction == NORD:
                 turns.append(U_TURN)
+            # change actual direction 
             actualDirection = direction
 
+        return turns
 
-
-        print(turns)
-
-        return
-
-        # davide
-        prevNode = route[0]
-        for i in range(1,len(route)):
-            currentNode = route[i]
-            if currentNode[0] != prevNode[0] and currentNode[1] != prevNode[1]:
-                pass
-
-
-        #sp
-        prevNode = route[0]
-        for i in range(1, len(route)):
-            currentNode = route[i]
-
-            if currentNode[0] == prevNode[0]:
-                if currentNode[1] > prevNode[0]:
-                    if self.robotOrientation == EST:
-                        directions.append(FORWARD)
-
-        for position in route:
-            if self.map(position[0], position[1]) == I:
-                pass
-                
-
+    # set robot position in the map
     def setRobotPosition(self, array):
         x = array[0]
         y = array[1]
@@ -173,6 +174,12 @@ class Navigation:
         if y > 0 and y < WIDTH - 1:
             self.robotPosition.setY(y)
     
+    # set robot orientation
+    def setRobotOrientation(self, orientation):
+        if orientation >= 0 and orientation <= 4:
+            self.robotOrientation = orientation
+    
+    #set goal position in the map
     def setGoalPosition(self, array):
         x = array[0]
         y = array[1]
@@ -183,12 +190,7 @@ class Navigation:
         if y > 0 and y < WIDTH - 1:
             self.goalPosition.setY(y)
 
-    def setRobotOrientation(self, orientation):
-        if orientation >= 0 and orientation <= 4:
-            self.robotOrientation = orientation
-
-    
-
+    # print actual status
     def printStatus(self):
         robotPosition = self.robotPosition
         goalPosition = self.goalPosition
@@ -204,8 +206,6 @@ class Navigation:
         
         print("Navigation Status: ")
         print("Robot Position: " + "(X: " + str(robotPosition.getX()) + ", Y: " + str(robotPosition.getY()) +")")
-        print(robotPosition.getPositionArray())
-        print(goalPosition.getPositionArray())
         print("Robot Orientation: " + str(robotOrientation))
         print("Goal Position: " + "(X: " + str(goalPosition.getX()) + ", Y: " + str(goalPosition.getY()) +")")
 

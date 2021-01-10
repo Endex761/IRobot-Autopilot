@@ -1,5 +1,8 @@
 from enum import IntEnum, auto
 
+# Enable debug prints
+DEBUG = True
+
 class Status(IntEnum):
     INIT = auto()
     PARK_FOUND = auto()
@@ -75,6 +78,10 @@ class Logger:
 
     def debug(self, message):
         self.log(message, self.DEBUG)
+
+# DEFINE LOGGER TO BE USED IN THE PROGRAM
+logger = Logger()
+logger.DEBUG_ENABLED = DEBUG
 
 
 class Color:

@@ -1,64 +1,4 @@
-# import Driver from Webots
-from vehicle import Driver
-from Devices import Actuators, Compass, DistanceSensors, PositionSensors
-from LineFollower import LineFollower
-from Positioning import Positioning
-from PathPlanner import PathPlanner
-from PathRunner import PathRunner
-from Motion import Motion
-
-altino = Driver()
-
-
-actuators = Actuators(altino)
-
-distanceSensors = DistanceSensors(altino)
-positionSensors = PositionSensors(altino)
-
-compass = Compass(altino)
-
-camera = altino.getDevice('camera')
-camera.enable(int(2 * altino.getBasicTimeStep())) #fix
-
-# this ensure sensors are correctly initialized
-for i in range(int(altino.getBasicTimeStep() * 2/altino.getBasicTimeStep()) + 1): # fix
-    altino.step()
-
-
-# each of this class must have and update method
-lineFollower = LineFollower(camera)
-
-
-positioning = Positioning(positionSensors, compass, lineFollower)
-
-
-pathPlanner = PathPlanner(positioning)
-
-
-pathRunner = PathRunner(positioning, pathPlanner, lineFollower)
-
-
-collisionAvoidance = 0 # to be define
-
-motion = Motion(actuators,pathRunner, collisionAvoidance)
-
-# run
-def run():
-    while altino.step() != -1:
-        lineFollower.update()
-        positioning.update()
-        pathPlanner.update()
-        pathRunner.update()
-        motion.update()
-
-# sistemare landmark
-
-
-
-
-
-
-"""from Odometry import Odometry
+from Odometry import Odometry
 from Utils import DistanceSensors, Position, PositionSensors
 from Utils import logger, Status, DEBUG
 from LineFollower import LineFollower, UNKNOWN
@@ -416,11 +356,37 @@ class Altino:
         self.camera = self.driver.getDevice("camera")
         self.camera.enable(self.sensorTimestep)
 
-        
+        # get distance sensors
+        self.distanceSensors = DistanceSensors()
+        self.distanceSensors.frontLeft = self.driver.getDevice("front_left_sensor")
+        self.distanceSensors.frontCenter = self.driver.getDevice('front_center_sensor')
+        self.distanceSensors.frontRight = self.driver.getDevice('front_right_sensor')
 
-        
+        self.distanceSensors.sideLeft = self.driver.getDevice('side_left_sensor')
+        self.distanceSensors.sideRight = self.driver.getDevice('side_right_sensor')
+        self.distanceSensors.back = self.driver.getDevice('back_sensor')
 
-        
+        # enable distance sensors
+        self.distanceSensors.frontLeft.enable(self.sensorTimestep)
+        self.distanceSensors.frontCenter.enable(self.sensorTimestep) 
+        self.distanceSensors.frontRight.enable(self.sensorTimestep)
+
+        self.distanceSensors.sideLeft.enable(self.sensorTimestep)
+        self.distanceSensors.sideRight.enable(self.sensorTimestep) 
+        self.distanceSensors.back.enable(self.sensorTimestep) 
+
+        # get position sensors
+        self.positionSensors = PositionSensors()
+        self.positionSensors.frontLeft  = self.driver.getDevice('left_front_sensor')
+        self.positionSensors.frontRight = self.driver.getDevice('right_front_sensor')
+        self.positionSensors.rearLeft   = self.driver.getDevice('left_rear_sensor')
+        self.positionSensors.rearRight  = self.driver.getDevice('right_rear_sensor')
+
+        # enable position sensors
+        self.positionSensors.frontLeft.enable(self.sensorTimestep)
+        self.positionSensors.frontRight.enable(self.sensorTimestep)
+        self.positionSensors.rearLeft.enable(self.sensorTimestep)
+        self.positionSensors.rearRight.enable(self.sensorTimestep)
 
         # get and enable compass
         self.compass = self.driver.getDevice('compass')
@@ -435,7 +401,26 @@ class Altino:
         for i in range(int(self.sensorTimestep/self.timestep) + 1):
             self.driver.step()
     
-   
+    # update cruising speed
+    def setSpeed(self, speed):
+        if (speed >= -1 * MAX_SPEED and speed <= MAX_SPEED):
+            self.speed = speed
+        elif (speed > MAX_SPEED):
+            self.speed = MAX_SPEED
+        elif (speed > -1 * MAX_SPEED):
+            self.speed = -1 * MAX_SPEED
+        self.driver.setCruisingSpeed(self.speed)
+
+    # update steering angle
+    def setAngle(self, angle):
+        # ensure angle stays between -MAX_ANGLE and MAX_ANGLE
+        if (angle >= -1 * MAX_ANGLE and angle <= MAX_ANGLE):
+            self.angle = angle
+        elif (angle > MAX_ANGLE):
+            self.angle = MAX_ANGLE
+        elif (angle < -1 * MAX_ANGLE):
+            self.angle = -1 * MAX_ANGLE
+        self.driver.setSteeringAngle(self.angle)
 
     def setStatus(self, status):
         # check if new status is a valid state.
@@ -507,4 +492,3 @@ class Altino:
 
         # return current key to allow other controls 
         return currentKey
-"""

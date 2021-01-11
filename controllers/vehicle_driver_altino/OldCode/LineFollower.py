@@ -1,9 +1,7 @@
 # Compute steering angle using camera images
-from Constants import UNKNOWN
-from Utils import logger
-
+UNKNOWN = -2
 FILTER_SIZE = 3
-NUM_ZONES = 9
+NUM_ZONES = 15
 MAX_STEERING_ANGLE = 0.8
 MIN_STEERING_ANGLE = -0.8
 
@@ -31,9 +29,6 @@ class LineFollower:
 
         # compute zone width
         self.zoneSpace = self.cameraWidth / NUM_ZONES
-
-        self.lineLost = False
-        self.newSteeringAngle = UNKNOWN
 
     # process data from camera
     def processCameraImage(self):
@@ -89,16 +84,6 @@ class LineFollower:
 
         return difference
 
-    def update(self):
-        self.newSteeringAngle = self.processCameraImage()
-        self.lineLost = self.newSteeringAngle == UNKNOWN
-        if self.lineLost:
-            self.newSteeringAngle = 0.0
-
     def getNewSteeringAngle(self):
-        return self.newSteeringAngle
-
-    def isLineLost(self):
-        return self.lineLost
-            
+        return self.processCameraImage()
         

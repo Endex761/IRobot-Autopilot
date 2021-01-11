@@ -102,10 +102,10 @@ PROTO Altino [
         name "light_sensor"
         occlusion TRUE
       }
-      Accelerometer {
-        name "accelerometer"
+      Compass {
+        name "compass"
         xAxis TRUE
-        yAxis TRUE
+        yAxis FALSE
         zAxis TRUE
       }
       Emitter {

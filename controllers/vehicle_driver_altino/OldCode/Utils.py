@@ -17,11 +17,25 @@ class Status(IntEnum):
     CENTER = auto()
     TURN = auto()
     
-class Orientation(IntEnum):
-    NORD = 0
-    SOUTH = 1
-    EAST = 2
-    WEST = 3
+class DistanceSensors:
+
+    def __init__(self):
+        self.frontLeft = 0
+        self.frontCenter = 0
+        self.frontRight = 0
+        
+        self.sideLeft = 0
+        self.sideRight = 0
+        self.back = 0
+
+class PositionSensors:
+
+    def __init__(self):
+        self.frontLeft = 0
+        self.frontRight = 0
+        self.rearLeft = 0
+        self.rearRight = 0
+
 
 class Logger:
     
@@ -95,9 +109,6 @@ class Position:
 
     def __str__(self):
         return "[X: " + str(self.x) + ", Y:" + str(self.y) + "]"
-    
-    def __eq__(self, other):
-        return self.x == other.x and self.y == other.y
        
 
 

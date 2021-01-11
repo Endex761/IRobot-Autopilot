@@ -1,9 +1,9 @@
-from Utils import Position
+from Utils import logger, Position
 import AStar
 
 # CARDINAL POINTS
 NORD = 0
-EST = 1
+EAST = 1
 SOUTH = 2
 WEST = 3
 
@@ -22,6 +22,7 @@ B = AStar.WALL
 O = AStar.WALL
 R = 1
 I = 2
+C = 3
 
 # --- MAP ---
 # o-----> Y      ^ N
@@ -32,7 +33,7 @@ I = 2
 #                                       
 #      Y  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24     X    map[X][Y]
 MAP =   [[B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B], # 0
-         [B, R, R, R, R, R, I, R, R, R, R, R, I, R, R, R, R, I, R, R, R, R, R, R, B], # 1
+         [B, C, R, R, R, R, I, R, R, R, R, R, I, R, R, R, R, I, R, R, R, R, R, C, B], # 1
          [B, R, O, O, O, O, R, O, O, O, O, O, R, O, O, O, O, R, O, O, O, O, O, R, B], # 2
          [B, R, O, O, O, O, R, O, O, O, O, O, R, O, O, O, O, R, O, O, O, O, O, R, B], # 3
          [B, R, O, O, O, O, R, O, O, O, O, O, R, O, O, O, O, R, O, O, O, O, O, R, B], # 4
@@ -46,7 +47,7 @@ MAP =   [[B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B
          [B, R, O, O, O, O, R, O, O, O, O, O, I, R, R, R, R, I, R, R, R, R, R, I, B], # 12
          [B, R, O, O, O, O, R, O, O, O, O, O, R, O, O, O, O, R, O, O, O, O, O, R, B], # 13
          [B, R, O, O, O, O, R, O, O, O, O, O, R, O, O, O, O, R, O, O, O, O, O, R, B], # 14
-         [B, R, R, R, R, R, I, R, R, R, R, R, R, O, O, O, O, R, R, R, R, R, R, R, B], # 15
+         [B, C, R, R, R, R, I, R, R, R, R, R, C, O, O, O, O, C, R, R, R, R, R, C, B], # 15
          [B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B]] # 16
 
  # Navigation class
@@ -74,18 +75,22 @@ class Navigation:
         # get turns based on robot directions and robot orientation
         turns = self.getTurnsFromDirections(directions)
 
+        # remove curve turns
+        turns = self.removeCurves(turns, intersections)
+
         # return the turns
         return turns
 
     # return first, last and intersection nodes from AStar route
     def getIntersectionNodesFromRoute(self, route):
         intersections = []
-        # get first node
+        #if self.map[route[0][0]][route[0][1]] == I:
+            # get first node
         intersections.append(route[0])
 
         # get intersection nodes
         for node in route[1:-1]:
-            if self.map[node[0]][node[1]] == I:
+            if self.map[node[0]][node[1]] == I or self.map[node[0]][node[1]] == C:
                 intersections.append(node)
 
         # get last node
@@ -108,11 +113,11 @@ class Navigation:
                 directions.append(NORD)
             # check if Y has changed
             elif currentNode[1] > prevNode[1]:
-                directions.append(EST)
+                directions.append(EAST)
             elif currentNode[1] < prevNode[1]:
                 directions.append(WEST)
             else:
-                print("ERROR: Invalid intersetions")
+                logger.error("Invalid intersetions")
             # go to next couple of node
             prevNode = currentNode
         
@@ -131,28 +136,28 @@ class Navigation:
             if actualDirection == direction:
                 turns.append(FORWARD)
             # EST cases
-            elif actualDirection == EST and direction == SOUTH:
+            elif actualDirection == EAST and direction == SOUTH:
                 turns.append(RIGHT)
-            elif actualDirection == EST and direction == NORD:
+            elif actualDirection == EAST and direction == NORD:
                 turns.append(LEFT)
-            elif actualDirection == EST and direction == WEST:
+            elif actualDirection == EAST and direction == WEST:
                 turns.append(U_TURN)
             # WEST cases
             elif actualDirection == WEST and direction == SOUTH:
                 turns.append(LEFT)
             elif actualDirection == WEST and direction == NORD:
                 turns.append(RIGHT)
-            elif actualDirection == WEST and direction == EST:
+            elif actualDirection == WEST and direction == EAST:
                 turns.append(U_TURN)
             # NORD cases
-            elif actualDirection == NORD and direction == EST:
+            elif actualDirection == NORD and direction == EAST:
                 turns.append(RIGHT)
             elif actualDirection == NORD and direction == WEST:
                 turns.append(LEFT)
             elif actualDirection == NORD and direction == SOUTH:
                 turns.append(U_TURN)
             # SOUTH cases
-            elif actualDirection == SOUTH and direction == EST:
+            elif actualDirection == SOUTH and direction == EAST:
                 turns.append(LEFT)
             elif actualDirection == SOUTH and direction == WEST:
                 turns.append(RIGHT)
@@ -163,26 +168,40 @@ class Navigation:
 
         return turns
 
-    # set robot position in the map
-    def setRobotPosition(self, array):
-        x = array[0]
-        y = array[1]
+    # remove curves from turns
+    def removeCurves(self, turns, intersections):
+        newTurns = [turns[0]]
+        for i in range(1, len(intersections) - 1):
+            node = intersections[i]
+            if self.map[node[0]][node[1]] != C:
+                newTurns.append(turns[i])
+        return newTurns
 
+    # set robot position in the map
+    def setRobotPosition(self, position):
+        x = position.getX()
+        y = position.getY()
         if x > 0 and x < HEIGHT - 1:
             self.robotPosition.setX(x)
 
         if y > 0 and y < WIDTH - 1:
             self.robotPosition.setY(y)
+
+    def getRobotPosition(self):
+        return self.robotPosition
     
     # set robot orientation
     def setRobotOrientation(self, orientation):
         if orientation >= 0 and orientation <= 4:
             self.robotOrientation = orientation
+
+    def getRobotOrientation(self):
+        return self.robotOrientation
     
     #set goal position in the map
-    def setGoalPosition(self, array):
-        x = array[0]
-        y = array[1]
+    def setGoalPosition(self, position):
+        x = position.getX()
+        y = position.getY()
 
         if x > 0 and x < HEIGHT - 1:
             self.goalPosition.setX(x)
@@ -197,7 +216,7 @@ class Navigation:
         robotOrientation = "UNKNOWN"
         if self.robotOrientation == NORD:
             robotOrientation = "NORD"
-        if self.robotOrientation == EST:
+        if self.robotOrientation == EAST:
             robotOrientation = "EST"    
         if self.robotOrientation == SOUTH:
             robotOrientation = "SOUTH"

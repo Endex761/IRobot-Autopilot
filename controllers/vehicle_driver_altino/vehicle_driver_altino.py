@@ -1,4 +1,3 @@
-from Altino import Altino
+from Altino import run
 
-altino = Altino()
-altino.run()
+run()

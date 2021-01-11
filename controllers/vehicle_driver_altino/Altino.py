@@ -1,4 +1,5 @@
 # import Driver from Webots
+from Utils import Position
 from vehicle import Driver
 from Devices import Actuators, Compass, DistanceSensors, PositionSensors
 from LineFollower import LineFollower
@@ -37,7 +38,7 @@ pathPlanner = PathPlanner(positioning)
 
 pathRunner = PathRunner(positioning, pathPlanner, lineFollower)
 
-
+pathRunner.goTo(Position(14, 23))
 collisionAvoidance = 0 # to be define
 
 motion = Motion(actuators,pathRunner, collisionAvoidance)

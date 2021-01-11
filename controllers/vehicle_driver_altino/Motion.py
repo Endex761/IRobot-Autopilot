@@ -1,4 +1,5 @@
 
+from Constants import MAX_ANGLE, MAX_SPEED
 from Devices import Actuators
 from PathPlanner import U_TURN
 from PathRunner import PathRunner
@@ -21,5 +22,5 @@ class Motion:
         newSpeed = self.pathRunner.getSpeed()
         newAngle = self.pathRunner.getSteeringAngle()
         if newAngle != U_TURN:
-            self.actuators.setAngle(newAngle)
-            self.actuators.setSpeed(newSpeed)
+            self.actuators.setAngle(newAngle * MAX_ANGLE)
+            self.actuators.setSpeed(newSpeed * MAX_SPEED)

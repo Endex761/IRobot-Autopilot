@@ -69,7 +69,6 @@ class DistanceSensors:
     def __init__(self, driver):
         deviceTimestep = int(driver.getBasicTimeStep() * DEVICE_TIMESTEP_MULTIPLIER)
         # get distance sensors
-        logger.log("Device timestep " + str(deviceTimestep))
         self.frontLeft = driver.getDevice('front_left_sensor')
         self.frontCenter = driver.getDevice('front_center_sensor')
         self.frontRight = driver.getDevice('front_right_sensor')

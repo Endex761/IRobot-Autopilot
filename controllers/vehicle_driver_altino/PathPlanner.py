@@ -192,7 +192,7 @@ class PathPlanner:
     # remove curves from turns
     def removeCurves(self, turns, intersections):
         newTurns = [turns[0]]
-        for i in range(1, len(intersections) - 1):
+        for i in range(1, len(intersections) - 2):
             node = intersections[i]
             if self.map[node[0]][node[1]] != Map.C:
                 newTurns.append(turns[i])

@@ -1,11 +1,12 @@
 # Compute steering angle using camera images
+from PathPlanner import LEFT, RIGHT
 from Constants import UNKNOWN
 from Utils import logger
 
 FILTER_SIZE = 3
-NUM_ZONES = 9
-MAX_STEERING_ANGLE = 0.8
-MIN_STEERING_ANGLE = -0.8
+NUM_ZONES = 13
+MAX_STEERING_ANGLE = 1
+MIN_STEERING_ANGLE = -1
 
 STEERING_ANGLE_STEP = ((MAX_STEERING_ANGLE - MIN_STEERING_ANGLE) / NUM_ZONES)
 
@@ -58,6 +59,7 @@ class LineFollower:
 
         # find index of greatest zone
         index = self.indexOfMax(self.zones)
+        print(index)
 
         # debug
         # print(self.zones)

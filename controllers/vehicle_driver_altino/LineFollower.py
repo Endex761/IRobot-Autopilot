@@ -1,13 +1,12 @@
 # Compute steering angle using camera images
-from PathPlanner import LEFT, RIGHT
 from Constants import UNKNOWN
 from Utils import logger
 import Map 
 
 FILTER_SIZE = 3
-NUM_ZONES = 13
-MAX_STEERING_ANGLE = 1
-MIN_STEERING_ANGLE = -1
+NUM_ZONES = 9
+MAX_STEERING_ANGLE = 0.8
+MIN_STEERING_ANGLE = -0.8
 
 STEERING_ANGLE_STEP = ((MAX_STEERING_ANGLE - MIN_STEERING_ANGLE) / NUM_ZONES)
 
@@ -56,17 +55,12 @@ class LineFollower:
                 if self.colorDifference(image[i][j]) < LINE_COLOR_TOLERANCE:
                     self.zones[int(i / self.zoneSpace)] += 1
         
-        # lost line and not near to a Landmark
-        if sum(self.zones) == 0 and Map.getValue(self.position) != Map.I and Map.findNearestIntersection(self.position) == self.position : 
-            return -1*(MIN_STEERING_ANGLE + index * STEERING_ANGLE_STEP)
-
         # lost line
         if sum(self.zones) == 0:
             return UNKNOWN
 
         # find index of greatest zone
         index = self.indexOfMax(self.zones)
-        print(index)
         self.lastLineKnownZone = index
 
         # debug
@@ -107,6 +101,9 @@ class LineFollower:
 
     def getNewSteeringAngle(self):
         return self.newSteeringAngle
+
+    def getSteeringAngleLineSearching(self):
+        return -1 * (MIN_STEERING_ANGLE + self.lastLineKnownZone * STEERING_ANGLE_STEP)
 
     def isLineLost(self):
         return self.lineLost

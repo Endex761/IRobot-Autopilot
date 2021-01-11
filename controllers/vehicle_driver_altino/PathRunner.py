@@ -1,7 +1,9 @@
 from Constants import UNKNOWN
+import Map
 
 FOLLOW_LINE = 1
 TURN = 2
+SEARCH_LINE = 3
 
 class PathRunner:
     def __init__(self, positioning, pathPlanner, lineFollower):
@@ -37,6 +39,8 @@ class PathRunner:
             self.steeringAngle = self.lineFollower.getNewSteeringAngle()
             if isLineLost and currentPath == UNKNOWN:
                 self.speed = 0.0
+            elif isLineLost and Map.getValue(self.positioning.position) != Map.I and Map.findNearestIntersection(self.positioning.position) == self.positioning.position:
+                self.status = SEARCH_LINE
             elif isLineLost and currentPath != UNKNOWN:
                 self.status = TURN
 
@@ -49,6 +53,12 @@ class PathRunner:
             
             if not isLineLost:
                 self.actualTurn += 1
+                self.status = FOLLOW_LINE
+
+        if self.status == SEARCH_LINE:
+            self.steeringAngle = self.lineFollower.getSteeringAngleLineSearching()
+
+            if not isLineLost:
                 self.status = FOLLOW_LINE
 
 

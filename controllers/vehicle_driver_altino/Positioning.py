@@ -1,4 +1,5 @@
 from Utils import Orientation, Position, logger
+from Constants import UNKNOWN
 import Map
 
 WHEEL_RADIUS = 0.020
@@ -19,7 +20,8 @@ class Positioning:
 
         # HOW? GPS?
         self.position = Position(4,1)
-        self.orientation = self.updateOrientation()
+        self.orientation = UNKNOWN
+        self.updateOrientation()
 
     # set robot position in the map
     def setPosition(self, position):
@@ -61,9 +63,6 @@ class Positioning:
 
     def getActualDistance(self):
         return (self.leftWheelDistance + self.rightWheelDistance) / 2.0
-
-    def getInitialDistance(self):
-        return (self.initalLeftWheelDistance + self.initalRightWheelDistance) / 2-0
 
     def updateOrientation(self):
         self.orientation = self.compass.getOrientation()

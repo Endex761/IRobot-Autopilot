@@ -2,6 +2,7 @@
 from PathPlanner import LEFT, RIGHT
 from Constants import UNKNOWN
 from Utils import logger
+import Map 
 
 FILTER_SIZE = 3
 NUM_ZONES = 13
@@ -35,6 +36,7 @@ class LineFollower:
 
         self.lineLost = False
         self.newSteeringAngle = UNKNOWN
+        self.lastLineKnownZone = UNKNOWN
 
     # process data from camera
     def processCameraImage(self):
@@ -54,12 +56,18 @@ class LineFollower:
                 if self.colorDifference(image[i][j]) < LINE_COLOR_TOLERANCE:
                     self.zones[int(i / self.zoneSpace)] += 1
         
+        # lost line and not near to a Landmark
+        if sum(self.zones) == 0 and Map.getValue(self.position) != Map.I and Map.findNearestIntersection(self.position) == self.position : 
+            return -1*(MIN_STEERING_ANGLE + index * STEERING_ANGLE_STEP)
+
+        # lost line
         if sum(self.zones) == 0:
             return UNKNOWN
 
         # find index of greatest zone
         index = self.indexOfMax(self.zones)
         print(index)
+        self.lastLineKnownZone = index
 
         # debug
         # print(self.zones)

@@ -9,7 +9,10 @@ COLLISION_AVOIDANCE = 4
 GO_FORWARD = 5
 U_TURN = 6
 
+# class to handle path running service
 class PathRunner:
+
+    # initialize path running service
     def __init__(self, positioning, pathPlanner, lineFollower, collisionAvoidance):
         self.positioning = positioning
         self.pathPlanner = pathPlanner
@@ -28,19 +31,23 @@ class PathRunner:
 
         self.collisionAvoidanceCount = 0
 
+    # update path running service
     def update(self):
         self.updateSpeedAndAngle()
         self.updateGoalStatus()
 
+    # get new fastest path from actual position to goal if set
     def updatePath(self):
         self.currentPath = self.pathPlanner.getFastestRoute()
 
+    # check if robot have reached goal
     def updateGoalStatus(self):
         currentPosition = self.positioning.getPosition()
         goalPosition = self.pathPlanner.getGoalPosition()
 
         self.goalReach = currentPosition == goalPosition
     
+    # update speed and angle of the robot
     def updateSpeedAndAngle(self):
         isLineLost = self.lineFollower.isLineLost()
         currentPath = self.currentPath
@@ -197,21 +204,25 @@ class PathRunner:
             # self.speed = 0.0
             pass
 
-
+    # get current steering angle setted by path runner
     def getSteeringAngle(self):
         return self.steeringAngle
 
+    # get current speed setted by path runner
     def getSpeed(self):
         return self.speed
 
+    # return if goal has been reached
     def isGoalReach(self):
         return self.goalReach
 
+    # set goal
     def goTo(self, goal):
         self.pathPlanner.setGoalPosition(goal)
         self.currentPath = self.pathPlanner.getFastestRoute()
         print(self.currentPath)
 
+    # go forward for x meters (NOT WORKING)
     def proceedForward(self, meters):
         self.status = GO_FORWARD
         startingAngle = self.getSteeringAngle()

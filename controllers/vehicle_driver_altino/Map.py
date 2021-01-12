@@ -39,9 +39,11 @@ MAP =   [[B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B
          [B, C, R, R, R, R, I, R, R, R, R, R, C, O, O, O, O, C, R, R, R, R, R, C, B], # 15
          [B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B]] # 16
 
+# return map value in postion
 def getValue(position):
     return MAP[position.getX()][position.getY()]
 
+# return true if robot is allowed to walk in position
 def isWalkable(position):
     x = position.getX()
     y = position.getY()
@@ -49,6 +51,7 @@ def isWalkable(position):
     
     return value == R or value == I or value == C
 
+# return the nearest walkable position given position and orientation
 def getNearestWalkablePosition(position, orientation):
     if not isWalkable(position):
         x = position.getX()
@@ -71,7 +74,7 @@ def getNearestWalkablePosition(position, orientation):
         return position
 
 
-# to be defined
+# return the position of the nearest intersection to position, -1 if no interection in range
 def findNearestIntersection(position):
     x = position.getX()
     y = position.getY()
@@ -83,7 +86,7 @@ def findNearestIntersection(position):
                     return Position(i, j)
     
     return -1
-
+# set new 
 def setNewObstacle(position):
     x = position.getX()
     y = position.getY()

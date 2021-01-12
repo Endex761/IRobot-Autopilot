@@ -1,10 +1,9 @@
 from Constants import DEVICE_TIMESTEP_MULTIPLIER, MAX_ANGLE, MAX_SPEED, UNKNOWN
 from Utils import Orientation, logger
 
+# actuator class to handle speed and steering 
 class Actuators:
     def __init__(self, driver):
-        #deviceTimestep = driver.getBasicTimeStep() * DEVICE_TIMESTEP_MULTIPLIER
-
         self.driver = driver
         self.speed = 0.0
         self.angle = 0.0
@@ -37,7 +36,27 @@ class Actuators:
 
     def getAngle(self):
         return self.angle
-        
+
+# class to handle camera data
+class Camera:
+    def __init__(self, driver):
+        deviceTimestep = int(driver.getBasicTimeStep() * DEVICE_TIMESTEP_MULTIPLIER)
+
+        self.camera = driver.getDevice('camera')
+
+        self.camera.enable(deviceTimestep) #fix
+
+    # return camera image in array form
+    def getImageArray(self):
+        return self.camera.getImageArray()
+
+    def getWidth(self):
+        return self.camera.getWidth()
+    
+    def getHeight(self):
+        return self.camera.getHeight()
+
+# compass class to handle compass data        
 class Compass:
     def __init__(self, driver):
         deviceTimestep = int(driver.getBasicTimeStep() * DEVICE_TIMESTEP_MULTIPLIER)
@@ -47,15 +66,19 @@ class Compass:
 
         self.orientation = UNKNOWN
 
+    # get fine orientation for navigation purpose
     def getOrientation(self):
         threshold = 0.95
         return self.computeOrientation(threshold)
 
+    # get inaccurate orientation for positioning purpose
     def getInaccurateOrientation(self):
         threshold = 0.5
         return self.computeOrientation(threshold)
 
+    # get compass data and convert to orientation
     def computeOrientation(self, precision):
+        # this return 3d vector indicating nord pole
         compassData = self.compass.getValues()
         yComponent = compassData[0]
         xComponent = compassData[2]
@@ -76,7 +99,7 @@ class Compass:
 
         return newOrientation
         
-
+# distance sensor class to handle distance sensor data
 class DistanceSensors:
 
     def __init__(self, driver):
@@ -105,36 +128,19 @@ class DistanceSensors:
         self.backCenter.enable(deviceTimestep) 
         self.backRight.enable(deviceTimestep) 
 
-    def frontLeftCM(self):
-        return (self.frontLeft.getValue() * (-0.06)) + 60
-
-    def frontRightCM(self):
-        return (self.frontRight.getValue() * (-0.06)) + 60
-
-    def frontCenterCM(self):
-        return (self.frontCenter.getValue() * (-0.06)) + 60
-
-    def backLeftCM(self):
-        return (self.backLeft.getValue() * (-0.06)) + 60
-
-    def backRightCM(self):
-        return (self.backRight.getValue() * (-0.06)) + 60
-
-    def backCenterCM(self):
-        return (self.backCenter.getValue() * (-0.06)) + 60
-
+    # check if front sensors detect a distance less or equal to value
     def frontDistance(self, value):
         return self.frontLeft.getValue() > value or self.frontCenter.getValue() > value or self.frontRight.getValue() > value
-
+    # check if back sensors detect a distance less or equal to value   
     def backDistance(self, value):
         return self.backLeft.getValue() > value or self.backCenter.getValue() > value or self.backRight.getValue() > value
 
+# position sensor class to handle positon sensor data from wheels encoders
 class PositionSensors:
 
     def __init__(self, driver):
         deviceTimestep = int(driver.getBasicTimeStep() * DEVICE_TIMESTEP_MULTIPLIER)
         # get position sensors
-
         self.frontLeft  = driver.getDevice('left_front_sensor')
         self.frontRight = driver.getDevice('right_front_sensor')
         self.rearLeft   = driver.getDevice('left_rear_sensor')

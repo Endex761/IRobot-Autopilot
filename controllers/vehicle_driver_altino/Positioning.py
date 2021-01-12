@@ -3,9 +3,10 @@ from Constants import UNKNOWN
 import Map
 
 WHEEL_RADIUS = 0.020
-
+# class for handling postioning service using odometry
 class Positioning:
 
+    #initialize positioning service
     def __init__(self, positionSensors, compass, lineFollower):
         self.frontLeft = positionSensors.frontLeft
         self.frontRight = positionSensors.frontRight
@@ -18,8 +19,8 @@ class Positioning:
 
         self.lineAlreadyLost = False
 
-        # HOW? GPS?
-        self.position = Position(5,1)
+        # how should i get the starting position? GPS?
+        self.position = Position(4,1)
         self.orientation = UNKNOWN
         self.updateOrientation()
 
@@ -33,24 +34,30 @@ class Positioning:
                 return
         logger.warning("Invalid Position")
     
+    # set robot orientation
     def setOrientation(self, orientation):
         self.orientation = orientation
 
+    # get current stimated robot position
     def getPosition(self):
         return self.position
 
+    # get current stimated robot orientation
     def getOrientation(self):
         return self.orientation
 
+    # print status of positioning
     def printStatus(self):
         logger.info("Positioning: " + str(self.position) + " Orientation: " + str(self.orientation))
 
+    # update positioning service
     def update(self):
         self.updateWheelTraveledDistance()
         self.updateOrientation()
         self.updatePosition()
         self.computePositionBasedOnLandmark()
 
+    # update distance traveled by wheels using encoders
     def updateWheelTraveledDistance(self):
         # get radiants from wheel
         radFLW = self.frontLeft.getValue()
@@ -60,22 +67,22 @@ class Positioning:
         self.leftWheelDistance = radFLW * WHEEL_RADIUS
         self.rightWheelDistance = radFRW * WHEEL_RADIUS
 
-
+    # return current stimated traveled distance
     def getActualDistance(self):
         return (self.leftWheelDistance + self.rightWheelDistance) / 2.0
 
+    # update orientation using inaccurate compass orientation
     def updateOrientation(self):
         self.orientation = self.compass.getInaccurateOrientation()
 
-    # to be improved   
+    # update positioning using map landmarks
     def computePositionBasedOnLandmark(self):
+        # if the line get lost provably the robot is near an intersecion
         isLineLost = self.lineFollower.isLineLost()
         if isLineLost and not self.lineAlreadyLost:
-            logger.debug("Should be here once: ilLineLost " + str(isLineLost) + str(self.lineAlreadyLost))
+            logger.debug("isLineLost: " + str(isLineLost) + "isLineAlreadyLost: " + str(self.lineAlreadyLost))
             self.lineAlreadyLost = True
-            if Map.getValue(self.position) == Map.I:
-                logger.debug("Already in")
-            else:
+            if not Map.getValue(self.position) == Map.I:
                 nearestIntersecion = Map.findNearestIntersection(self.position)
                 if nearestIntersecion != -1:
                     self.position = nearestIntersecion
@@ -85,10 +92,7 @@ class Positioning:
         elif not isLineLost:
             self.lineAlreadyLost = False
 
-
-
-                
-        
+    # update position based on odometry        
     def updatePosition(self):
         tolerance = -0.02
         add = [0,0]

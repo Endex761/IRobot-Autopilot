@@ -1,6 +1,5 @@
-
 # STATES
-from Constants import LEFT, MAX_ANGLE, RIGHT
+from Constants import LEFT, RIGHT
 from Utils import logger
 
 DETECT = 1

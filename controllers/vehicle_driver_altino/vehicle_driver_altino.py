@@ -1,3 +1,7 @@
-from Altino import run
+from Altino import Altino
+print("her1")
+altino = Altino()
 
-run()
+altino.run()
+
+print("Here")

@@ -1,7 +1,9 @@
 # constant definition
 
+# device timestamp multiplication ratio
 DEVICE_TIMESTEP_MULTIPLIER = 2
 
+# usefull value to detect unknown informations
 UNKNOWN = -123
 
 # vehicle dimensions in meters
@@ -14,6 +16,7 @@ HEIGHT = 0.061
 MAX_SPEED = 1.8
 MAX_ANGLE = 0.52 # rads ~ 30°
 
+# directions
 LEFT = -1
 RIGHT = 1
 FORWARD = 0

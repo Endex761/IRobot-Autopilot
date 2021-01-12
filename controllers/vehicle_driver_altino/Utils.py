@@ -3,6 +3,7 @@ from enum import IntEnum, auto
 # Enable debug prints
 DEBUG = True
 
+# useless?
 class Status(IntEnum):
     INIT = auto()
     PARK_FOUND = auto()

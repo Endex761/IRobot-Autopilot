@@ -1,60 +1,86 @@
-# import Driver from Webots
-from CollisionAvoidance import CollissionAvoidance
-from Utils import Position
+# import devices and serivices to use in the altino toy car
 from vehicle import Driver
-from Devices import Actuators, Compass, DistanceSensors, PositionSensors
+from CollisionAvoidance import CollissionAvoidance
+from Utils import Position, logger
+from Devices import Actuators, Camera, Compass, DistanceSensors, PositionSensors
 from LineFollower import LineFollower
 from Positioning import Positioning
 from PathPlanner import PathPlanner
 from PathRunner import PathRunner
 from Motion import Motion
 
-altino = Driver()
+# altino states
+RUN = 1
+STOP = 2
 
+class Altino:
 
-actuators = Actuators(altino)
+    def __init__(self):
+        
+        self.status = STOP
+        
+        # initialize altino driver
+        self.driver = Driver()
+             
+        # initialize actuators
+        self.actuators = Actuators(self.driver)
+        
+        # initialize distance and position sensors
+        self.distanceSensors = DistanceSensors(self.driver)
+        self.positionSensors = PositionSensors(self.driver)
+        
+        # initialize compass
+        self.compass = Compass(self.driver)
+        
+        # initialize camera
+        self.camera = Camera(self.driver)
+        
+        
+        self.collisionAvoidance = CollissionAvoidance(self.distanceSensors)
+        
+        # line following service
+        self.lineFollower = LineFollower(self.camera)
+        
+        # positioning service
+        self.positioning = Positioning(self.positionSensors, self.compass, self.lineFollower)
+        
+        # path planning serivice
+        self.pathPlanner = PathPlanner(self.positioning)
+        
+        # path running service
+        self.pathRunner = PathRunner(self.positioning, self.pathPlanner, self.lineFollower, self.collisionAvoidance)
+        
+        # set path runner destination
+        self.pathRunner.goTo(Position(14, 23))
+        
+        # motion serivice
+        self.motion = Motion(self.actuators, self.pathRunner)
 
-distanceSensors = DistanceSensors(altino)
-positionSensors = PositionSensors(altino)
+        # this ensure sensors are correctly initialized
+        self.devicesInitialization()
 
-compass = Compass(altino)
+    # run
+    def run(self):
+        logger.info("Altino is running.")
+        self.status = RUN
+        # for each timestep update services
+        while self.driver.step() != -1 and self.status == RUN:
+            self.collisionAvoidance.update()
+            self.lineFollower.update()
+            self.positioning.update()
+            self.pathPlanner.update()
+            self.pathRunner.update()
+            self.motion.update()
 
-camera = altino.getDevice('camera')
-camera.enable(int(2 * altino.getBasicTimeStep())) #fix
+    # stop
+    def stop(self):
+        logger.info("Altino is stopping.")
+        self.status = STOP
 
-# this ensure sensors are correctly initialized
-for i in range(int(altino.getBasicTimeStep() * 2/altino.getBasicTimeStep()) + 1): # fix
-    altino.step()
-
-collisionAvoidance = CollissionAvoidance(distanceSensors)
-
-# each of this class must have and update method
-lineFollower = LineFollower(camera)
-
-
-positioning = Positioning(positionSensors, compass, lineFollower)
-
-
-pathPlanner = PathPlanner(positioning)
-
-
-pathRunner = PathRunner(positioning, pathPlanner, lineFollower, collisionAvoidance)
-
-pathRunner.goTo(Position(14, 23))
-
-motion = Motion(actuators, pathRunner)
-
-# run
-def run():
-    while altino.step() != -1:
-        collisionAvoidance.update()
-        lineFollower.update()
-        positioning.update()
-        pathPlanner.update()
-        pathRunner.update()
-        motion.update()
-
-# sistemare landmark
+    # to be sure sensors are correctly initialized before using them
+    def devicesInitialization(self):
+        for i in range(int(self.driver.getBasicTimeStep() * 2/self.driver.getBasicTimeStep()) + 1):
+            self.driver.step()
 
 
 

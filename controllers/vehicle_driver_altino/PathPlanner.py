@@ -1,4 +1,4 @@
-from Constants import UNKNOWN
+from Constants import UNKNOWN, LEFT, RIGHT, FORWARD, U_TURN
 from Utils import logger, Position, Orientation
 import Map
 import AStar
@@ -10,10 +10,10 @@ import AStar
 #Orientation.WEST = 3
 
 # TURNS
-LEFT = -1
-RIGHT = 1
-FORWARD = 0
-U_TURN = 99
+#LEFT = -1
+#RIGHT = 1
+#FORWARD = 0
+#U_TURN = 99
 
 # MAP DIMENSIONS
 #WIDTH = 25
@@ -52,9 +52,10 @@ U_TURN = 99
 #         [B, C, R, R, R, R, I, R, R, R, R, R, C, O, O, O, O, C, R, R, R, R, R, C, B], # 15
 #         [B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B]] # 16
 
- # Navigation class
+ # class to handle path planning service
 class PathPlanner:
 
+    # initialize path planning service
     def __init__(self, positioning):
         self.map = Map.MAP
         self.positioning = positioning
@@ -62,14 +63,20 @@ class PathPlanner:
         self.robotOrientation = positioning.getOrientation()
         self.goalPosition = Position (14, 23)
 
+    # update path planning service
     def update(self):
         self.robotPosition = self.positioning.getPosition()
         self.robotOrientation = self.positioning.getOrientation()
+
+    # update map to improve path planning when obstacle are found
+    def updateMap(self):
+        self.map = Map.MAP
+
     
     # return array containing a turn for each intersection in the path between robot position and goal
     def getFastestRoute(self):
 
-        # update map status
+        # update map status, this ensure new obstacles are detected
         self.updateMap()
         
         # get fastest route from AStar giving map, start position and goal position
@@ -220,5 +227,3 @@ class PathPlanner:
         print("Robot Orientation: " + str(robotOrientation))
         print("Goal Position: " + "(X: " + str(goalPosition.getX()) + ", Y: " + str(goalPosition.getY()) +")")
 
-    def updateMap(self):
-        self.map = Map.MAP

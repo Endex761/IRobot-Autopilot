@@ -65,7 +65,7 @@ class Positioning:
         return (self.leftWheelDistance + self.rightWheelDistance) / 2.0
 
     def updateOrientation(self):
-        self.orientation = self.compass.getOrientation()
+        self.orientation = self.compass.getInaccurateOrientation()
 
     # to be improved   
     def computePositionBasedOnLandmark(self):
@@ -111,9 +111,10 @@ class Positioning:
         newX = x + add[0]
         newY = y + add[1]
         logger.debug("New Position: " + str(Position(newX,newY)))
-        if Map.isWalkable(Position(newX, newY)):
-            self.position.setX(newX)
-            self.position.setY(newY)
+        self.position = Map.getNearestWalkablePosition(Position(newX,newY), self.orientation)
+        #if Map.isWalkable(Position(newX, newY)):
+        #    self.position.setX(newX)
+        #    self.position.setY(newY)
 
 
         

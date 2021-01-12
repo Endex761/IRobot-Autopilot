@@ -1,4 +1,4 @@
-from Utils import Position
+from Utils import Orientation, Position
 from AStar import WALL
 
 # MAP DIMENSIONS
@@ -48,6 +48,28 @@ def isWalkable(position):
     value = MAP[x][y]
     
     return value == R or value == I or value == C
+
+def getNearestWalkablePosition(position, orientation):
+    if not isWalkable(position):
+        x = position.getX()
+        y = position.getY()
+        if orientation == Orientation.NORD or orientation == Orientation.SOUTH:
+            p = Position(x+1, y)
+            if isWalkable(p):
+                return p
+            p = Position(x-1, y)
+            if isWalkable(p):
+                return p
+        elif orientation == Orientation.EAST or orientation == Orientation.WEST:
+            p = Position(x, y+1)
+            if isWalkable(p):
+                return p
+            p = Position(x, y-1)
+            if isWalkable(p):
+                return p
+    else:
+        return position
+
 
 # to be defined
 def findNearestIntersection(position):

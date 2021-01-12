@@ -48,13 +48,21 @@ class Compass:
         self.orientation = UNKNOWN
 
     def getOrientation(self):
+        threshold = 0.95
+        return self.computeOrientation(threshold)
+
+    def getInaccurateOrientation(self):
+        threshold = 0.5
+        return self.computeOrientation(threshold)
+
+    def computeOrientation(self, precision):
         compassData = self.compass.getValues()
         yComponent = compassData[0]
         xComponent = compassData[2]
 
         newOrientation = self.orientation
 
-        compassThreshold = 0.95
+        compassThreshold = precision
         if xComponent > compassThreshold:
             newOrientation = Orientation.NORD
         elif xComponent < -compassThreshold:
@@ -65,8 +73,9 @@ class Compass:
             newOrientation = Orientation.WEST
 
         self.orientation = newOrientation
-        
+
         return newOrientation
+        
 
 class DistanceSensors:
 

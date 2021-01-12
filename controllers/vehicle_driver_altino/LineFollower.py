@@ -112,5 +112,11 @@ class LineFollower:
 
     def isLineLost(self):
         return self.lineLost
+
+    def resetLastLineKnownZone(self, angle=0):
+        if angle != 0 :
+            self.lastLineKnownZone = int((angle - MIN_STEERING_ANGLE) / STEERING_ANGLE_STEP)
+        else:
+            self.lastLineKnownZone=angle
             
         

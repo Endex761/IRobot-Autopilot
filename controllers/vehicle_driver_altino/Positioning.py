@@ -19,7 +19,7 @@ class Positioning:
         self.lineAlreadyLost = False
 
         # HOW? GPS?
-        self.position = Position(4,1)
+        self.position = Position(5,1)
         self.orientation = UNKNOWN
         self.updateOrientation()
 

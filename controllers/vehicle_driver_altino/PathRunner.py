@@ -47,33 +47,34 @@ class PathRunner:
         lineFollowerAngle = self.lineFollower.getNewSteeringAngle()
         collisionAvoidanceAngle  = self.collisionAvoidance.getSteeringAngle()
 
-        logger.debug("Status: " + str(self.status) + "CD: " + str(self.collisionAvoidance.isCollisionDetect()) + " LF: " + str(lineFollowerAngle) + " CA: " + str(collisionAvoidanceAngle))
+        logger.debug("Status: " + str(self.status) + " CD: " + str(self.collisionAvoidance.isCollisionDetect()) + " LF: " + str(lineFollowerAngle) + " CA: " + str(collisionAvoidanceAngle))
 
         if self.collisionAvoidance.isCollisionDetect():
-            if self.status == TURN:
-                logger.info("Can't turn")
+            #if self.status == TURN:
+             #   logger.info("Can't turn")
+             #   Map.setNewObstacle(self.positioning.getPosition())
+             #   self.updatePath()
+             #   print(self.currentPath)
             self.status = COLLISION_AVOIDANCE
-        """
+        
 
         if currentPath != UNKNOWN and self.actualTurn == 0:
             # here i should change the orientation
             self.actualTurn += 1
-            self.status = U_TURN
+            self.status = FOLLOW_LINE
             pass
 
-        
-        """
         if self.status == COLLISION_AVOIDANCE:
-            
             self.steeringAngle = collisionAvoidanceAngle
+            self.speed = self.collisionAvoidance.getSpeed()
+            print(self.steeringAngle)
             if not self.collisionAvoidance.isCollisionDetect():
-                #self.proceedForward(0.05)
                 self.status = SEARCH_LINE
                 
         
         elif self.status == FOLLOW_LINE:
 
-            if abs(collisionAvoidanceAngle) > abs(lineFollowerAngle) + 0.1:
+            if self.collisionAvoidance.isCollisionDetect():
                 self.status = COLLISION_AVOIDANCE
 
             self.steeringAngle = lineFollowerAngle
@@ -108,11 +109,11 @@ class PathRunner:
                 logger.debug("Line was lost and i found it!")
                 self.status = FOLLOW_LINE
 
-        if self.status == GO_FORWARD:
+        elif self.status == GO_FORWARD:
             pass
 
         #To Be Implement
-        if self.status == U_TURN:            
+        elif self.status == U_TURN:            
             # prendo i sensori 
             self.sensors = self.collisionAvoidance.getDistanceSensor()
 
@@ -170,12 +171,7 @@ class PathRunner:
 
             
         # logger.debug("Steerign angle: " + str(self.steeringAngle) + " STATUS: " + str(self.status))
-
-
-        isLineLost = self.lineFollower.isLineLost()
-        currentPath = self.currentPath
-        print(self.currentPath)
-        if self.isGoalReach() and isLineLost and currentPath == UNKNOWN:
+        elif self.isGoalReach() and isLineLost and currentPath == UNKNOWN:
             self.speed = 0.0
 
         elif not isLineLost:

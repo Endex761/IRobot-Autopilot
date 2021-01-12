@@ -1,7 +1,5 @@
-from Utils import Orientation, Position
+import Map
 
-print(Orientation.NORD)
+from PathPlanner import PathPlanner
 
-nord = Orientation.NORD
-
-print(5  + nord)
+pp = PathPlanner(1)

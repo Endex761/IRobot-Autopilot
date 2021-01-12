@@ -80,11 +80,13 @@ class Positioning:
                 if nearestIntersecion != -1:
                     self.position = nearestIntersecion
                     self.reference = self.getActualDistance()
+                else:
+                    self.lineAlreadyLost = False
         elif not isLineLost:
             self.lineAlreadyLost = False
 
-     
-        
+
+
                 
         
     def updatePosition(self):
@@ -106,8 +108,12 @@ class Positioning:
         x = self.position.getX()
         y = self.position.getY()
 
-        self.position.setX(x + add[0])
-        self.position.setY(y + add[1])
+        newX = x + add[0]
+        newY = y + add[1]
+        logger.debug("New Position: " + str(Position(newX,newY)))
+        if Map.isWalkable(Position(newX, newY)):
+            self.position.setX(newX)
+            self.position.setY(newY)
 
 
         

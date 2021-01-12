@@ -42,6 +42,13 @@ MAP =   [[B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B
 def getValue(position):
     return MAP[position.getX()][position.getY()]
 
+def isWalkable(position):
+    x = position.getX()
+    y = position.getY()
+    value = MAP[x][y]
+    
+    return value == R or value == I or value == C
+
 # to be defined
 def findNearestIntersection(position):
     x = position.getX()
@@ -54,3 +61,10 @@ def findNearestIntersection(position):
                     return Position(i, j)
     
     return -1
+
+def setNewObstacle(position):
+    x = position.getX()
+    y = position.getY()
+    if x> 1 and x < HEIGHT:
+        if y > 1 and y < WIDTH:
+            MAP[x][y] = O

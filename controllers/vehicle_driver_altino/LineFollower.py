@@ -108,7 +108,7 @@ class LineFollower:
         if self.lastLineKnownZone == MIDDLE_ZONE:
             return 0
          
-        return (MIN_STEERING_ANGLE + self.lastLineKnownZone * STEERING_ANGLE_STEP) * 0.6
+        return (MIN_STEERING_ANGLE + self.lastLineKnownZone * STEERING_ANGLE_STEP) * 1
 
     def isLineLost(self):
         return self.lineLost

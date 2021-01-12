@@ -68,6 +68,9 @@ class PathPlanner:
     
     # return array containing a turn for each intersection in the path between robot position and goal
     def getFastestRoute(self):
+
+        # update map status
+        self.updateMap()
         
         # get fastest route from AStar giving map, start position and goal position
         route = AStar.findPath(self.map, self.robotPosition.getPositionArray(), self.goalPosition.getPositionArray())
@@ -131,12 +134,12 @@ class PathPlanner:
             if currentNode[0] > prevNode[0]:
                 directions.append(Orientation.SOUTH)
             elif currentNode[0] < prevNode[0]:
-                directions.append(Orientation.Orientation.NORD)
+                directions.append(Orientation.NORD)
             # check if Y has changed
             elif currentNode[1] > prevNode[1]:
                 directions.append(Orientation.EAST)
             elif currentNode[1] < prevNode[1]:
-                directions.append(Orientation.Orientation.WEST)
+                directions.append(Orientation.WEST)
             else:
                 logger.error("Invalid intersetions")
             # go to next couple of node
@@ -217,3 +220,5 @@ class PathPlanner:
         print("Robot Orientation: " + str(robotOrientation))
         print("Goal Position: " + "(X: " + str(goalPosition.getX()) + ", Y: " + str(goalPosition.getY()) +")")
 
+    def updateMap(self):
+        self.map = Map.MAP

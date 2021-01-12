@@ -45,12 +45,14 @@ class Compass:
         self.compass = driver.getDevice('compass')
         self.compass.enable(deviceTimestep)
 
+        self.orientation = UNKNOWN
+
     def getOrientation(self):
         compassData = self.compass.getValues()
         yComponent = compassData[0]
         xComponent = compassData[2]
 
-        newOrientation = UNKNOWN
+        newOrientation = self.orientation
 
         compassThreshold = 0.95
         if xComponent > compassThreshold:
@@ -62,6 +64,8 @@ class Compass:
         elif yComponent < -compassThreshold:
             newOrientation = Orientation.WEST
 
+        self.orientation = newOrientation
+        
         return newOrientation
 
 class DistanceSensors:

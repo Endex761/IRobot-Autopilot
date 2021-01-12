@@ -22,5 +22,6 @@ class Motion:
         newSpeed = self.pathRunner.getSpeed()
         newAngle = self.pathRunner.getSteeringAngle()
         if newAngle != U_TURN:
+            logger.log("ACTUAL ANGLE: " + str(newAngle))
             self.actuators.setAngle(newAngle * MAX_ANGLE)
             self.actuators.setSpeed(newSpeed * MAX_SPEED)

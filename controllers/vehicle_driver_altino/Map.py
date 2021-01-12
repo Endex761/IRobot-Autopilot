@@ -49,7 +49,8 @@ def findNearestIntersection(position):
     radius = 1
     for i in range(x-radius, x+radius +1):
         for j in range(y-radius, y+radius +1):
-            if MAP[i][j] == I:
-                return Position(i, j)
+            if i < HEIGHT and i > 1 and j < WIDTH and j > 1:
+                if MAP[i][j] == I:
+                    return Position(i, j)
     
     return -1

@@ -52,7 +52,7 @@ class Compass:
 
         newOrientation = UNKNOWN
 
-        compassThreshold = 0.7
+        compassThreshold = 0.9
         if xComponent > compassThreshold:
             newOrientation = Orientation.NORD
         elif xComponent < -compassThreshold:
@@ -84,7 +84,7 @@ class DistanceSensors:
 
         self.sideLeft.enable(deviceTimestep)
         self.sideRight.enable(deviceTimestep) 
-        self.back.enable(deviceTimestep) 
+        self.back.enable(deviceTimestep)
 
 class PositionSensors:
 

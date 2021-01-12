@@ -22,6 +22,8 @@ class PathRunner:
         self.steeringAngle = UNKNOWN
         self.speed = 0.5
 
+        self.collisionAvoidanceCount = 0
+
     def update(self):
         self.updateSpeedAndAngle()
         self.updateGoalStatus()
@@ -42,9 +44,11 @@ class PathRunner:
         lineFollowerAngle = self.lineFollower.getNewSteeringAngle()
         collisionAvoidanceAngle  = self.collisionAvoidance.getSteeringAngle()
 
-        logger.debug("Status: " + str(self.status) + " LF: " + str(lineFollowerAngle) + " CA: " + str(collisionAvoidanceAngle))
+        logger.debug("Status: " + str(self.status) + "CD: " + str(self.collisionAvoidance.isCollisionDetect()) + " LF: " + str(lineFollowerAngle) + " CA: " + str(collisionAvoidanceAngle))
 
-        if collisionAvoidanceAngle > 0.7:
+        if self.collisionAvoidance.isCollisionDetect():
+            if self.status == TURN:
+                logger.info("Can't turn")
             self.status = COLLISION_AVOIDANCE
 
         if currentPath != UNKNOWN and self.actualTurn == 0:
@@ -53,12 +57,14 @@ class PathRunner:
             pass
         
         if self.status == COLLISION_AVOIDANCE:
+            
             self.steeringAngle = collisionAvoidanceAngle
-            if abs(collisionAvoidanceAngle) < 0.1:
-                # self.proceedForward(0.05)
+            if not self.collisionAvoidance.isCollisionDetect():
+                #self.proceedForward(0.05)
                 self.status = SEARCH_LINE
+                
         
-        if self.status == FOLLOW_LINE:
+        elif self.status == FOLLOW_LINE:
 
             if abs(collisionAvoidanceAngle) > abs(lineFollowerAngle) + 0.1:
                 self.status = COLLISION_AVOIDANCE
@@ -71,16 +77,16 @@ class PathRunner:
 
             if isLineLost and currentPath == UNKNOWN:
                 self.speed = 0.0
-            elif isLineLost and currentPath != UNKNOWN and Map.findNearestIntersection(self.positioning.getPosition()) != -1:
+            elif isLineLost and currentPath != UNKNOWN and Map.getValue(self.positioning.getPosition()) == Map.I:
                 self.status = TURN
             elif isLineLost and Map.getValue(self.positioning.position) != Map.I and Map.findNearestIntersection(self.positioning.getPosition()) == -1:
                 self.status = SEARCH_LINE
             
 
-        if self.status == TURN:
+        elif self.status == TURN:
             if  currentPath != UNKNOWN and self.actualTurn < len(currentPath):
                 turn = currentPath[self.actualTurn]
-                self.steeringAngle = 0.5 * turn
+                self.steeringAngle = 0.57 * turn
             else:
                 self.currentPath = UNKNOWN
             
@@ -88,7 +94,7 @@ class PathRunner:
                 self.actualTurn += 1
                 self.status = FOLLOW_LINE
 
-        if self.status == SEARCH_LINE:
+        elif self.status == SEARCH_LINE:
             self.steeringAngle = self.lineFollower.getSteeringAngleLineSearching()
 
             if not isLineLost:

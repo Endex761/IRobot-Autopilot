@@ -62,7 +62,8 @@ class LineFollower:
 
         # find index of greatest zone
         index = self.indexOfMax(self.zones)
-        self.lastLineKnownZone = index
+        if index != -1:
+            self.lastLineKnownZone = index
 
         # debug
         # print(self.zones)
@@ -76,7 +77,7 @@ class LineFollower:
 
     # compute index of greatest value in the array
     def indexOfMax(self, array):
-        index = 0
+        index = -1
         max = array[0]
         for i in range(1, NUM_ZONES - 1):
             if array[i] > max:
@@ -107,7 +108,7 @@ class LineFollower:
         if self.lastLineKnownZone == MIDDLE_ZONE:
             return 0
          
-        return (MIN_STEERING_ANGLE + self.lastLineKnownZone * STEERING_ANGLE_STEP) * 0.5
+        return (MIN_STEERING_ANGLE + self.lastLineKnownZone * STEERING_ANGLE_STEP) * 0.6
 
     def isLineLost(self):
         return self.lineLost

@@ -52,7 +52,7 @@ class Compass:
 
         newOrientation = UNKNOWN
 
-        compassThreshold = 0.7
+        compassThreshold = 0.95
         if xComponent > compassThreshold:
             newOrientation = Orientation.NORD
         elif xComponent < -compassThreshold:
@@ -75,7 +75,10 @@ class DistanceSensors:
 
         self.sideLeft = driver.getDevice('side_left_sensor')
         self.sideRight = driver.getDevice('side_right_sensor')
-        self.back = driver.getDevice('back_sensor')
+
+        self.backLeft = driver.getDevice('back_left_sensor')
+        self.backCenter = driver.getDevice('back_center_sensor')
+        self.backRight = driver.getDevice('back_right_sensor')
 
         # enable distance sensors
         self.frontLeft.enable(deviceTimestep)
@@ -84,7 +87,32 @@ class DistanceSensors:
 
         self.sideLeft.enable(deviceTimestep)
         self.sideRight.enable(deviceTimestep) 
-        self.back.enable(deviceTimestep) 
+
+        self.backLeft.enable(deviceTimestep) 
+        self.backCenter.enable(deviceTimestep) 
+        self.backRight.enable(deviceTimestep) 
+
+    def frontLeftCM(self):
+        return (self.frontLeft.getValue() * (-0.06)) + 60
+
+    def frontRightCM(self):
+        return (self.frontRight.getValue() * (-0.06)) + 60
+
+    def frontCenterCM(self):
+        return (self.frontCenter.getValue() * (-0.06)) + 60
+
+    def backLeftCM(self):
+        return (self.backLeft.getValue() * (-0.06)) + 60
+
+    def backRightCM(self):
+        return (self.backRight.getValue() * (-0.06)) + 60
+
+    def backCenterCM(self):
+        return (self.backCenter.getValue() * (-0.06)) + 60
+
+    # need to update (not function)
+    def cmDistance(self, sensor):
+        return (sensor.getValue() * (-0.06)) + 60
 
 class PositionSensors:
 

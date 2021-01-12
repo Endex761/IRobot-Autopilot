@@ -57,7 +57,7 @@ class LineFollower:
         
         # lost line
         if sum(self.zones) == 0:
-            logger.debug("Last known line: " + str(self.lastLineKnownZone))
+            #logger.debug("Last known line: " + str(self.lastLineKnownZone))
             return UNKNOWN
 
         # find index of greatest zone

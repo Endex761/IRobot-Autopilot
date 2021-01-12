@@ -48,7 +48,7 @@ PROTO Altino [
         aperture 0.1
         numberOfRays 3
         translation 0.03 0 0.14
-        rotation 0 1 0 -1.3708
+        rotation 0 1 0 -1
         lookupTable [ 0 1023 0, 0.6 0 0.04 ]
       }
       DistanceSensor {
@@ -62,7 +62,7 @@ PROTO Altino [
       }
       DistanceSensor {
         translation -0.03 0 0.14
-        rotation 0 1 0 -1.7708
+        rotation 0 1 0 -2
         aperture 0.1
         numberOfRays 3
         name "front_right_sensor"
@@ -88,11 +88,29 @@ PROTO Altino [
         lookupTable [ 0 1023 0, 0.6 0 0.04 ]
       }
       DistanceSensor {
+        name "back_left_sensor"
+        type "infra-red"
+        aperture 0.1
+        numberOfRays 3
+        translation 0.03 -0.005 -0.037
+        rotation 0 1 0 1
+        lookupTable [ 0 1023 0, 0.6 0 0.04 ]
+      }
+      DistanceSensor {
         translation 0 -0.005 -0.037
         rotation 0 1 0 1.5708
         aperture 0.1
         numberOfRays 3
-        name "back_sensor"
+        name "back_center_sensor"
+        type "infra-red"
+        lookupTable [ 0 1023 0, 0.6 0 0.04 ]
+      }
+      DistanceSensor {
+        translation -0.03 -0.005 -0.037
+        rotation 0 1 0 2
+        aperture 0.1
+        numberOfRays 3
+        name "back_right_sensor"
         type "infra-red"
         lookupTable [ 0 1023 0, 0.6 0 0.04 ]
       }

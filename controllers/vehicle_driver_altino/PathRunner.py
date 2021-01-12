@@ -19,6 +19,7 @@ class PathRunner:
         self.status = FOLLOW_LINE
         self.uTurnStatus = UNKNOWN
         self.uTurnGoalOrientation = UNKNOWN
+        self.uTurnStartingMeter = UNKNOWN
         self.actualTurn = 0
         self.currentPath = UNKNOWN
         self.goalReach = False
@@ -114,6 +115,7 @@ class PathRunner:
 
         #To Be Implement
         elif self.status == U_TURN:            
+            # controllo se sei su un incrocio / controllo sensori anteriori
             # prendo i sensori 
             self.sensors = self.collisionAvoidance.getDistanceSensor()
 
@@ -130,41 +132,61 @@ class PathRunner:
                 # set steering MAX
                 self.steeringAngle = 1
                 self.uTurnStatus = 1
+                self.uTurnStartingMeter = self.positioning.getActualDistance()
                 self.uTurnGoalOrientation = Orientation((self.positioning.getOrientation() + 2) % 4)    
+                
                 logger.debug("U_TURN: Start Orientation: " + str(self.positioning.getOrientation()))     
                 logger.debug("U_TURN: Goal Orientation: " + str(self.uTurnGoalOrientation))
             elif self.uTurnStatus == 1:
-                if self.sensors.frontRight.getValue() > 900 or self.sensors.sideRight.getValue() > 900:
-                    logger.debug("Trovato ostacolo a destra, giro tutto a sinistra")
-                    self.steeringAngle = -1
+
+                sensor_distance = 825 if (self.positioning.getActualDistance() - self.uTurnStartingMeter) < 0.15 else 775
+                logger.debug("Valore distanza: " + str(sensor_distance) + ", Distanza percorsa: " + str(self.positioning.getActualDistance() - self.uTurnStartingMeter))
+
+                if self.sensors.frontRight.getValue() > sensor_distance or self.sensors.frontCenter.getValue() > sensor_distance or self.sensors.frontLeft.getValue() > sensor_distance:
+                    logger.debug("Trovato ostacolo a destra, giro tutto a sinistra, metri percorsi: " + str(self.positioning.getActualDistance() - self.uTurnStartingMeter))
+                    self.steeringAngle = -1 * self.steeringAngle
                     self.uTurnStatus += 1
+
+                if self.positioning.getOrientation() == ((self.uTurnGoalOrientation + 1) % 4) or self.positioning.getOrientation() == ((self.uTurnGoalOrientation - 1) % 4):
+                    logger.debug("Ho girato più di 90° rispetto alla posizione di partenza, c'è un buco, presumibilmente un incrocio\nPasso al prossimo step della manovra")
+                    self.steeringAngle = -1 * self.steeringAngle
+                    self.speed= -0.2
+                    self.uTurnStatus = 4
+
             elif self.uTurnStatus == 2:
                 if self.sensors.frontRight.getValue() < 500:
                     self.uTurnStatus += 1
+
             elif self.uTurnStatus == 3:
-                if self.sensors.frontLeft.getValue() > 900 or self.sensors.frontCenter.getValue() > 900 or self.sensors.frontRight.getValue() > 900:
+                if self.sensors.frontLeft.getValue() > 950 or self.sensors.frontCenter.getValue() > 950 or self.sensors.frontRight.getValue() > 950:
                     logger.debug("Trovato ostacolo a sinistra o davanti, vado indietro a destra")
                     self.speed= -0.2
-                    self.steeringAngle = 1
+                    self.steeringAngle = 1 * self.steeringAngle
                     self.uTurnStatus += 1
+
             elif self.uTurnStatus == 4:
-                if self.sensors.backLeft.getValue() > 900 or self.sensors.backCenter.getValue() > 900:
+                if self.sensors.backLeft.getValue() > 950 or self.sensors.backCenter.getValue() > 950 or self.sensors.backRight.getValue() > 950:
                     logger.debug("Trovato ostacolo dietro, vado avanti a sinistra e cerco la linea")
                     self.speed= 0.2
-                    self.steeringAngle = -1
+                    self.steeringAngle = -1 * self.steeringAngle
                     self.uTurnStatus += 1
 
                 if self.positioning.getOrientation() == self.uTurnGoalOrientation:
                     self.uTurnStatus += 1
+
             elif self.uTurnStatus == 5:
-                if self.sensors.frontLeft.getValue() > 900 or self.sensors.frontCenter.getValue() > 900 or self.sensors.frontRight.getValue() > 900:
+                if self.sensors.frontLeft.getValue() > 950 or self.sensors.frontCenter.getValue() > 950 or self.sensors.frontRight.getValue() > 950:
                     self.uTurnStatus = 3
 
                 elif self.positioning.getOrientation() == self.uTurnGoalOrientation:
                     self.uTurnStatus += 1
+
             else:
                 self.speed= 0.2
-                self.steeringAngle = -0.2
+                self.steeringAngle = 0          
+                self.uTurnStatus = UNKNOWN
+                self.uTurnGoalOrientation = UNKNOWN
+                self.uTurnStartingMeter = UNKNOWN
                 self.status = FOLLOW_LINE  
                 logger.debug("Manovra completata")
 

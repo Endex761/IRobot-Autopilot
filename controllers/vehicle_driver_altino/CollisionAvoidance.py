@@ -87,6 +87,10 @@ class CollissionAvoidance:
         self.fc = self.distanceSensors.frontCenter.getValue()
         self.fr = self.distanceSensors.frontRight.getValue()
 
-        self.sl = self.distanceSensors.sideLeft.getValue()
-        self.sr = self.distanceSensors.sideRight.getValue()
-        self.bc = self.distanceSensors.back.getValue()
+        self.sr = self.distanceSensors.sideLeft.getValue()
+        self.sl = self.distanceSensors.sideRight.getValue()
+        self.bc = self.distanceSensors.backCenter.getValue()
+
+    # return distance sensors instance
+    def getDistanceSensor(self):
+        return self.distanceSensors

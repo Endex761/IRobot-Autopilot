@@ -54,7 +54,7 @@ class Compass:
 
         newOrientation = self.orientation
 
-        compassThreshold = 0.95
+        compassThreshold = 0.90
         if xComponent > compassThreshold:
             newOrientation = Orientation.NORD
         elif xComponent < -compassThreshold:
@@ -114,9 +114,11 @@ class DistanceSensors:
     def backCenterCM(self):
         return (self.backCenter.getValue() * (-0.06)) + 60
 
-    # need to update (not function)
-    def cmDistance(self, sensor):
-        return (sensor.getValue() * (-0.06)) + 60
+    def frontDistance(self, value):
+        return self.frontLeft.getValue() > value or self.frontCenter.getValue() > value or self.frontRight.getValue() > value
+
+    def backDistance(self, value):
+        return self.backLeft.getValue() > value or self.backCenter.getValue() > value or self.backRight.getValue() > value
 
 class PositionSensors:
 

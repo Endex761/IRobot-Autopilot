@@ -8,10 +8,10 @@ from Utils import logger
 
 class Motion:
 
-    def __init__(self, actuators, pathRunner, collisionAvoidance):
+    def __init__(self, actuators, pathRunner):
         self.actuators = actuators
         self.pathRunner = pathRunner
-        self.collisionAvoidance = collisionAvoidance
+        
 
         actuators.setSpeed(0.5)
 

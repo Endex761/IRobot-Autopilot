@@ -52,4 +52,4 @@ def findNearestIntersection(position):
             if MAP[i][j] == I:
                 return Position(i, j)
     
-    return position
+    return -1

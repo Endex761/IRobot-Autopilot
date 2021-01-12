@@ -13,3 +13,8 @@ HEIGHT = 0.061
 # constants 
 MAX_SPEED = 1.8
 MAX_ANGLE = 0.52 # rads ~ 30°
+
+LEFT = -1
+RIGHT = 1
+FORWARD = 0
+U_TURN = 99

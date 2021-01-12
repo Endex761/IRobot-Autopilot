@@ -97,7 +97,10 @@ class Position:
         return "[X: " + str(self.x) + ", Y:" + str(self.y) + "]"
     
     def __eq__(self, other):
-        return self.x == other.x and self.y == other.y
+        try:
+            return self.x == other.x and self.y == other.y
+        except:
+            return False
        
 
 

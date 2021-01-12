@@ -1,15 +1,19 @@
+from Utils import logger
 from Constants import UNKNOWN
 import Map
 
 FOLLOW_LINE = 1
 TURN = 2
 SEARCH_LINE = 3
+COLLISION_AVOIDANCE = 4
+GO_FORWARD = 5
 
 class PathRunner:
-    def __init__(self, positioning, pathPlanner, lineFollower):
+    def __init__(self, positioning, pathPlanner, lineFollower, collisionAvoidance):
         self.positioning = positioning
         self.pathPlanner = pathPlanner
         self.lineFollower = lineFollower
+        self.collisionAvoidance = collisionAvoidance
 
         self.status = FOLLOW_LINE
         self.actualTurn = 0
@@ -34,18 +38,47 @@ class PathRunner:
     def updateSpeedAndAngle(self):
         isLineLost = self.lineFollower.isLineLost()
         currentPath = self.currentPath
+
+        lineFollowerAngle = self.lineFollower.getNewSteeringAngle()
+        collisionAvoidanceAngle  = self.collisionAvoidance.getSteeringAngle()
+
+        logger.debug("Status: " + str(self.status) + " LF: " + str(lineFollowerAngle) + " CA: " + str(collisionAvoidanceAngle))
+
+        if collisionAvoidanceAngle > 0.7:
+            self.status = COLLISION_AVOIDANCE
+
+        if currentPath != UNKNOWN and self.actualTurn == 0:
+            # here i should change the orientation
+            self.actualTurn += 1
+            pass
+        
+        if self.status == COLLISION_AVOIDANCE:
+            self.steeringAngle = collisionAvoidanceAngle
+            if abs(collisionAvoidanceAngle) < 0.1:
+                # self.proceedForward(0.05)
+                self.status = SEARCH_LINE
         
         if self.status == FOLLOW_LINE:
-            self.steeringAngle = self.lineFollower.getNewSteeringAngle()
+
+            if abs(collisionAvoidanceAngle) > abs(lineFollowerAngle) + 0.1:
+                self.status = COLLISION_AVOIDANCE
+
+            self.steeringAngle = lineFollowerAngle
+
+            if self.isGoalReach():
+                self.speed = 0.0
+                logger.info("Destination Reached")
+
             if isLineLost and currentPath == UNKNOWN:
                 self.speed = 0.0
-            elif isLineLost and Map.getValue(self.positioning.position) != Map.I and Map.findNearestIntersection(self.positioning.position) == self.positioning.position:
-                self.status = SEARCH_LINE
-            elif isLineLost and currentPath != UNKNOWN:
+            elif isLineLost and currentPath != UNKNOWN and Map.findNearestIntersection(self.positioning.getPosition()) != -1:
                 self.status = TURN
+            elif isLineLost and Map.getValue(self.positioning.position) != Map.I and Map.findNearestIntersection(self.positioning.getPosition()) == -1:
+                self.status = SEARCH_LINE
+            
 
         if self.status == TURN:
-            if self.actualTurn < len(currentPath) and currentPath != UNKNOWN:
+            if  currentPath != UNKNOWN and self.actualTurn < len(currentPath):
                 turn = currentPath[self.actualTurn]
                 self.steeringAngle = 0.5 * turn
             else:
@@ -59,7 +92,14 @@ class PathRunner:
             self.steeringAngle = self.lineFollower.getSteeringAngleLineSearching()
 
             if not isLineLost:
+                logger.debug("Line was lost and i found it!")
                 self.status = FOLLOW_LINE
+
+        if self.status == GO_FORWARD:
+            pass
+
+            
+        # logger.debug("Steerign angle: " + str(self.steeringAngle) + " STATUS: " + str(self.status))
 
 
 
@@ -98,3 +138,15 @@ class PathRunner:
     def goTo(self, goal):
         self.pathPlanner.setGoalPosition(goal)
         self.currentPath = self.pathPlanner.getFastestRoute()
+        print(self.currentPath)
+
+    def proceedForward(self, meters):
+        self.status = GO_FORWARD
+        startingAngle = self.getSteeringAngle()
+        start = self.positioning.getActualDistance()
+        stop  = start + meters 
+        while stop - start > 0:
+            self.steeringAngle = 0.0
+        
+        self.steeringAngle = startingAngle
+        

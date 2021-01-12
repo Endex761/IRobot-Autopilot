@@ -1,4 +1,5 @@
 # import Driver from Webots
+from CollisionAvoidance import CollissionAvoidance
 from Utils import Position
 from vehicle import Driver
 from Devices import Actuators, Compass, DistanceSensors, PositionSensors
@@ -25,6 +26,7 @@ camera.enable(int(2 * altino.getBasicTimeStep())) #fix
 for i in range(int(altino.getBasicTimeStep() * 2/altino.getBasicTimeStep()) + 1): # fix
     altino.step()
 
+collisionAvoidance = CollissionAvoidance(distanceSensors)
 
 # each of this class must have and update method
 lineFollower = LineFollower(camera)
@@ -36,16 +38,16 @@ positioning = Positioning(positionSensors, compass, lineFollower)
 pathPlanner = PathPlanner(positioning)
 
 
-pathRunner = PathRunner(positioning, pathPlanner, lineFollower)
+pathRunner = PathRunner(positioning, pathPlanner, lineFollower, collisionAvoidance)
 
 pathRunner.goTo(Position(14, 23))
-collisionAvoidance = 0 # to be define
 
-motion = Motion(actuators,pathRunner, collisionAvoidance)
+motion = Motion(actuators, pathRunner)
 
 # run
 def run():
     while altino.step() != -1:
+        collisionAvoidance.update()
         lineFollower.update()
         positioning.update()
         pathPlanner.update()

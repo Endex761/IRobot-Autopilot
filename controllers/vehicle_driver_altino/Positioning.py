@@ -76,18 +76,19 @@ class Positioning:
             if Map.getValue(self.position) == Map.I:
                 logger.debug("Already in")
             else:
-                logger.debug("Current pos to search: " + str(self.position))
-                self.position = Map.findNearestIntersection(self.position)
-                self.reference = self.getActualDistance()
-                logger.debug("new pos: " + str(self.position))
+                nearestIntersecion = Map.findNearestIntersection(self.position)
+                if nearestIntersecion != -1:
+                    self.position = nearestIntersecion
+                    self.reference = self.getActualDistance()
         elif not isLineLost:
             self.lineAlreadyLost = False
 
+     
         
                 
         
     def updatePosition(self):
-        tolerance = 0.00
+        tolerance = -0.02
         add = [0,0]
         if self.getActualDistance() - self.reference > Map.MAP_RESOLUTION + tolerance:
             if self.orientation == Orientation.NORD:

@@ -7,6 +7,7 @@ TURN = 2
 SEARCH_LINE = 3
 COLLISION_AVOIDANCE = 4
 GO_FORWARD = 5
+U_TURN = 6
 
 class PathRunner:
     def __init__(self, positioning, pathPlanner, lineFollower, collisionAvoidance):
@@ -97,6 +98,14 @@ class PathRunner:
 
         if self.status == GO_FORWARD:
             pass
+        #To Be Implement
+        if self.status == U_TURN:
+            # set slow speed 
+            self.speed= 0.2
+            
+            # set steering MAX
+            self.steeringAngle = self.lineFollower.MAX_STEERING_ANGLE
+            
 
             
         # logger.debug("Steerign angle: " + str(self.steeringAngle) + " STATUS: " + str(self.status))

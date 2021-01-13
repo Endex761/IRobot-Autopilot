@@ -73,6 +73,20 @@ def getNearestWalkablePosition(position, orientation):
     else:
         return position
 
+def getNearestWalkablePosition2(position, orientation):
+    if not isWalkable(position):
+        x = position.getX()
+        y = position.getY()
+        radius = 1
+        for i in range(x-radius, x+radius +1):
+            for j in range(y-radius, y+radius +1):
+                if i < HEIGHT and i > 1 and j < WIDTH and j > 1:
+                    p = Position(x+i, y+j)
+                    if isWalkable(p):
+                        return p
+    else:
+        return position
+
 
 # return the position of the nearest intersection to position, -1 if no interection in range
 def findNearestIntersection(position):

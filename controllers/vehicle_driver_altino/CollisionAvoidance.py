@@ -1,7 +1,8 @@
 from Constants import LEFT, RIGHT
 from Utils import logger
 
-DETECT = 1
+DISABLED = 1
+ENABLED = 2
 
 # class to handle collision avoidance service
 class CollissionAvoidance:
@@ -20,10 +21,19 @@ class CollissionAvoidance:
         self.steeringAngle = 0.0
         self.speed = 0.0
 
-        self.status = DETECT
+        self.status = DISABLED
 
         # true if imminent collision is detected
         self.collisionDetect = False
+
+    def isEnabled(self):
+        return self.status != DISABLED
+
+    def enable(self):
+        self.status = ENABLED
+
+    def disable(self):
+        self.status = DISABLED
 
     # return true is an imminent collision is detected 
     def isCollisionDetect(self):
@@ -102,8 +112,9 @@ class CollissionAvoidance:
 
     # update collision avoidance service
     def update(self):
-        self.updateSensorsValue()
-        self.computeSpeedAndAngle()
+        if self.status == ENABLED:
+            self.updateSensorsValue()
+            self.computeSpeedAndAngle()
 
     # update sensors values
     def updateSensorsValue(self):

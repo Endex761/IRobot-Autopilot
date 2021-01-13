@@ -38,6 +38,7 @@ class Altino:
         
         
         self.collisionAvoidance = CollissionAvoidance(self.distanceSensors)
+        self.collisionAvoidance.enable()
         
         # line following service
         self.lineFollower = LineFollower(self.camera)
@@ -49,7 +50,8 @@ class Altino:
         self.pathPlanner = PathPlanner(self.positioning)
         
         # path running service
-        self.pathRunner = PathRunner(self.positioning, self.pathPlanner, self.lineFollower, self.collisionAvoidance)
+        self.pathRunner = PathRunner(self.positioning, self.pathPlanner, self.lineFollower, self.distanceSensors)
+        self.pathRunner.enable()
         
         # set path runner destination
         self.pathRunner.goTo(Position(14, 23))
@@ -58,7 +60,7 @@ class Altino:
         # self.parking.enable()
         
         # motion serivice
-        self.motion = Motion(self.actuators, self.pathRunner, self.parking)
+        self.motion = Motion(self.actuators, self.pathRunner, self.parking, self.collisionAvoidance)
 
         # this ensure sensors are correctly initialized
         self.devicesInitialization()

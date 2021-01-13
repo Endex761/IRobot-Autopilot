@@ -2,6 +2,7 @@ from Utils import logger, Orientation
 from Constants import UNKNOWN, MAX_ANGLE
 import Map
 
+DISABLED = 0
 FOLLOW_LINE = 1
 TURN = 2
 SEARCH_LINE = 3
@@ -13,13 +14,13 @@ U_TURN = 6
 class PathRunner:
 
     # initialize path running service
-    def __init__(self, positioning, pathPlanner, lineFollower, collisionAvoidance):
+    def __init__(self, positioning, pathPlanner, lineFollower, distanceSensors):
         self.positioning = positioning
         self.pathPlanner = pathPlanner
         self.lineFollower = lineFollower
-        self.collisionAvoidance = collisionAvoidance
+        self.distanceSensors = distanceSensors
 
-        self.status = FOLLOW_LINE
+        self.status = DISABLED
         self.uTurnStatus = UNKNOWN
         self.uTurnGoalOrientation = UNKNOWN
         self.uTurnStartingMeter = UNKNOWN
@@ -31,10 +32,23 @@ class PathRunner:
 
         self.collisionAvoidanceCount = 0
 
+    def isEnabled(self):
+        return self.status != DISABLED
+
+    def enable(self):
+        self.status = FOLLOW_LINE
+
+    def disable(self):
+        self.status = DISABLED
+
+    def isUTurning(self):
+        return self.status == U_TURN
+
     # update path running service
     def update(self):
-        self.updateSpeedAndAngle()
-        self.updateGoalStatus()
+        if self.status != DISABLED:
+            self.updateSpeedAndAngle()
+            self.updateGoalStatus()
 
     # get new fastest path from actual position to goal if set
     def updatePath(self):
@@ -53,13 +67,14 @@ class PathRunner:
         currentPath = self.currentPath
 
         lineFollowerAngle = self.lineFollower.getNewSteeringAngle()
-        collisionAvoidanceAngle  = self.collisionAvoidance.getSteeringAngle()
+        #collisionAvoidanceAngle  = self.collisionAvoidance.getSteeringAngle()
 
-        logger.debug("Status: " + str(self.status) + " CD: " + str(self.collisionAvoidance.isCollisionDetect()) + " LF: " + str(lineFollowerAngle) + " CA: " + str(collisionAvoidanceAngle))
+        #logger.debug("Status: " + str(self.status) + " CD: " + str(self.collisionAvoidance.isCollisionDetect()) + " LF: " + str(lineFollowerAngle) + " CA: " + str(collisionAvoidanceAngle))
 
-        if self.collisionAvoidance.isCollisionDetect():
-            if self.status != U_TURN:
-                self.status = COLLISION_AVOIDANCE
+        # go to motion, use obstacle detected
+        #if self.collisionAvoidance.isCollisionDetect():
+        #    if self.status != U_TURN:
+        #        self.status = COLLISION_AVOIDANCE
         
 
         if currentPath != UNKNOWN and self.actualTurn == 0:
@@ -67,19 +82,21 @@ class PathRunner:
             self.actualTurn += 1
             self.status = U_TURN
             pass
-
-        if self.status == COLLISION_AVOIDANCE:
-            self.steeringAngle = collisionAvoidanceAngle
-            self.speed = self.collisionAvoidance.getSpeed()
-            print(self.steeringAngle)
-            if not self.collisionAvoidance.isCollisionDetect():
-                self.status = SEARCH_LINE
+        
+        # go to motion
+        #if self.status == COLLISION_AVOIDANCE:
+        #    self.steeringAngle = collisionAvoidanceAngle
+        #    self.speed = self.collisionAvoidance.getSpeed()
+        #    print(self.steeringAngle)
+        #    if not self.collisionAvoidance.isCollisionDetect():
+        #        self.status = SEARCH_LINE
                 
         
         elif self.status == FOLLOW_LINE:
-
-            if self.collisionAvoidance.isCollisionDetect():
-                self.status = COLLISION_AVOIDANCE
+            
+            # go to motion
+            #if self.collisionAvoidance.isCollisionDetect():
+            #    self.status = COLLISION_AVOIDANCE
 
             self.steeringAngle = lineFollowerAngle
 
@@ -119,7 +136,7 @@ class PathRunner:
         #To Be Implement
         elif self.status == U_TURN:    
             print("Orientamento attuale: " + str(self.positioning.getOrientation()) + " orientamento goal: " + str(self.uTurnGoalOrientation))        
-            self.sensors = self.collisionAvoidance.getDistanceSensor()
+            self.sensors = self.distanceSensors
             logger.debug("U_TURN: Status: " + str(self.uTurnStatus))
 
             if self.uTurnStatus == UNKNOWN:

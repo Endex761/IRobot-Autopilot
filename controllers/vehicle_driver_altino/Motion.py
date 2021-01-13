@@ -5,33 +5,55 @@ from Utils import logger
 # class to handle car motion service
 class Motion:
     # initialize motion service
-    def __init__(self, actuators, pathRunner, parking):
+    def __init__(self, actuators, pathRunner, parking, collisionAvoidance):
         self.actuators = actuators
         self.pathRunner = pathRunner
+        self.collisionAvoidance = collisionAvoidance
         self.parking = parking
         actuators.setSpeed(0.5)
 
     # update motion service
     def update(self):
-        if self.parking.isEnabled():
+        collisionImminent = False
+        isUTurning = self.pathRunner.isUTurning()
+        isParking = self.parking.isParking()
+
+        if self.collisionAvoidance.isEnabled() and (not isUTurning or not isParking):
+            collisionImminent = self.collisionAvoidance.isCollisionDetect()
+            if collisionImminent:
+                self.updateCollisionAvoidance()
+
+        if self.parking.isEnabled() and (isParking or not collisionImminent):
             self.updateParking()
-        else:
+        
+        if self.pathRunner.isEnabled() and (isUTurning or not collisionImminent):
             self.updatePathRunner()
 
+    # update parking commands
     def updateParking(self):
         newSpeed = self.parking.getSpeed()
         newAngle = self.parking.getAngle()
-        self.actuators.setAngle(newAngle * MAX_ANGLE)
-        self.actuators.setSpeed(newSpeed * MAX_SPEED)
+        self.setAngleAndSpeed(newAngle, newSpeed)
 
-    # update path runner comands
+    # update path runner commands
     def updatePathRunner(self):
+        if self.pathRunner.isUTurning():
+            self
         newSpeed = self.pathRunner.getSpeed()
         newAngle = self.pathRunner.getSteeringAngle()
-        if newAngle != U_TURN:
-            logger.log("ACTUAL ANGLE: " + str(newAngle))
-            self.actuators.setAngle(newAngle * MAX_ANGLE)
-            self.actuators.setSpeed(newSpeed * MAX_SPEED)
+        self.setAngleAndSpeed(newAngle, newSpeed)
+
+    # update collision avoidance commands
+    def updateCollisionAvoidance(self):
+        newSpeed = self.collisionAvoidance.getSpeed()
+        newAngle = self.collisionAvoidance.getSteeringAngle()
+        self.setAngleAndSpeed(newAngle, newSpeed)
+
+    # set angle and speed on the actuators    
+    def setAngleAndSpeed(self, angle, speed):
+        logger.debug("Setting Actuators - Angle: " + str(angle) + " - Speed: " + str(speed))
+        self.actuators.setAngle(angle * MAX_ANGLE)
+        self.actuators.setSpeed(speed * MAX_SPEED)
 
     # set actuators speed
     def setSpeed(self, speed):

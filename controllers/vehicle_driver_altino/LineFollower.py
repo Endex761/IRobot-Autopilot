@@ -79,9 +79,11 @@ class LineFollower:
         # if the middle zone is the greatest return 0
         if index == MIDDLE_ZONE:
             return 0
-        else:
+        elif index != -1:
             # return angle according to greatest zone
             return MIN_STEERING_ANGLE + index * STEERING_ANGLE_STEP
+        else:
+            return 0
 
     # compute index of greatest value in the array
     def indexOfMax(self, array):

@@ -1,4 +1,4 @@
-from Utils import logger
+from Utils import Status, logger
 from Constants import LEFT, RIGHT, CAR_LENGTH, UNKNOWN
 
 # parking states
@@ -40,6 +40,9 @@ class Parking:
 
     def disable(self):
         self.status = DISABLED
+
+    def isParking(self):
+        return self.status == PARKING or self.status == PARKING2
 
     def getSpeed(self):
         return self.speed

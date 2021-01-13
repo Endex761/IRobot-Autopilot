@@ -140,65 +140,61 @@ class PathRunner:
             logger.debug("U_TURN: Status: " + str(self.uTurnStatus))
 
             if self.uTurnStatus == UNKNOWN:
-                if self.sensors.frontDistance(950):
-                    self.steeringAngle = -1 * self.steeringAngle
+                #controlli se posso fare l'inversione
+                self.uTurnStatus = 1
+                self.steeringAngle = 1
+                self.uTurnGoalOrientation = Orientation((self.positioning.inaccurateOrientation + 2) % 4) 
+
+            if self.uTurnStatus == 1:
+                if self.sensors.frontDistance(950) or self.positioning.getOrientation() == ((self.uTurnGoalOrientation + 1) % 4) or self.positioning.getOrientation() == ((self.uTurnGoalOrientation - 1) % 4):
+                    logger.debug("U_TURN: Primo passo completato, vado indietro")
                     self.speed= -0.2
-                    self.uTurnStatus = 3
+                    self.steeringAngle = -1 * self.steeringAngle
+                    self.uTurnStatus +=2
+                    self.uTurnStartingMeter = self.positioning.getActualDistance()       
                 else:
                     self.speed= 0.2 
                     self.steeringAngle = 1
-                
-                self.uTurnStatus = 2
-                self.uTurnStartingMeter = self.positioning.getActualDistance()
-                self.uTurnGoalOrientation = Orientation((self.positioning.getOrientation() + 2) % 4) 
-
-            elif self.uTurnStatus == 1:
-
-                sensor_distance = 825 if (self.positioning.getActualDistance() - self.uTurnStartingMeter) < 0.15 else 750
-
-                if self.sensors.frontDistance(sensor_distance):
-                    self.steeringAngle = -1 * self.steeringAngle
-                    self.uTurnStatus += 1
-
-                
 
             elif self.uTurnStatus == 2:
                 if self.sensors.frontDistance(950):
+                    logger.debug("U_TURN: Primo passo completato, vado indietro")
                     self.speed= -0.2
                     self.steeringAngle = -1 * self.steeringAngle
-                    self.uTurnStatus += 1
+                    self.uTurnStatus +=1
+                    self.uTurnStartingMeter = self.positioning.getActualDistance()
 
-                if self.positioning.getOrientation() == ((self.uTurnGoalOrientation + 1) % 4) or self.positioning.getOrientation() == ((self.uTurnGoalOrientation - 1) % 4):
-                    self.steeringAngle = -1 * self.steeringAngle
-                    self.speed= -0.2
-                    self.uTurnStatus = 3
+                if self.positioning.getOrientation() == self.uTurnGoalOrientation:
+                    self.uTurnStatus += 2
 
             elif self.uTurnStatus == 3:
                 if self.sensors.backDistance(950):
+                    logger.debug("U_TURN: Trovato ostacolo dietro, vado avanti")
                     self.speed= 0.2
                     self.steeringAngle = -1 * self.steeringAngle
-                    self.uTurnStatus += 1
+                    self.uTurnStatus -= 1
 
                 if self.positioning.getOrientation() == self.uTurnGoalOrientation:
                     self.uTurnStatus += 1
 
-            elif self.uTurnStatus == 4:
-                if self.sensors.frontDistance(950):
-                    self.steeringAngle = -1 * self.steeringAngle
-                    self.uTurnStatus = 2
-
-                elif self.positioning.getOrientation() == self.uTurnGoalOrientation:
-                    self.uTurnStatus += 1
-
             else:
-                self.speed= 0.2
-                self.steeringAngle = -0.2 * self.steeringAngle          
+                logger.debug("U_TURN: Manovra completata")
+                logger.debug("U_TURN: Spazio percorso: " + str(self.positioning.getActualDistance() - self.uTurnStartingMeter))
+                distanzaPercorsa = self.positioning.getActualDistance() - self.uTurnStartingMeter
+                if distanzaPercorsa >= 0:
+                    self.steeringAngle = -0.5 * self.steeringAngle
+                elif abs(distanzaPercorsa) > 0.07:
+                    self.steeringAngle = -0.1 * self.steeringAngle                
+                else:
+                    self.steeringAngle = -0.2 * self.steeringAngle
+
+                logger.debug("U_TURN: Spazio percorso: " + str(distanzaPercorsa) + ", Angolo di sterzata: " + str(self.steeringAngle))
+                self.speed= 0.5    
                 self.uTurnStatus = UNKNOWN
                 self.uTurnGoalOrientation = UNKNOWN
                 self.uTurnStartingMeter = UNKNOWN
                 self.lineFollower.resetLastLineKnownZone(self.steeringAngle)
                 self.status = SEARCH_LINE  
-                logger.debug("Manovra completata")
 
 
             

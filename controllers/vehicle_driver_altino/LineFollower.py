@@ -132,6 +132,6 @@ class LineFollower:
         if angle != 0 :
             self.lastLineKnownZone = int((angle - MIN_STEERING_ANGLE) / STEERING_ANGLE_STEP)
         else:
-            self.lastLineKnownZone=angle
+            self.lastLineKnownZone=MIDDLE_ZONE
             
         

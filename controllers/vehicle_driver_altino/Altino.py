@@ -7,6 +7,7 @@ from LineFollower import LineFollower
 from Positioning import Positioning
 from PathPlanner import PathPlanner
 from PathRunner import PathRunner
+from Parking import Parking
 from Motion import Motion
 
 # altino states
@@ -52,9 +53,12 @@ class Altino:
         
         # set path runner destination
         self.pathRunner.goTo(Position(14, 23))
+
+        self.parking = Parking(self.distanceSensors, self.positioning)
+        # self.parking.enable()
         
         # motion serivice
-        self.motion = Motion(self.actuators, self.pathRunner)
+        self.motion = Motion(self.actuators, self.pathRunner, self.parking)
 
         # this ensure sensors are correctly initialized
         self.devicesInitialization()
@@ -70,6 +74,7 @@ class Altino:
             self.positioning.update()
             self.pathPlanner.update()
             self.pathRunner.update()
+            self.parking.update()
             self.motion.update()
 
     # stop

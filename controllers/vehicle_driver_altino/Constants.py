@@ -8,9 +8,9 @@ UNKNOWN = -123
 
 # vehicle dimensions in meters
 WHEEL_RADIUS = 0.020
-LENGTH = 0.180
-WIDTH = 0.098
-HEIGHT = 0.061
+CAR_LENGTH = 0.180
+CAR_WIDTH = 0.098
+CAR_HEIGHT = 0.061
 
 # constants 
 MAX_SPEED = 1.8

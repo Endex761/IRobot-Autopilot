@@ -5,14 +5,24 @@ from Utils import logger
 # class to handle car motion service
 class Motion:
     # initialize motion service
-    def __init__(self, actuators, pathRunner):
+    def __init__(self, actuators, pathRunner, parking):
         self.actuators = actuators
         self.pathRunner = pathRunner
+        self.parking = parking
         actuators.setSpeed(0.5)
 
     # update motion service
     def update(self):
-        self.updatePathRunner()
+        if self.parking.isEnabled():
+            self.updateParking()
+        else:
+            self.updatePathRunner()
+
+    def updateParking(self):
+        newSpeed = self.parking.getSpeed()
+        newAngle = self.parking.getAngle()
+        self.actuators.setAngle(newAngle * MAX_ANGLE)
+        self.actuators.setSpeed(newSpeed * MAX_SPEED)
 
     # update path runner comands
     def updatePathRunner(self):

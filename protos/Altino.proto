@@ -40,7 +40,7 @@ PROTO Altino [
         width 128
         height 16
         near 0.0055
-        fieldOfView 1.2
+        fieldOfView 1.3
       }
       DistanceSensor {
         name "front_left_sensor"

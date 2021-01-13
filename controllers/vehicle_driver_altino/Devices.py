@@ -65,25 +65,29 @@ class Compass:
         self.compass.enable(deviceTimestep)
 
         self.orientation = UNKNOWN
+        self.inaccurateOrientation = UNKNOWN
+        self.orientation = self.getInaccurateOrientation()
 
     # get fine orientation for navigation purpose
     def getOrientation(self):
         threshold = 0.95
-        return self.computeOrientation(threshold)
+        self.orientation = self.computeOrientation(threshold, self.orientation)
+        return self.orientation
 
     # get inaccurate orientation for positioning purpose
     def getInaccurateOrientation(self):
         threshold = 0.5
-        return self.computeOrientation(threshold)
+        self.inaccurateOrientation = self.computeOrientation(threshold, self.inaccurateOrientation)
+        return self.inaccurateOrientation
 
     # get compass data and convert to orientation
-    def computeOrientation(self, precision):
+    def computeOrientation(self, precision, oldOrientation):
         # this return 3d vector indicating nord pole
         compassData = self.compass.getValues()
         yComponent = compassData[0]
         xComponent = compassData[2]
 
-        newOrientation = self.orientation
+        newOrientation = oldOrientation
 
         compassThreshold = precision
         if xComponent > compassThreshold:
@@ -94,8 +98,6 @@ class Compass:
             newOrientation = Orientation.EAST
         elif yComponent < -compassThreshold:
             newOrientation = Orientation.WEST
-
-        self.orientation = newOrientation
 
         return newOrientation
         

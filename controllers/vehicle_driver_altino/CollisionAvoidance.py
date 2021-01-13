@@ -1,10 +1,11 @@
-# STATES
 from Constants import LEFT, RIGHT
 from Utils import logger
 
 DETECT = 1
-class CollissionAvoidance:
 
+# class to handle collision avoidance service
+class CollissionAvoidance:
+    # initialize collision avoidance service
     def __init__(self, distanceSensors):
         self.distanceSensors = distanceSensors
 
@@ -20,11 +21,15 @@ class CollissionAvoidance:
         self.speed = 0.0
 
         self.status = DETECT
+
+        # true if imminent collision is detected
         self.collisionDetect = False
 
+    # return true is an imminent collision is detected 
     def isCollisionDetect(self):
         return self.collisionDetect
-    
+
+    # compute angle and speed to avoid obstacle 
     def computeSpeedAndAngle(self):
         # set values of thresholds
 
@@ -81,18 +86,21 @@ class CollissionAvoidance:
             self.steeringAngle = self.steeringAngle / 1.5
             self.collisionDetect = False
 
-        """if self.steeringAngle > 1:
+        if self.steeringAngle > 1:
             self.steeringAngle = 1
         
         if self.steeringAngle < -1:
-            self.steeringAngle = -1"""
+            self.steeringAngle = -1
 
+    # get collision avoidance angle
     def getSteeringAngle(self):
         return self.steeringAngle
 
+    # get collision avoidance speed
     def getSpeed(self):
         return self.speed
 
+    # update collision avoidance service
     def update(self):
         self.updateSensorsValue()
         self.computeSpeedAndAngle()

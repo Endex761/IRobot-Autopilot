@@ -18,10 +18,11 @@ class Positioning:
         self.reference = self.getActualDistance()
 
         self.lineAlreadyLost = False
-
+        # TODO what if speed is negative
         # how should i get the starting position? GPS?
         self.position = Position(4,1)
         self.orientation = UNKNOWN
+        self.inaccurateOrientation = UNKNOWN
         self.updateOrientation()
 
     # set robot position in the map
@@ -73,7 +74,8 @@ class Positioning:
 
     # update orientation using inaccurate compass orientation
     def updateOrientation(self):
-        self.orientation = self.compass.getInaccurateOrientation()
+        self.orientation = self.compass.getOrientation()
+        self.inaccurateOrientation = self.compass.getInaccurateOrientation()
 
     # update positioning using map landmarks
     def computePositionBasedOnLandmark(self):
@@ -97,13 +99,13 @@ class Positioning:
         tolerance = -0.02
         add = [0,0]
         if self.getActualDistance() - self.reference > Map.MAP_RESOLUTION + tolerance:
-            if self.orientation == Orientation.NORD:
+            if self.inaccurateOrientation == Orientation.NORD:
                 add = [-1, 0]
-            elif self.orientation == Orientation.SOUTH:
+            elif self.inaccurateOrientation == Orientation.SOUTH:
                 add = [1, 0]
-            elif self.orientation == Orientation.EAST:
+            elif self.inaccurateOrientation == Orientation.EAST:
                 add = [0, 1]
-            elif self.orientation == Orientation.WEST:
+            elif self.inaccurateOrientation == Orientation.WEST:
                 add = [0, -1]
                 
             self.printStatus()
@@ -115,7 +117,7 @@ class Positioning:
         newX = x + add[0]
         newY = y + add[1]
         logger.debug("New Position: " + str(Position(newX,newY)))
-        self.position = Map.getNearestWalkablePosition(Position(newX,newY), self.orientation)
+        self.position = Map.getNearestWalkablePosition(Position(newX,newY), self.inaccurateOrientation)
         #if Map.isWalkable(Position(newX, newY)):
         #    self.position.setX(newX)
         #    self.position.setY(newY)

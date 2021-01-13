@@ -117,7 +117,8 @@ class PathRunner:
             pass
 
         #To Be Implement
-        elif self.status == U_TURN:            
+        elif self.status == U_TURN:    
+            print("Orientamento attuale: " + str(self.positioning.getOrientation()) + " orientamento goal: " + str(self.uTurnGoalOrientation))        
             self.sensors = self.collisionAvoidance.getDistanceSensor()
             logger.debug("U_TURN: Status: " + str(self.uTurnStatus))
 
@@ -174,7 +175,7 @@ class PathRunner:
 
             else:
                 self.speed= 0.2
-                self.steeringAngle = 0.5 * self.steeringAngle          
+                self.steeringAngle = -0.2 * self.steeringAngle          
                 self.uTurnStatus = UNKNOWN
                 self.uTurnGoalOrientation = UNKNOWN
                 self.uTurnStartingMeter = UNKNOWN

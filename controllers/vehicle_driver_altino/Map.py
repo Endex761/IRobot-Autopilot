@@ -47,9 +47,10 @@ def getValue(position):
 def isWalkable(position):
     x = position.getX()
     y = position.getY()
-    value = MAP[x][y]
-    
-    return value == R or value == I or value == C
+    if x < HEIGHT and x > 0 and y < WIDTH and y > 0:
+        value = MAP[x][y]
+        return value == R or value == I or value == C
+    return False
 
 # return the nearest walkable position given position and orientation
 def getNearestWalkablePosition(position, orientation):

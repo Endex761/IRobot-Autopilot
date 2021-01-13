@@ -97,6 +97,7 @@ class PathRunner:
         elif self.status == TURN:
             if  currentPath != UNKNOWN and self.actualTurn < len(currentPath):
                 turn = currentPath[self.actualTurn]
+                
                 self.steeringAngle = 0.57 * turn
             else:
                 self.currentPath = UNKNOWN

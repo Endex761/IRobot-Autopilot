@@ -89,7 +89,7 @@ class PathRunner:
             if isLineLost and currentPath == UNKNOWN:
                 self.speed = 0.0
             elif isLineLost and currentPath != UNKNOWN and Map.findNearestIntersection(self.positioning.getPosition()) != -1:
-                print("TURN")
+                logger.log("go to TURN")
                 self.status = TURN
             elif isLineLost and Map.findNearestIntersection(self.positioning.getPosition()) == -1:
                 self.status = SEARCH_LINE
@@ -117,7 +117,7 @@ class PathRunner:
 
         #To Be Implement
         elif self.status == U_TURN:    
-            print("Orientamento attuale: " + str(self.positioning.getOrientation()) + " orientamento goal: " + str(self.uTurnGoalOrientation))        
+            logger.debug("Orientamento attuale: " + str(self.positioning.getOrientation()) + " orientamento goal: " + str(self.uTurnGoalOrientation))        
             self.sensors = self.distanceSensors
             logger.debug("U_TURN: Status: " + str(self.uTurnStatus))
 

@@ -1,7 +1,5 @@
 from enum import IntEnum, auto
-
-# Enable debug prints
-DEBUG = True
+from Constants import DEBUG
 
 # useless?
 class Status(IntEnum):

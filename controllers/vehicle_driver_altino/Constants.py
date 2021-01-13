@@ -1,4 +1,6 @@
 # constant definition
+# is debug enabled
+DEBUG = False
 
 # device timestamp multiplication ratio
 DEVICE_TIMESTEP_MULTIPLIER = 2

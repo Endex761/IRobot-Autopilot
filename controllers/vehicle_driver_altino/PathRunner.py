@@ -8,7 +8,7 @@ TURN = 2
 SEARCH_LINE = 3
 COLLISION_AVOIDANCE = 4
 GO_FORWARD = 5
-U_TURN = 6
+U_TURN = 99
 
 # class to handle path running service
 class PathRunner:
@@ -30,7 +30,7 @@ class PathRunner:
         self.steeringAngle = UNKNOWN
         self.speed = 0.5
 
-        self.collisionAvoidanceCount = 0
+        self.collisionImminent = False
 
     def isEnabled(self):
         return self.status != DISABLED
@@ -43,6 +43,9 @@ class PathRunner:
 
     def isUTurning(self):
         return self.status == U_TURN
+
+    def setCollisionImminent(self, value):
+        self.collisionImminent = value
 
     # update path running service
     def update(self):
@@ -66,37 +69,16 @@ class PathRunner:
         isLineLost = self.lineFollower.isLineLost()
         currentPath = self.currentPath
 
+        logger.debug("Current Status: " + str(self.status))
+
         lineFollowerAngle = self.lineFollower.getNewSteeringAngle()
-        #collisionAvoidanceAngle  = self.collisionAvoidance.getSteeringAngle()
-
-        #logger.debug("Status: " + str(self.status) + " CD: " + str(self.collisionAvoidance.isCollisionDetect()) + " LF: " + str(lineFollowerAngle) + " CA: " + str(collisionAvoidanceAngle))
-
-        # go to motion, use obstacle detected
-        #if self.collisionAvoidance.isCollisionDetect():
-        #    if self.status != U_TURN:
-        #        self.status = COLLISION_AVOIDANCE
-        
 
         if currentPath != UNKNOWN and self.actualTurn == 0:
-            # here i should change the orientation
+            if self.currentPath[self.actualTurn] == U_TURN:
+                self.status = U_TURN
             self.actualTurn += 1
-            self.status = U_TURN
-            pass
-        
-        # go to motion
-        #if self.status == COLLISION_AVOIDANCE:
-        #    self.steeringAngle = collisionAvoidanceAngle
-        #    self.speed = self.collisionAvoidance.getSpeed()
-        #    print(self.steeringAngle)
-        #    if not self.collisionAvoidance.isCollisionDetect():
-        #        self.status = SEARCH_LINE
-                
         
         elif self.status == FOLLOW_LINE:
-            
-            # go to motion
-            #if self.collisionAvoidance.isCollisionDetect():
-            #    self.status = COLLISION_AVOIDANCE
 
             self.steeringAngle = lineFollowerAngle
 
@@ -106,12 +88,12 @@ class PathRunner:
 
             if isLineLost and currentPath == UNKNOWN:
                 self.speed = 0.0
-            elif isLineLost and currentPath != UNKNOWN and Map.getValue(self.positioning.getPosition()) == Map.I:
+            elif isLineLost and currentPath != UNKNOWN and Map.findNearestIntersection(self.positioning.getPosition()) != -1:
+                print("TURN")
                 self.status = TURN
             elif isLineLost and Map.findNearestIntersection(self.positioning.getPosition()) == -1:
                 self.status = SEARCH_LINE
             
-
         elif self.status == TURN:
             if  currentPath != UNKNOWN and self.actualTurn < len(currentPath):
                 turn = currentPath[self.actualTurn]
@@ -191,7 +173,7 @@ class PathRunner:
                     self.uTurnStatus += 1
 
             else:
-                self.speed= 0.2
+                self.speed= 0.5
                 self.steeringAngle = -0.2 * self.steeringAngle          
                 self.uTurnStatus = UNKNOWN
                 self.uTurnGoalOrientation = UNKNOWN
@@ -238,7 +220,7 @@ class PathRunner:
     def goTo(self, goal):
         self.pathPlanner.setGoalPosition(goal)
         self.currentPath = self.pathPlanner.getFastestRoute()
-        print(self.currentPath)
+        logger.debug("Current Path to Goal: " + str(self.currentPath))
 
     # go forward for x meters (NOT WORKING)
     def proceedForward(self, meters):

@@ -3,7 +3,7 @@ from PathPlanner import U_TURN
 from Utils import logger
 
 # class to handle car motion service
-class Motion:
+class Motion: #TODO global planner
     # initialize motion service
     def __init__(self, actuators, pathRunner, parking, collisionAvoidance):
         self.actuators = actuators
@@ -27,6 +27,7 @@ class Motion:
             self.updateParking()
         
         if self.pathRunner.isEnabled() and (isUTurning or not collisionImminent):
+            self.pathRunner.setCollisionImminent(collisionImminent)
             self.updatePathRunner()
 
     # update parking commands
@@ -37,10 +38,11 @@ class Motion:
 
     # update path runner commands
     def updatePathRunner(self):
-        if self.pathRunner.isUTurning():
-            self
         newSpeed = self.pathRunner.getSpeed()
         newAngle = self.pathRunner.getSteeringAngle()
+        if self.pathRunner.isGoalReach():
+            self.pathRunner.disable()
+            self.parking.enable()
         self.setAngleAndSpeed(newAngle, newSpeed)
 
     # update collision avoidance commands

@@ -18,9 +18,9 @@ class Positioning:
         self.reference = self.getActualDistance()
 
         self.lineAlreadyLost = False
-        # TODO what if speed is negative
+        # TODO what if speed is negative 
         # how should i get the starting position? GPS?
-        self.position = Position(4,1)
+        self.position = Position(3,1)
         self.orientation = UNKNOWN
         self.inaccurateOrientation = UNKNOWN
         self.updateOrientation()
@@ -82,15 +82,17 @@ class Positioning:
         # if the line get lost provably the robot is near an intersecion
         isLineLost = self.lineFollower.isLineLost()
         if isLineLost and not self.lineAlreadyLost:
-            logger.debug("isLineLost: " + str(isLineLost) + "isLineAlreadyLost: " + str(self.lineAlreadyLost))
+            logger.debug("isLineLost: " + str(isLineLost) + " isLineAlreadyLost: " + str(self.lineAlreadyLost))
             self.lineAlreadyLost = True
             if not Map.getValue(self.position) == Map.I:
+                logger.debug("Position: " + str(self.position))
                 nearestIntersecion = Map.findNearestIntersection(self.position)
                 if nearestIntersecion != -1:
                     self.position = nearestIntersecion
                     self.reference = self.getActualDistance()
                 else:
                     self.lineAlreadyLost = False
+                    logger.debug("QUI")
         elif not isLineLost:
             self.lineAlreadyLost = False
 

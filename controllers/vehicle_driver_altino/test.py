@@ -1,6 +1,5 @@
 # file for tests
+from Utils import Position
 import Map
 
-from PathPlanner import PathPlanner
-
-pp = PathPlanner(1)
+print("Test: " + str(Map.findNearestIntersection(Position(4,1))))

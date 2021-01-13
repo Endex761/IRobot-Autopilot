@@ -76,7 +76,7 @@ class Compass:
 
     # get inaccurate orientation for positioning purpose
     def getInaccurateOrientation(self):
-        threshold = 0.5
+        threshold = 0.6
         self.inaccurateOrientation = self.computeOrientation(threshold, self.inaccurateOrientation)
         return self.inaccurateOrientation
 

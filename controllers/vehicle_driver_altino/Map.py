@@ -2,16 +2,16 @@ from Utils import Orientation, Position
 from AStar import WALL
 
 # MAP DIMENSIONS
-WIDTH = 25
-HEIGHT = 17
-MAP_RESOLUTION = 0.5
+WIDTH = 25          # map width
+HEIGHT = 17         # map height
+MAP_RESOLUTION = 0.5# map resolution
 
 # MAP CONSTANS
-B = WALL
-O = WALL
-R = 1
-I = 2
-C = 3
+B = WALL    # map border
+O = WALL    # obstacle / no road
+R = 1       # road
+I = 2       # intersection
+C = 3       # curve
 
 # --- MAP ---
 # o-----> Y      ^ N
@@ -95,11 +95,11 @@ def findNearestIntersection(position):
     radius = 1
     for i in range(x-radius, x+radius +1):
         for j in range(y-radius, y+radius +1):
-            if i < HEIGHT and i > 1 and j < WIDTH and j > 1:
+            if i < HEIGHT and i > 0 and j < WIDTH and j > 0:
                 if MAP[i][j] == I:
                     return Position(i, j)
-    
     return -1
+
 # set new 
 def setNewObstacle(position):
     x = position.getX()

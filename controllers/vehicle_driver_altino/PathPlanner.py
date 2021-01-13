@@ -77,8 +77,8 @@ class PathPlanner:
     def getFastestRoute(self):
 
         # update map status, this ensure new obstacles are detected
-        self.updateMap()
-        
+        #self.updateMap()
+        logger.debug("Initial Orientation: " + str(self.robotOrientation))
         # get fastest route from AStar giving map, start position and goal position
         route = AStar.findPath(self.map, self.robotPosition.getPositionArray(), self.goalPosition.getPositionArray())
 
@@ -88,8 +88,12 @@ class PathPlanner:
         # get cardinal points directions based on intersection nodes
         directions = self.getDirectionsFromIntersections(intersections)
         
+        logger.debug(directions)
+
         # get turns based on robot directions and robot orientation
         turns = self.getTurnsFromDirections(directions)
+
+        logger.debug(turns)
 
         # remove curve turns
         turns = self.removeCurves(turns, intersections)

@@ -35,8 +35,11 @@ class Altino:
         
         # initialize camera
         self.camera = Camera(self.driver)
+
+        # this ensure sensors are correctly initialized
+        self.devicesInitialization()
         
-        
+        # collision avoidance service
         self.collisionAvoidance = CollissionAvoidance(self.distanceSensors)
         self.collisionAvoidance.enable()
         
@@ -62,8 +65,6 @@ class Altino:
         # motion serivice
         self.motion = Motion(self.actuators, self.pathRunner, self.parking, self.collisionAvoidance)
 
-        # this ensure sensors are correctly initialized
-        self.devicesInitialization()
 
     # run
     def run(self):

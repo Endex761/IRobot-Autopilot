@@ -1,4 +1,4 @@
-from Utils import logger, Orientation
+from Utils import Position, logger, Orientation
 from Constants import UNKNOWN, MAX_ANGLE
 import Map
 
@@ -52,10 +52,17 @@ class PathRunner:
         if self.status != DISABLED:
             self.updateSpeedAndAngle()
             self.updateGoalStatus()
+        
 
     # get new fastest path from actual position to goal if set
     def updatePath(self):
-        self.currentPath = self.pathPlanner.getFastestRoute()
+        if self.isEnabled():
+            p = self.positioning.getPosition()
+            x = p.getX()
+            y = p.getY()
+            Map.setNewObstacle(Position(x+1, y)) # TODO in base all'orientamento
+            self.currentPath = self.pathPlanner.getFastestRoute()
+            self.actualTurn = 0
 
     # check if robot have reached goal
     def updateGoalStatus(self):
@@ -96,6 +103,7 @@ class PathRunner:
             
         elif self.status == TURN:
             if  currentPath != UNKNOWN and self.actualTurn < len(currentPath):
+                logger.debug("CURRENT TURN: " + str(self.actualTurn))
                 turn = currentPath[self.actualTurn]
                 
                 self.steeringAngle = 0.57 * turn
@@ -130,21 +138,21 @@ class PathRunner:
 
             if self.uTurnStatus == 1:
                 if self.sensors.frontDistance(950) or self.positioning.getOrientation() == ((self.uTurnGoalOrientation + 1) % 4) or self.positioning.getOrientation() == ((self.uTurnGoalOrientation - 1) % 4):
-                    logger.debug("U_TURN: Primo passo completato, vado indietro")
-                    self.speed= -0.2
+                    logger.debug("U_TURN: Primo passo completato, vado indietro (Status 1)")
+                    self.speed = -0.2
                     self.steeringAngle = -1 * self.steeringAngle
-                    self.uTurnStatus +=2
+                    self.uTurnStatus = 3
                     self.uTurnStartingMeter = self.positioning.getActualDistance()       
                 else:
-                    self.speed= 0.2 
+                    self.speed = 0.2 
                     self.steeringAngle = 1
 
             elif self.uTurnStatus == 2:
                 if self.sensors.frontDistance(950):
-                    logger.debug("U_TURN: Primo passo completato, vado indietro")
-                    self.speed= -0.2
+                    logger.debug("U_TURN: Primo passo completato, vado indietro (status 2)")
+                    self.speed = -0.2
                     self.steeringAngle = -1 * self.steeringAngle
-                    self.uTurnStatus +=1
+                    self.uTurnStatus += 1
                     self.uTurnStartingMeter = self.positioning.getActualDistance()
 
                 if self.positioning.getOrientation() == self.uTurnGoalOrientation:
@@ -170,6 +178,9 @@ class PathRunner:
                     self.steeringAngle = -0.1 * self.steeringAngle                
                 else:
                     self.steeringAngle = -0.2 * self.steeringAngle
+
+                # if Map.getValue(self.positioning.getPosition()) == Map.C:
+                self.steeringAngle *= - 5
 
                 logger.debug("U_TURN: Spazio percorso: " + str(distanzaPercorsa) + ", Angolo di sterzata: " + str(self.steeringAngle))
                 self.speed= 0.5    

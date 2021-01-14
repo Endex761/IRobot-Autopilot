@@ -76,7 +76,7 @@ class Compass:
 
     # get inaccurate orientation for positioning purpose
     def getInaccurateOrientation(self):
-        threshold = 0.6
+        threshold = 0.5
         self.inaccurateOrientation = self.computeOrientation(threshold, self.inaccurateOrientation)
         return self.inaccurateOrientation
 
@@ -165,9 +165,13 @@ class PositionSensors:
         self.frontRight = driver.getDevice('right_front_sensor')
         self.rearLeft   = driver.getDevice('left_rear_sensor')
         self.rearRight  = driver.getDevice('right_rear_sensor')
+        self.steerLeft  = driver.getDevice('left_steer_sensor')
+        self.steerRight = driver.getDevice('right_steer_sensor')
 
         # enable position sensors
         self.frontLeft.enable(deviceTimestep)
         self.frontRight.enable(deviceTimestep)
         self.rearLeft.enable(deviceTimestep)
         self.rearRight.enable(deviceTimestep)
+        self.steerLeft.enable(deviceTimestep)
+        self.steerRight.enable(deviceTimestep)

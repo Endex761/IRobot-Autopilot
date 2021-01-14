@@ -49,7 +49,26 @@ class ManualDrive:
         # handbreak
         elif currentKey == ord(' '):
             speed /= 4
-        
+            
+        # return angle to 0
+        else:
+            angle /= 1.5
+
+        # limit the maximum speed and angle
+        if abs(speed) < 0.01:
+            speed = 0
+        elif speed > 1:
+            speed = 1
+        elif speed < -1:
+            speed = -1
+
+        if abs(angle) < 0.01:
+            angle = 0
+        elif angle > 1:
+            angle = 1
+        elif angle < -1:
+            angle = -1
+
         # update state
         self.speed = speed
         self.angle = angle

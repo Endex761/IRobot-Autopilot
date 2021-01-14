@@ -18,27 +18,40 @@ class Motion: #TODO global planner
         collisionImminent = False
         isUTurning = self.pathRunner.isUTurning()
         isParking = self.parking.isParking()
+        isManualActive = self.manualDrive.isEnabled()
 
-        #self.updateManualDrive()
-        #return
+        collisionImminent = self.collisionAvoidance.isCollisionDetected()
+        obstacleDetected = self.collisionAvoidance.isObstacleDetected()
 
-        if self.collisionAvoidance.isEnabled() and (not isUTurning or not isParking):
-            collisionImminent = self.collisionAvoidance.isCollisionDetect()
-            if collisionImminent:
-                self.updateCollisionAvoidance()
+        if isManualActive:
+            self.updateManualDrive()
+        else:
+            if not isUTurning and not isParking:  # evita gli ostacoli se non sto parcheggiando o facendo inversione
+                
+                logger.debug("Collision Imminent: " + str(collisionImminent) + " Obstacle Detection: " + str(obstacleDetected))
+                
+                if obstacleDetected:
+                    logger.debug("Path Updating..")
+                    self.pathRunner.updatePath()
+                    collisionImminent = False
 
-        if self.parking.isEnabled() and (isParking or not collisionImminent):
-            self.updateParking()
-        
-        if self.pathRunner.isEnabled() and (isUTurning or not collisionImminent):
-            self.pathRunner.setCollisionImminent(collisionImminent)
-            self.updatePathRunner()
+                if collisionImminent:
+                    self.updateCollisionAvoidance()
+
+            if isParking:
+                self.updateParking()
+            
+            elif isUTurning or not collisionImminent:
+                logger.debug("Updating the path runner")
+                self.updatePathRunner()
+                self.collisionAvoidance.resetObstacleDetection()
 
     # update parking commands
     def updateParking(self):
         if self.parking.isEnabled():
             newSpeed = self.parking.getSpeed()
             newAngle = self.parking.getAngle()
+            logger.debug("Parking - Speed: " + str(newSpeed) + " Angle: " + str(newAngle))
             self.setAngleAndSpeed(newAngle, newSpeed)
 
     # update path runner commands
@@ -46,6 +59,7 @@ class Motion: #TODO global planner
         if self.pathRunner.isEnabled():
             newSpeed = self.pathRunner.getSpeed()
             newAngle = self.pathRunner.getSteeringAngle()
+            logger.debug("Path Runner - Speed: " + str(newSpeed) + " Angle: " + str(newAngle))
             if self.pathRunner.isGoalReach():
                 self.pathRunner.disable()
                 self.parking.enable()
@@ -56,12 +70,14 @@ class Motion: #TODO global planner
         if self.collisionAvoidance.isEnabled():
             newSpeed = self.collisionAvoidance.getSpeed()
             newAngle = self.collisionAvoidance.getSteeringAngle()
+            logger.debug("Collision Avoidance - Speed: " + str(newSpeed) + " Angle: " + str(newAngle))
             self.setAngleAndSpeed(newAngle, newSpeed)
     
     def updateManualDrive(self):
         if self.manualDrive.isEnabled():
             newSpeed = self.manualDrive.getSpeed()
             newAngle = self.manualDrive.getAngle()
+            logger.debug("Manual Drive - Speed: " + str(newSpeed) + " Angle: " + str(newAngle))
             self.setAngleAndSpeed(newAngle, newSpeed)
 
     # set angle and speed on the actuators    

@@ -1,4 +1,4 @@
-from Utils import Orientation, Position
+from Utils import logger, Orientation, Position
 from AStar import WALL
 
 # MAP DIMENSIONS
@@ -55,6 +55,7 @@ def isWalkable(position):
 # return the nearest walkable position given position and orientation
 def getNearestWalkablePosition(position, orientation):
     if not isWalkable(position):
+        logger.debug("Actual position non walkable. " + str(position) + " is unwalkable")
         x = position.getX()
         y = position.getY()
         if orientation == Orientation.NORD or orientation == Orientation.SOUTH:
@@ -74,6 +75,31 @@ def getNearestWalkablePosition(position, orientation):
     else:
         return position
 
+# return the nearest walkable position given position and orientation
+def getNearestWalkablePositionEquals(position, orientation, value):
+    if not isWalkable(position):
+        logger.debug("Actual position non walkable. " + str(position) + " is unwalkable")
+        x = position.getX()
+        y = position.getY()
+        if orientation == Orientation.NORD or orientation == Orientation.SOUTH:
+            p = Position(x+1, y)
+            if isWalkable(p) and getValue(p) == value:
+                return p
+            p = Position(x-1, y)
+            if isWalkable(p) and getValue(p) == value:
+                return p
+        elif orientation == Orientation.EAST or orientation == Orientation.WEST:
+            p = Position(x, y+1)
+            if isWalkable(p) and getValue(p) == value:
+                return p
+            p = Position(x, y-1)
+            if isWalkable(p) and getValue(p) == value:
+                return p
+    elif getValue(position) == value:
+        return position
+    else:
+        return -1
+
 def getNearestWalkablePosition2(position, orientation):
     if not isWalkable(position):
         x = position.getX()
@@ -90,10 +116,9 @@ def getNearestWalkablePosition2(position, orientation):
 
 
 # return the position of the nearest intersection to position, -1 if no interection in range
-def findNearestIntersection(position):
+def findNearestIntersection(position, radius = 1):
     x = position.getX()
     y = position.getY()
-    radius = 1
     for i in range(x-radius, x+radius +1):
         for j in range(y-radius, y+radius +1):
             if i < HEIGHT and i > 0 and j < WIDTH and j > 0:
@@ -105,6 +130,14 @@ def findNearestIntersection(position):
 def setNewObstacle(position):
     x = position.getX()
     y = position.getY()
-    if x> 1 and x < HEIGHT:
-        if y > 1 and y < WIDTH:
+    if x> 0 and x < HEIGHT:
+        if y > 0 and y < WIDTH:
             MAP[x][y] = O
+
+def printMap():
+    for i in range(WIDTH-1):
+        for j in range(HEIGHT-1):
+            if i>= 0 and i < HEIGHT:
+                if j >= 0 and j < WIDTH:
+                    print(MAP[i][j], end=" ")
+        print()

@@ -24,7 +24,9 @@ class CollissionAvoidance:
         self.status = DISABLED
 
         # true if imminent collision is detected
-        self.collisionDetect = False
+        self.collisionDetected = False
+
+        self.obstacleDetected = False
 
     def isEnabled(self):
         return self.status != DISABLED
@@ -36,8 +38,14 @@ class CollissionAvoidance:
         self.status = DISABLED
 
     # return true is an imminent collision is detected 
-    def isCollisionDetect(self):
-        return self.collisionDetect
+    def isCollisionDetected(self):
+        return self.collisionDetected
+
+    def isObstacleDetected(self):
+        return self.obstacleDetected
+
+    def resetObstacleDetection(self):
+        self.obstacleDetected = False
 
     # compute angle and speed to avoid obstacle 
     def computeSpeedAndAngle(self):
@@ -61,16 +69,19 @@ class CollissionAvoidance:
         else:
             self.speed = 0.5
 
-        if self.fl > 750 and self.fr > 750 or self.fc > 950:
-            self.speed = 0.0
+        if self.fl > 750 and self.fr > 750 or self.fc > 750:
+            # self.speed = 0.0
             logger.debug("Street is closed")
+            self.obstacleDetected = True
+
+        logger.debug("Collision Detection: " + str(self.collisionDetected))
 
         # check if front left obstacle, turn right
         if self.fl > self.fr + tolerance and (self.fl > frontSideThreshold or self.fc > frontThreshold):
             # self.steeringAngle += (self.fl - self.fr)  / 500.0
             self.steeringAngle = RIGHT * (self.fl / 2000.0 + (self.fl - self.fr) / 2000.0 )
             # logger.debug("Steering angle: " + str(RIGHT * frontLeftSensor / 1000.0 * MAX_ANGLE))
-            self.collisionDetect = True
+            self.collisionDetected = True
             logger.debug("Steering angle (FRONT LEFT): " + str(self.steeringAngle))
 
         # check if front right obstacle, turn left
@@ -78,23 +89,23 @@ class CollissionAvoidance:
             # self.steeringAngle -= (self.fl - self.fr) / 500.0
             self.steeringAngle = LEFT * (self.fr / 2000.0 + (self.fr - self.fl) / 2000.0 )
             # logger.debug("Steering angle: " + str(LEFT * frontRightSensor / 1000.0 * MAX_ANGLE))
-            self.collisionDetect = True
+            self.collisionDetected = True
             logger.debug("Steering angle (FRONT RIGHT): " + str(self.steeringAngle))
 
         # check if side left obstacle, turn slight right
         elif self.sl > sideThreshold:
             self.steeringAngle = RIGHT * self.sl / 2000.0
-            self.collisionDetect = True
+            self.collisionDetected = True
 
         # check if side right obstacle, turn slight left
         elif self.sr > sideThreshold:
             self.steeringAngle = LEFT * self.sr / 2000.0
-            self.collisionDetect = True
+            self.collisionDetected = True
 
         # if no obstacle go straight
         else:
             self.steeringAngle = self.steeringAngle / 1.5
-            self.collisionDetect = False
+            self.collisionDetected = False
 
         if self.steeringAngle > 1:
             self.steeringAngle = 1

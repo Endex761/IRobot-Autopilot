@@ -67,7 +67,7 @@ class Altino:
         # self.parking.enable()
 
         self.manualDrive = ManualDrive(self.keyboard)
-        self.manualDrive.enable()
+        #self.manualDrive.enable()
         
         # motion serivice
         self.motion = Motion(self.actuators, self.pathRunner, self.parking, self.collisionAvoidance, self.manualDrive)
@@ -79,6 +79,7 @@ class Altino:
         self.status = RUN
         # for each timestep update services
         while self.driver.step() != -1 and self.status == RUN:
+            logger.debug("__________ NEW CYCLE _____________")
             self.collisionAvoidance.update()
             self.lineFollower.update()
             self.positioning.update()

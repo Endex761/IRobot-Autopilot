@@ -137,6 +137,24 @@ class DistanceSensors:
     def backDistance(self, value):
         return self.backLeft.getValue() > value or self.backCenter.getValue() > value or self.backRight.getValue() > value
 
+# class to handle keyboard input
+class Keyboard:
+    def __init__(self, driver):
+        deviceTimestep = int(driver.getBasicTimeStep() * DEVICE_TIMESTEP_MULTIPLIER)
+        self.keyboard = driver.getKeyboard()
+        self.keyboard.enable(deviceTimestep)
+
+    def getKey(self):
+        logger.debug("Keyboard")
+        key = self.keyboard.getKey()
+        logger.debug(key)
+        return key
+
+    # return true if char key or his uppercase is pressed
+    def isKeyPressed(self, char):
+        return self.getKey() == ord(char) or self.getKey() == ord(char.upper())
+
+
 # position sensor class to handle positon sensor data from wheels encoders
 class PositionSensors:
 

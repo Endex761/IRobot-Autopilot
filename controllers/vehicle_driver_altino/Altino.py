@@ -2,12 +2,13 @@
 from vehicle import Driver
 from CollisionAvoidance import CollissionAvoidance
 from Utils import Position, logger
-from Devices import Actuators, Camera, Compass, DistanceSensors, PositionSensors
+from Devices import Actuators, Camera, Compass, DistanceSensors, Keyboard, PositionSensors
 from LineFollower import LineFollower
 from Positioning import Positioning
 from PathPlanner import PathPlanner
 from PathRunner import PathRunner
 from Parking import Parking
+from ManualDrive import ManualDrive
 from Motion import Motion
 
 # altino states
@@ -36,6 +37,9 @@ class Altino:
         # initialize camera
         self.camera = Camera(self.driver)
 
+        # initialize keyboard
+        self.keyboard = Keyboard(self.driver)
+        
         # this ensure sensors are correctly initialized
         self.devicesInitialization()
         
@@ -61,9 +65,12 @@ class Altino:
 
         self.parking = Parking(self.distanceSensors, self.positioning)
         # self.parking.enable()
+
+        self.manualDrive = ManualDrive(self.keyboard)
+        self.manualDrive.enable()
         
         # motion serivice
-        self.motion = Motion(self.actuators, self.pathRunner, self.parking, self.collisionAvoidance)
+        self.motion = Motion(self.actuators, self.pathRunner, self.parking, self.collisionAvoidance, self.manualDrive)
 
 
     # run
@@ -78,6 +85,7 @@ class Altino:
             self.pathPlanner.update()
             self.pathRunner.update()
             self.parking.update()
+            self.manualDrive.update()
             self.motion.update()
 
     # stop

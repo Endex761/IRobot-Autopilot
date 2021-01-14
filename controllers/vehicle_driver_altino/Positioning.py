@@ -1,5 +1,6 @@
+import math
 from Utils import Orientation, Position, logger
-from Constants import CAR_LENGTH, MAX_ANGLE, UNKNOWN
+from Constants import CAR_LENGTH, MAX_ANGLE, MAX_SPEED, UNKNOWN
 import Map
 
 WHEEL_RADIUS = 0.020
@@ -23,7 +24,7 @@ class Positioning:
         self.lineAlreadyLost = False
         # TODO what if speed is negative 
         # how should i get the starting position? GPS?
-        self.position = Position(3,1)
+        self.position = Position(7.5,9)
         self.orientation = UNKNOWN
         self.inaccurateOrientation = UNKNOWN
         self.updateOrientation()
@@ -116,15 +117,41 @@ class Positioning:
         isLineLost = self.lineFollower.isLineLost()
         logger.debug("isLineLost: " + str(isLineLost) + " isLineAlreadyLost: " + str(self.lineAlreadyLost))
         if isLineLost and not self.lineAlreadyLost:
+            self.lineAlreadyLost = True
+            nearestIntersecion = Map.findNearestIntersection(self.position)
+            offset = 0.25
+            if nearestIntersecion != -1:
+                x = nearestIntersecion.getX()
+                y = nearestIntersecion.getY()
+                if self.orientation == Orientation.NORD:
+                    nearestIntersecion.setX(y - offset)
+                if self.orientation == Orientation.EAST:
+                    nearestIntersecion.setY(y - offset)
+                if self.orientation == Orientation.SOUTH:
+                    nearestIntersecion.setX(y + offset)
+                if self.orientation == Orientation.WEST:
+                    nearestIntersecion.setY(y + offset)
+                
+                
+                self.position = nearestIntersecion
+        elif not isLineLost:
+            self.lineAlreadyLost = False
+
+             # update positioning using map landmarks
+    def computePositionBasedOnLandmark1(self):
+        # if the line get lost provably the robot is near an intersecion
+        isLineLost = self.lineFollower.isLineLost()
+        logger.debug("isLineLost: " + str(isLineLost) + " isLineAlreadyLost: " + str(self.lineAlreadyLost))
+        if isLineLost and not self.lineAlreadyLost:
             logger.debug("LINE IS LOST - REFERENCE: " + str(self.reference))
             distance = self.getActualDistance() - self.reference
             logger.debug("DIFFERENCE " + str(distance))
             self.lineAlreadyLost = True
             #if not Map.getValue(self.position) == Map.I:
             #if Map.getNearestWalkablePositionEquals(self.position, self.inaccurateOrientation, Map.I) != -1:
-            logger.debug("Im not in a I position: " + str(self.position))
+            #logger.debug("Im not in a I position: " + str(self.position))
             nearestIntersecion = Map.findNearestIntersection(self.position)
-            logger.debug("L'intersezione più vicina è: " + str(nearestIntersecion))
+            #logger.debug("L'intersezione più vicina è: " + str(nearestIntersecion))
             if nearestIntersecion != -1:
                 self.position = nearestIntersecion
                 self.reference = self.getActualDistance() + ((Map.MAP_RESOLUTION / 2))
@@ -136,15 +163,16 @@ class Positioning:
 
 
     # update position based on odometry        
-    def updatePosition(self):
-        logger.debug("REFERENCE: " + str(self.reference))
-        logger.debug("ACTUAL DI: " + str(self.getActualDistance()))
+    def updatePosition1(self):
+        logger.debug("COMPASS ANGLE: " + str(self.compass.getAngleFromOrientation()))
+        #logger.debug("REFERENCE: " + str(self.reference))
+        #logger.debug("ACTUAL DI: " + str(self.getActualDistance()))
         tolerance = 0
         turning = -0.6 * abs(self.getActualSteeringAngle() / MAX_ANGLE)
         if turning > -0.001:
             turning = 0
             tolerance = -0.05
-        logger.debug("ANGLE: " + str(turning))
+        #logger.debug("ANGLE: " + str(turning))
         add = [0,0]
         if self.getActualDistance() - self.reference > Map.MAP_RESOLUTION + turning + tolerance:
             if self.inaccurateOrientation == Orientation.NORD:
@@ -177,7 +205,48 @@ class Positioning:
         #    self.position.setY(newY)
 
 
+        # update position based on odometry        
+    def updatePosition(self):
+        logger.debug("COMPASS ANGLE: " + str(self.compass.getAngleFromOrientation()))
+
+        angle = self.compass.getAngleFromOrientation()
+
+        #logger.debug("ANGLE: " + str(turning))
+        add = [0,0]
+
+
+        if self.inaccurateOrientation == Orientation.NORD:
+            add = [-1, 0]
+        elif self.inaccurateOrientation == Orientation.SOUTH:
+            add = [1, 0]
+        elif self.inaccurateOrientation == Orientation.EAST:
+            add = [0, 1]
+        elif self.inaccurateOrientation == Orientation.WEST:
+            add = [0, -1]
+        else:
+            add = [0,0]
+            
+        #self.printStatus()
+        self.reference = self.getActualDistance()
+
+        x = self.position.x
+        y = self.position.y
+
+        linearMove = (((MAX_SPEED * 0.5) * 2 * math.pi * WHEEL_RADIUS) / 25) * 2
+        precision = 2
         
+        logger.debug("X-COMPONENT: " + str(round(self.compass.getXComponent(), precision)))
+        logger.debug("Y-COMPONENT: " + str(round(self.compass.getYComponent(), precision)))
+        newX = x - round(self.compass.getXComponent(), precision) * linearMove * 1.5
+        newY = y + round(self.compass.getYComponent(), precision) * linearMove * 1.5
+        
+        newPosition = Position(newX,newY)
+        # wp = Map.getNearestWalkablePosition(newPosition, self.inaccurateOrientation)
+        #if wp != -1:
+            #logger.log("WP:" + str(wp))
+
+        self.setPosition(newPosition)
+
         
 
         

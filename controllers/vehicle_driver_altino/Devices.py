@@ -1,5 +1,6 @@
 from Constants import DEVICE_TIMESTEP_MULTIPLIER, MAX_ANGLE, MAX_SPEED, UNKNOWN
 from Utils import Orientation, logger
+import math
 
 # actuator class to handle speed and steering 
 class Actuators:
@@ -100,6 +101,37 @@ class Compass:
             newOrientation = Orientation.WEST
 
         return newOrientation
+
+    def getAngleFromOrientation(self):
+        orientation = self.getOrientation()
+        compassData = self.compass.getValues()
+        xToll = 0.0
+        yToll = 0.0
+        xComponent = compassData[2] - xToll # this is 1 when going NORD -1 when SOUTH
+        yComponent = compassData[0] - yToll # this is 1 when going EAST -1 when WEST
+
+        angle = 0.0
+
+        if orientation == Orientation.NORD:
+            angle = math.acos(xComponent)
+        elif orientation == Orientation.SOUTH:
+            angle = math.acos(-xComponent)
+        elif orientation == Orientation.EAST:
+            angle = math.acos(yComponent)
+        elif orientation == Orientation.WEST:
+            angle = math.acos(-yComponent)
+        
+        return angle
+
+    def getXComponent(self):
+        compassData = self.compass.getValues()
+        return compassData[2]
+    
+    def getYComponent(self):
+        compassData = self.compass.getValues()
+        return compassData[0]
+
+
         
 # distance sensor class to handle distance sensor data
 class DistanceSensors:

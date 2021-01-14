@@ -60,7 +60,7 @@ class PathRunner:
             p = self.positioning.getPosition()
             x = p.getX()
             y = p.getY()
-            Map.setNewObstacle(Position(x+1, y)) # TODO in base all'orientamento
+            Map.setNewObstacle(Position(x, y+2)) # TODO in base all'orientamento
             self.currentPath = self.pathPlanner.getFastestRoute()
             self.actualTurn = 0
 

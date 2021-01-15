@@ -1,3 +1,4 @@
+from typing import NewType
 from Utils import Position, logger, Orientation
 from Constants import UNKNOWN, MAX_ANGLE
 import Map
@@ -58,9 +59,21 @@ class PathRunner:
     def updatePath(self):
         if self.isEnabled():
             p = self.positioning.getPosition()
+            o = self.positioning.getOrientation()
+            nearest = Map.getNearestWalkablePosition(p, o)
+            if nearest != None:
+                p = nearest
             x = p.getX()
             y = p.getY()
-            Map.setNewObstacle(Position(x+1, y)) # TODO in base all'orientamento
+            if o == Orientation.NORD:
+                Map.setNewObstacle(Position(x - 1, y))
+            if o == Orientation.EAST:
+                Map.setNewObstacle(Position(x, y + 1))
+            if o == Orientation.SOUTH:
+                Map.setNewObstacle(Position(x + 1, y))
+            if o == Orientation.WEST:
+                Map.setNewObstacle(Position(x, y - 1))
+            Map.printMap()
             self.currentPath = self.pathPlanner.getFastestRoute()
             self.actualTurn = 0
 
@@ -88,14 +101,14 @@ class PathRunner:
         elif self.status == FOLLOW_LINE :
 
             self.steeringAngle = lineFollowerAngle
-
+            logger.warning("GOAL REACHED: " + str(self.isGoalReach()))
             if self.isGoalReach():
                 self.speed = 0.0
                 logger.info("Destination Reached")
 
             if isLineLost and currentPath == UNKNOWN:
                 self.speed = 0.0
-            elif isLineLost and currentPath != UNKNOWN and Map.findNearestIntersection(self.positioning.getPosition()) != -1:
+            elif isLineLost and currentPath != UNKNOWN and Map.findNearestIntersection(self.positioning.getPosition(), 2) != -1:
                 logger.log("go to TURN")
                 self.status = TURN
             elif isLineLost and Map.findNearestIntersection(self.positioning.getPosition()) == -1:
@@ -103,7 +116,7 @@ class PathRunner:
             
         elif self.status == TURN:
             if  currentPath != UNKNOWN and self.actualTurn < len(currentPath):
-                logger.debug("CURRENT TURN: " + str(self.actualTurn))
+                
                 turn = currentPath[self.actualTurn]
                 
                 self.steeringAngle = 0.57 * turn

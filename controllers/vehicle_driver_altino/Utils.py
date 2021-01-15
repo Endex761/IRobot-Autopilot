@@ -1,5 +1,7 @@
 from enum import IntEnum, auto
 from Constants import DEBUG
+HEIGHT = 16
+WIDTH = 24
 
 # useless?
 class Status(IntEnum):
@@ -78,26 +80,28 @@ class Position:
         self.setY(y)
 
     def getX(self):
-        return self.x
+        return int(round(self.x,0))
 
     def getY(self):
-        return self.y
+        return int(round(self.y, 0))
 
     def setX(self, x):
-        self.x = x
+        if x >= 0 and x < HEIGHT:
+            self.x = x
 
     def setY(self, y):
-        self.y = y
+        if y >= 0 and y < WIDTH:
+            self.y = y
 
     def getPositionArray(self):
-        return (self.x, self.y)
+        return (self.getX(), self.getY())
 
     def __str__(self):
         return "[X: " + str(self.x) + ", Y:" + str(self.y) + "]"
     
     def __eq__(self, other):
         try:
-            return self.x == other.x and self.y == other.y
+            return self.getX() == other.getX() and self.getY() == other.getY()
         except:
             return False
        

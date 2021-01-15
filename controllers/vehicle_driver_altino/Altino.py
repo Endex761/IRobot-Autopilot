@@ -51,7 +51,7 @@ class Altino:
         self.lineFollower = LineFollower(self.camera)
         
         # positioning service
-        self.positioning = Positioning(self.positionSensors, self.compass, self.lineFollower)
+        self.positioning = Positioning(self.positionSensors, self.compass, self.lineFollower, self.actuators)
         
         # path planning serivice
         self.pathPlanner = PathPlanner(self.positioning)
@@ -61,13 +61,13 @@ class Altino:
         # self.pathRunner.enable()
         
         # set path runner destination
-        self.pathRunner.goTo(Position(14, 23))
+        self.pathRunner.goTo(Position(1, 20))
 
         self.parking = Parking(self.distanceSensors, self.positioning, self.lineFollower)
         self.parking.enable()
 
         self.manualDrive = ManualDrive(self.keyboard)
-        #self.manualDrive.enable()
+        # self.manualDrive.enable()
         
         # motion serivice
         self.motion = Motion(self.actuators, self.pathRunner, self.parking, self.collisionAvoidance, self.manualDrive)

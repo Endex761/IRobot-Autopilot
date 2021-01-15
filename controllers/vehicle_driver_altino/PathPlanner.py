@@ -83,6 +83,10 @@ class PathPlanner:
         # get fastest route from AStar giving map, start position and goal position
         route = AStar.findPath(self.map, self.robotPosition.getPositionArray(), self.goalPosition.getPositionArray())
 
+        # if no route was found, return UNKNOWN path
+        if route == None:
+            return UNKNOWN
+
         # get only intersection nodes from AStar route
         intersections = self.getIntersectionNodesFromRoute(route)
 
@@ -122,18 +126,19 @@ class PathPlanner:
         intersections = []
         #if self.map[route[0][0]][route[0][1]] == I:
             # get first node
-        intersections.append(route[0])
+        if route != None:
+            intersections.append(route[0])
 
-        # get intersection nodes
-        for node in route[1:-1]:
-            if self.map[node[0]][node[1]] == Map.I or self.map[node[0]][node[1]] == Map.C:
-                intersections.append(node)
+            # get intersection nodes
+            for node in route[1:-1]:
+                if self.map[node[0]][node[1]] == Map.I or self.map[node[0]][node[1]] == Map.C:
+                    intersections.append(node)
 
-        # get last node
-        intersections.append(route[-1]) 
-        
-        # return intersections
-        return intersections
+            # get last node
+            intersections.append(route[-1]) 
+            
+            # return intersections
+            return intersections
 
     # return cardinal points direction from one intersection to another
     def getDirectionsFromIntersections(self, intersections):

@@ -8,12 +8,13 @@ WHEEL_RADIUS = 0.020
 class Positioning:
 
     #initialize positioning service
-    def __init__(self, positionSensors, compass, lineFollower):
+    def __init__(self, positionSensors, compass, lineFollower, actuators):
         self.positionSensors = positionSensors
         self.frontLeft = positionSensors.frontLeft
         self.frontRight = positionSensors.frontRight
         self.compass = compass
         self.lineFollower = lineFollower
+        self.actuators = actuators
 
         self.leftWheelDistance = 0.0
         self.rightWheelDistance = 0.0
@@ -124,14 +125,13 @@ class Positioning:
                 x = nearestIntersecion.getX()
                 y = nearestIntersecion.getY()
                 if self.orientation == Orientation.NORD:
-                    nearestIntersecion.setX(y - offset)
+                    nearestIntersecion.setX(x + offset)
                 if self.orientation == Orientation.EAST:
                     nearestIntersecion.setY(y - offset)
                 if self.orientation == Orientation.SOUTH:
-                    nearestIntersecion.setX(y + offset)
+                    nearestIntersecion.setX(x - offset)
                 if self.orientation == Orientation.WEST:
                     nearestIntersecion.setY(y + offset)
-                
                 
                 self.position = nearestIntersecion
         elif not isLineLost:
@@ -208,44 +208,27 @@ class Positioning:
         # update position based on odometry        
     def updatePosition(self):
         logger.debug("COMPASS ANGLE: " + str(self.compass.getAngleFromOrientation()))
+        
+        speed = self.actuators.getSpeed()
 
-        angle = self.compass.getAngleFromOrientation()
+        if speed != 0:
+            x = self.position.x
+            y = self.position.y
 
-        #logger.debug("ANGLE: " + str(turning))
-        add = [0,0]
-
-
-        if self.inaccurateOrientation == Orientation.NORD:
-            add = [-1, 0]
-        elif self.inaccurateOrientation == Orientation.SOUTH:
-            add = [1, 0]
-        elif self.inaccurateOrientation == Orientation.EAST:
-            add = [0, 1]
-        elif self.inaccurateOrientation == Orientation.WEST:
-            add = [0, -1]
-        else:
-            add = [0,0]
+            linearMove = (((speed) * 2 * math.pi * WHEEL_RADIUS) / 25) * 2
+            precision = 2
             
-        #self.printStatus()
-        self.reference = self.getActualDistance()
-
-        x = self.position.x
-        y = self.position.y
-
-        linearMove = (((MAX_SPEED * 0.5) * 2 * math.pi * WHEEL_RADIUS) / 25) * 2
-        precision = 2
+            logger.debug("X-COMPONENT: " + str(round(self.compass.getXComponent(), precision)))
+            logger.debug("Y-COMPONENT: " + str(round(self.compass.getYComponent(), precision)))
+            newX = x - round(self.compass.getXComponent(), precision) * linearMove * 1.5
+            newY = y + round(self.compass.getYComponent(), precision) * linearMove * 1.5
         
-        logger.debug("X-COMPONENT: " + str(round(self.compass.getXComponent(), precision)))
-        logger.debug("Y-COMPONENT: " + str(round(self.compass.getYComponent(), precision)))
-        newX = x - round(self.compass.getXComponent(), precision) * linearMove * 1.5
-        newY = y + round(self.compass.getYComponent(), precision) * linearMove * 1.5
-        
-        newPosition = Position(newX,newY)
-        # wp = Map.getNearestWalkablePosition(newPosition, self.inaccurateOrientation)
-        #if wp != -1:
-            #logger.log("WP:" + str(wp))
+            newPosition = Position(newX,newY)
+            # wp = Map.getNearestWalkablePosition(newPosition, self.inaccurateOrientation)
+            # if wp != None:
+                # newPosition = wp
 
-        self.setPosition(newPosition)
+            self.setPosition(newPosition)
 
         
 

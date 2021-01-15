@@ -85,7 +85,7 @@ class PathRunner:
                 self.status = U_TURN
             self.actualTurn += 1
         
-        elif self.status == FOLLOW_LINE:
+        elif self.status == FOLLOW_LINE :
 
             self.steeringAngle = lineFollowerAngle
 
@@ -124,7 +124,6 @@ class PathRunner:
         elif self.status == GO_FORWARD:
             pass
 
-        #To Be Implement
         elif self.status == U_TURN:    
             logger.debug("Orientamento attuale: " + str(self.positioning.getOrientation()) + " orientamento goal: " + str(self.uTurnGoalOrientation))        
             self.sensors = self.distanceSensors

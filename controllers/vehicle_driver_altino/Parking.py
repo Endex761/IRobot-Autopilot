@@ -14,10 +14,11 @@ STOP = 7        # car is parked
 class Parking:
 
     # initialize parking serivice
-    def __init__(self, distanceSensors, positioning):
+    def __init__(self, distanceSensors, positioning, lineFollower):
         # get distance sensors and positioning serivice
         self.distanceSensors = distanceSensors
         self.positioning = positioning
+        self.lineFollower = lineFollower
 
         # set initial status
         self.status = DISABLED
@@ -52,7 +53,14 @@ class Parking:
 
     # return if the car is parking
     def isParking(self):
-        return self.status == PARKING or self.status == PARKING2
+        return self.status == PARKING or self.status == PARKING2 or self.status == CENTER
+
+    # return if the car is parked
+    def isParked(self):
+        return self.status == STOP
+
+    def isSearchingPark(self):
+        return self.status == SEARCH
 
     # return parking speed
     def getSpeed(self):
@@ -73,20 +81,22 @@ class Parking:
         # set reference
         distanceTraveled = self.positioning.getActualDistance()
 
-        # SEARCH status
+        # SEARCH status 2
         if self.status == SEARCH:
 
             # set slow speed 
             self.speed = 0.2
 
             # set straight wheels
-            self.angle = 0.0
+            self.angle = self.lineFollower.getNewSteeringAngle()
 
-            #log info for debug
-            #logger.debug("Left Distance Sensor: " + str(ds.sideLeft.getValue()))
-            #logger.debug("Left Wheel CAR_LENGTH: " + str(distanceTraveled) + " m")
-            #logger.debug("Starting position: " + str(self.leftStartingPosition) + " m")
-            #logger.debug("Parking Lot CAR_LENGTH: " + str(distanceTraveled - self.leftStartingPosition) + " m")
+            if self.lineFollower.isLineLost():
+                self.resetParkingPosition() 
+                self.angle = self.lineFollower.getSteeringAngleLineSearching()
+
+            logger.debug("PARKING angle from Line Follower: " + str(self.angle))
+            if abs(self.angle) > 0.25:
+                self.resetParkingPosition() 
 
             # side threshold, if side sensor is greather than threshold the parking lot if occupied
             sideThreshold = 650
@@ -116,16 +126,16 @@ class Parking:
             elif rightSensorValue > sideThreshold and self.rightIsEmpty:
                 self.rightIsEmpty = False
 
-            elif self.rightIsEmpty and distanceTraveled - self.rightStartingPosition > CAR_LENGTH + CAR_LENGTH/3:
+            elif self.rightIsEmpty and distanceTraveled - self.rightStartingPosition > CAR_LENGTH + (CAR_LENGTH/2):
                 self.rightStartingPosition = distanceTraveled
                 self.sideOfParkingLot = RIGHT
                 self.status = FORWARD
 
-        # FORWARD status
+        # FORWARD status 3
         # this ensure that the parking manoeuvre starts after going forward and not as soon as the parking lot is detected
         elif self.status == FORWARD:
             # distance to travel before starting the maneuver
-            distance = 0.19
+            distance = 0.2
 
             # check if distance traveled is greater than distance to travel
             if self.sideOfParkingLot == LEFT:
@@ -139,20 +149,20 @@ class Parking:
                 logger.warning("Parking lot found! But I don't know if right or left. Looking for anther one.")
                 self.status = SEARCH
 
-        # starting the parking manoeuvre
+        # starting the parking manoeuvre 4
         elif self.status == PARKING:
             # check is the side of the parking lot is known
             if self.sideOfParkingLot != LEFT and self.sideOfParkingLot != RIGHT:
                 logger.error("Side of parking lot is unknown.")
             
             # stop the vehicle, turn the wheels and go back slowly
-            self.speed = 0.0
             self.angle = self.sideOfParkingLot
             self.speed = -0.1
 
             # back thresholds that tells when contursteer
-            backCenterThreshold = 300
-            backSideThreshold = 400
+            # tanto più sono vicino al parcheggio, tanto più alto deve essere il threshold
+            backCenterThreshold = 580
+            backSideThreshold = 420
 
             # get back distance sensors values
             ds = self.distanceSensors
@@ -174,49 +184,79 @@ class Parking:
             if sideSensor > backSideThreshold or bc > backCenterThreshold:
                 self.status = PARKING2
 
-        # PARKING2 status
+        # PARKING2 status 5
         elif self.status == PARKING2:
             # set countersteering angle
             self.angle = -1 * self.sideOfParkingLot
+            self.speed = -0.05
 
             # set side and back threshold
-            rearThreshold = 945
-            sideThreshold = 890
+            rearThreshold = 965
+            sideThreshold = 945
             
             # get rear and side sensors values
             rear = self.distanceSensors.backCenter.getValue()
             side = 0
             if self.sideOfParkingLot == RIGHT:
                 side = self.distanceSensors.sideRight.getValue()
+                bside = self.distanceSensors.backRight.getValue()
+                fside = self.distanceSensors.frontRight.getValue()
             elif self.sideOfParkingLot == LEFT:
                 side = self.distanceSensors.sideLeft.getValue()
+                bside = self.distanceSensors.backLeft.getValue()
+                fside = self.distanceSensors.frontLeft.getValue()
 
             # debug log
             logger.debug("sideOfParkingLot: " + str(self.sideOfParkingLot) + " side: " + str(side))
             
             # check if the park is completed
-            if side > sideThreshold or rear > rearThreshold :
+            #if side > sideThreshold or rear > rearThreshold or ( abs(bside - fside) < 20 and side > 850):
+                #self.status = CENTER
+
+            # check if the park is completed
+            if side > sideThreshold or rear > rearThreshold or (bside < fside and side > 850):
                 self.status = CENTER
 
-        # CENTER status
+        # CENTER status 6
         elif self.status == CENTER:
-            
-            # set angle streight
-            self.angle = 0.0
 
+            if self.sideOfParkingLot == RIGHT:
+                bside = self.distanceSensors.backRight.getValue()
+                fside = self.distanceSensors.frontRight.getValue()
+            elif self.sideOfParkingLot == LEFT:
+                bside = self.distanceSensors.backLeft.getValue()
+                fside = self.distanceSensors.frontLeft.getValue()                
+                
             # get front and back center sensors values
             rear = self.distanceSensors.backCenter.getValue()
             front = self.distanceSensors.frontCenter.getValue()
 
-            # if the rear and front sensor are the same stop the car else continue the centering manoeuver
-            if abs(rear - front) < 20:
+            
+            if rear > 950:
+                self.speed = 0.1
+            elif front > 950:
+                self.speed = -0.1
+            
+            # set angle streight
+            if abs(bside - fside) < 50 and abs(rear - front) < 40:
+                self.angle = 0.0
                 self.status = STOP
-            elif rear > front:
-                self.speed = 0.2
-            elif front > rear:
-                self.speed = -0.2
+                logger.warning("TRYING TO STAY CENTER: same distance sides and rear and front!")
+            elif abs(bside - fside) < 20:
+                self.angle = 0.0
+                logger.warning("TRYING TO STAY CENTER: same distance sides!")
+            else:
+                #TODO: left parking miss
+                self.angle = self.sideOfParkingLot * 0.2 * (1 if fside > bside else -1)
+                self.angle *= (-1 if self.speed > 0 else 1)
+                logger.warning("TRYING TO STAY CENTER: not same distance")
 
-        # STOP status
+            # if the rear and front sensor are the same stop the car else continue the centering manoeuver
+            #if abs(rear - front) < 10:
+            #    self.status = STOP
+            #el
+
+        # STOP status 7
         elif self.status == STOP:
             self.speed = 0.0
             self.angle = 0.0
@@ -226,6 +266,8 @@ class Parking:
         else:
             logger.warning("Invalid parcking status")
 
-        
+    def resetParkingPosition(self):
+        self.leftIsEmpty = False
+        self.rightIsEmpty = False
     
 

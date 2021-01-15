@@ -92,12 +92,12 @@ PROTO Altino [
         type "infra-red"
         aperture 0.1
         numberOfRays 3
-        translation 0.03 -0.005 -0.037
+        translation 0.03 0 -0.037
         rotation 0 1 0 1
         lookupTable [ 0 1023 0, 0.6 0 0.04 ]
       }
       DistanceSensor {
-        translation 0 -0.005 -0.037
+        translation 0 0 -0.037
         rotation 0 1 0 1.5708
         aperture 0.1
         numberOfRays 3
@@ -106,7 +106,7 @@ PROTO Altino [
         lookupTable [ 0 1023 0, 0.6 0 0.04 ]
       }
       DistanceSensor {
-        translation -0.03 -0.005 -0.037
+        translation -0.03 0 -0.037
         rotation 0 1 0 2
         aperture 0.1
         numberOfRays 3

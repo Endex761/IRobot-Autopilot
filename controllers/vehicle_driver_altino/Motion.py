@@ -1,6 +1,11 @@
-from Constants import MAX_ANGLE, MAX_SPEED
+from Constants import MAX_ANGLE, MAX_SPEED, UNKNOWN
 from PathPlanner import U_TURN
 from Utils import logger
+
+PATH_FOLLOWING = 1
+PARKING = 2
+COLLISION_AVOIDANCE = 3
+MANUAL = 4
 
 # class to handle car motion service
 class Motion: #TODO global planner
@@ -11,13 +16,79 @@ class Motion: #TODO global planner
         self.collisionAvoidance = collisionAvoidance
         self.parking = parking
         self.manualDrive = manualDrive
+        self.status = PARKING
+        self.prevStatus = UNKNOWN
         actuators.setSpeed(0.5)
 
-    # update motion service
     def update(self):
         collisionImminent = False
         isUTurning = self.pathRunner.isUTurning()
         isParking = self.parking.isParking()
+        isParked = self.parking.isParked()
+        isSearchingPark = self.parking.isSearchingPark()
+        isManualActive = self.manualDrive.isEnabled()
+
+        collisionImminent = self.collisionAvoidance.isCollisionDetected()
+        obstacleDetected = self.collisionAvoidance.isObstacleDetected()
+
+        if self.status == PATH_FOLLOWING:
+            logger.debug("MOTION: PathFollowing")
+            self.updatePathRunner()
+
+            # During path find a object that can be avoid
+            if collisionImminent and not isUTurning:
+                self.setStatus(COLLISION_AVOIDANCE)
+
+            # During path find a object that can't be avoid
+            if obstacleDetected and not isUTurning:
+                self.pathRunner.updatePath()
+                collisionImminent = False            
+                self.collisionAvoidance.resetObstacleDetection()
+                self.setStatus(PATH_FOLLOWING)
+            
+        elif self.status == PARKING:
+            logger.debug("MOTION: Parking")
+            self.updateParking()
+
+            if isParked:
+                self.setSpeed(0)
+                self.setAngle(0)
+
+            # During parking find a object that can be avoid
+            if collisionImminent and isSearchingPark:
+                self.setStatus(COLLISION_AVOIDANCE)
+
+        elif self.status == COLLISION_AVOIDANCE:
+            logger.debug("MOTION: Collision Avoidance")
+            self.updateCollisionAvoidance()
+
+            if not collisionImminent:
+                self.setPrevStatus()
+
+        elif self.status == MANUAL:
+            logger.debug("MOTION: Manual")
+            self.updateManualDrive()
+        
+        else:
+            logger.warning("MOTION STATUS: " + str(self.status))
+
+    def setPrevStatus(self):
+        tempStatus = self.prevStatus
+        self.prevStatus = self.status
+        self.status = tempStatus
+
+    def setStatus(self, status):
+        if self.status != status:
+            self.prevStatus = self.status
+            self.status = status
+
+    # update motion service
+    def update1(self):
+        collisionImminent = False
+        isUTurning = self.pathRunner.isUTurning()
+        isParking = self.parking.isParking()
+        isParked = self.parking.isParked()
+        isSearchingPark = self.parking.isSearchingPark()
         isManualActive = self.manualDrive.isEnabled()
 
         collisionImminent = self.collisionAvoidance.isCollisionDetected()
@@ -26,8 +97,7 @@ class Motion: #TODO global planner
         if isManualActive:
             self.updateManualDrive()
         else:
-            if not isUTurning and not isParking:  # evita gli ostacoli se non sto parcheggiando o facendo inversione
-                
+            if not isUTurning and not isParking and not isParked:  # evita gli ostacoli se non sto parcheggiando o facendo inversione
                 logger.debug("Collision Imminent: " + str(collisionImminent) + " Obstacle Detection: " + str(obstacleDetected))
                 
                 if obstacleDetected:
@@ -38,13 +108,19 @@ class Motion: #TODO global planner
                 if collisionImminent:
                     self.updateCollisionAvoidance()
 
-            if isParking:
+                if isSearchingPark:
+                    self.updateParking()
+
+            if isParking or isSearchingPark:
                 self.updateParking()
             
             elif isUTurning or not collisionImminent:
                 logger.debug("Updating the path runner")
                 self.updatePathRunner()
                 self.collisionAvoidance.resetObstacleDetection()
+
+            if isParked:
+                self.setSpeed(0)
 
     # update parking commands
     def updateParking(self):

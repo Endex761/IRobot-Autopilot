@@ -3,7 +3,7 @@ from Constants import UNKNOWN
 from Utils import logger
 
 # constants  
-NUM_ZONES = 13          # number of vertical zones of the image
+NUM_ZONES = 15          # number of vertical zones of the image
 MAX_STEERING_ANGLE = 1  # max steering angle allow to line following
 MIN_STEERING_ANGLE = -1 # min steering angle allow to line folloving
 

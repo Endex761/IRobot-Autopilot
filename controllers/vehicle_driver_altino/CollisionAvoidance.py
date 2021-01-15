@@ -16,7 +16,10 @@ class CollissionAvoidance:
         
         self.sr = 0
         self.sl = 0
+        
+        self.bl = 0
         self.bc = 0
+        self.br = 0
 
         self.steeringAngle = 0.0
         self.speed = 0.0
@@ -58,6 +61,7 @@ class CollissionAvoidance:
 
         logger.debug("SL: " + str(self.sl) + " SR: " + str(self.sr))
         logger.debug("FL: " + str(self.fl) + " FR: " + str(self.fr) + " FC: " + str(self.fc))
+        logger.debug("BL: " + str(self.bl) + " BR: " + str(self.br) + " BC: " + str(self.bc))
 
         if self.fc > frontThreshold:
             tolerance = -1
@@ -135,7 +139,10 @@ class CollissionAvoidance:
 
         self.sr = self.distanceSensors.sideRight.getValue()
         self.sl = self.distanceSensors.sideLeft.getValue()
+
+        self.bl = self.distanceSensors.backLeft.getValue()
         self.bc = self.distanceSensors.backCenter.getValue()
+        self.br = self.distanceSensors.backRight.getValue()
 
     # return distance sensors instance
     def getDistanceSensor(self):

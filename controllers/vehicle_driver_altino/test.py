@@ -1,5 +1,7 @@
 # file for tests
 from Utils import Position
-import Map
+import AStar
 
-print("Test: " + str(Map.findNearestIntersection(Position(4,1))))
+AStar.test()
+
+#print("Test: " + str(Map.findNearestIntersection(Position(4,1))))

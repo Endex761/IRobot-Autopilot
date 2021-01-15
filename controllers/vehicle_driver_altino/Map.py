@@ -58,18 +58,19 @@ def getNearestWalkablePosition(position, orientation):
         logger.debug("Actual position non walkable. " + str(position) + " is unwalkable")
         x = position.getX()
         y = position.getY()
+        logger.warning("ORIENTATION: " + str(orientation))
         if orientation == Orientation.NORD or orientation == Orientation.SOUTH:
-            p = Position(x+1, y)
+            p = Position(x, y - 1)
             if isWalkable(p):
                 return p
-            p = Position(x-1, y)
+            p = Position(x, y + 1)
             if isWalkable(p):
                 return p
         elif orientation == Orientation.EAST or orientation == Orientation.WEST:
-            p = Position(x, y+1)
+            p = Position(x - 1, y)
             if isWalkable(p):
                 return p
-            p = Position(x, y-1)
+            p = Position(x + 1, y)
             if isWalkable(p):
                 return p
     else:
@@ -135,9 +136,9 @@ def setNewObstacle(position):
             MAP[x][y] = O
 
 def printMap():
-    for i in range(WIDTH-1):
-        for j in range(HEIGHT-1):
+    for i in range(HEIGHT):
+        for j in range(WIDTH):
             if i>= 0 and i < HEIGHT:
                 if j >= 0 and j < WIDTH:
-                    print(MAP[i][j], end=" ")
+                    print("%2d" % MAP[i][j], end=" ")
         print()

@@ -101,7 +101,7 @@ class Position:
     
     def __eq__(self, other):
         try:
-            return self.x == other.x and self.y == other.y
+            return self.getX() == other.getX() and self.getY() == other.getY()
         except:
             return False
        

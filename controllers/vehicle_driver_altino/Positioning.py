@@ -25,7 +25,7 @@ class Positioning:
         self.lineAlreadyLost = False
         # TODO what if speed is negative 
         # how should i get the starting position? GPS?
-        self.position = Position(7.5,9)
+        self.position = Position(8,9)
         self.orientation = UNKNOWN
         self.inaccurateOrientation = UNKNOWN
         self.updateOrientation()

@@ -15,7 +15,7 @@ MIDDLE_ZONE = int(NUM_ZONES/2)
 
 # set line reference color and tolerance 
 LINE_REFERENCE_COLOR = [228, 228, 42] # yellow
-LINE_COLOR_TOLERANCE = 30
+LINE_COLOR_TOLERANCE = 60
 
 # class to handle line following
 class LineFollower:

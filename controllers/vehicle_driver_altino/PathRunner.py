@@ -114,7 +114,6 @@ class PathRunner:
         elif self.status == FOLLOW_LINE :
 
             self.steeringAngle = lineFollowerAngle
-            logger.warning("GOAL REACHED: " + str(self.isGoalReach()))
             if self.isGoalReach():
                 self.speed = 0.0
                 logger.info("Destination Reached")

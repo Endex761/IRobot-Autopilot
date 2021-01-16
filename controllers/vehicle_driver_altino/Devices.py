@@ -176,11 +176,13 @@ class Keyboard:
         self.keyboard = driver.getKeyboard()
         self.keyboard.enable(deviceTimestep)
 
+        self.pressedKey = UNKNOWN
+
     def getKey(self):
-        logger.debug("Keyboard")
-        key = self.keyboard.getKey()
-        logger.debug(key)
-        return key
+        return self.pressedKey
+
+    def update(self):
+        self.pressedKey = self.keyboard.getKey()
 
     # return true if char key or his uppercase is pressed
     def isKeyPressed(self, key ,char):

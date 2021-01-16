@@ -87,32 +87,6 @@ class Positioning:
         self.orientation = self.compass.getOrientation()
         self.inaccurateOrientation = self.compass.getInaccurateOrientation()
 
-    def computePositionBasedOnLandmark2(self):
-        # if the line get lost provably the robot is near an intersecion
-        isLineLost = self.lineFollower.isLineLost()
-        logger.debug("isLineLost: " + str(isLineLost) + " isLineAlreadyLost: " + str(self.lineAlreadyLost))
-        if isLineLost and not self.lineAlreadyLost:
-            self.lineAlreadyLost = True
-            #if not Map.getValue(self.position) == Map.I:
-            #if Map.getNearestWalkablePositionEquals(self.position, self.inaccurateOrientation, Map.I) != -1:
-            logger.debug("Im not in a I position: " + str(self.position))
-            nearestIntersecion = Map.findNearestIntersection(self.position, self.radios)
-            logger.debug("L'intersezione più vicina è: " + str(nearestIntersecion))
-            if nearestIntersecion != -1:
-                self.reference = self.getActualDistance() - ((Map.MAP_RESOLUTION / 2)) 
-                self.radios = 1
-            else:
-                #self.lineAlreadyLost = False
-                logger.debug("Intersection not found")
-            
-
-            logger.debug("LINE IS LOST - REFERENCE: " + str(self.reference))
-            distance = self.getActualDistance() - self.reference
-            logger.debug("DIFFERENCE " + str(distance))
-
-        elif not isLineLost:
-            self.lineAlreadyLost = False
-
     # update positioning using map landmarks
     def computePositionBasedOnLandmark(self):
         # if the line get lost provably the robot is near an intersecion
@@ -229,8 +203,8 @@ class Positioning:
             
             logger.debug("X-COMPONENT: " + str(round(self.compass.getXComponent(), precision)))
             logger.debug("Y-COMPONENT: " + str(round(self.compass.getYComponent(), precision)))
-            newX = x - round(self.compass.getXComponent(), precision) * linearMove * 1.2 * turnCoeficent
-            newY = y + round(self.compass.getYComponent(), precision) * linearMove * 1.2 * turnCoeficent
+            newX = x - round(self.compass.getXComponent(), precision) * linearMove * 1.3 * turnCoeficent
+            newY = y + round(self.compass.getYComponent(), precision) * linearMove * 1.3 * turnCoeficent
         
             newPosition = Position(newX,newY)
             # wp = Map.getNearestWalkablePosition(newPosition, self.inaccurateOrientation)

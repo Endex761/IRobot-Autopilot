@@ -117,7 +117,7 @@ def getNearestWalkablePosition2(position, orientation):
 
 
 # return the position of the nearest intersection to position, -1 if no interection in range
-def findNearestIntersection(position, radius = 1):
+def findNearestIntersection(position, radius = 1, orientation = False):
     x = position.getX()
     y = position.getY()
     for i in range(x-radius, x+radius +1):

@@ -85,6 +85,7 @@ class Altino:
         # for each timestep update services
         while self.driver.step() != -1 and self.status == RUN:
             logger.debug("__________ NEW CYCLE _____________")
+            self.keyboard.update()
             self.externalController.update()
             self.collisionAvoidance.update()
             self.lineFollower.update()

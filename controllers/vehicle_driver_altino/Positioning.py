@@ -229,8 +229,8 @@ class Positioning:
             
             logger.debug("X-COMPONENT: " + str(round(self.compass.getXComponent(), precision)))
             logger.debug("Y-COMPONENT: " + str(round(self.compass.getYComponent(), precision)))
-            newX = x - round(self.compass.getXComponent(), precision) * linearMove * turnCoeficent
-            newY = y + round(self.compass.getYComponent(), precision) * linearMove * turnCoeficent
+            newX = x - round(self.compass.getXComponent(), precision) * linearMove * 1.2 * turnCoeficent
+            newY = y + round(self.compass.getYComponent(), precision) * linearMove * 1.2 * turnCoeficent
         
             newPosition = Position(newX,newY)
             # wp = Map.getNearestWalkablePosition(newPosition, self.inaccurateOrientation)

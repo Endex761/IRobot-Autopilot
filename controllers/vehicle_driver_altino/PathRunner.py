@@ -122,8 +122,8 @@ class PathRunner:
             if isLineLost and currentPath == UNKNOWN:
                 self.speed = 0.0
             elif isLineLost and currentPath != UNKNOWN and Map.findNearestIntersection(self.positioning.getPosition(), 1) != -1:
-                if self.prevStatus != SEARCH_LINE:
-                    self.setStatus(TURN)
+                #if self.prevStatus != SEARCH_LINE:
+                self.setStatus(TURN)
             elif isLineLost and Map.findNearestIntersection(self.positioning.getPosition()) == -1:
                 self.setStatus(SEARCH_LINE)
             

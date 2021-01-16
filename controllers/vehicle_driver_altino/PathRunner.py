@@ -1,6 +1,5 @@
-from typing import NewType
 from Utils import Position, logger, Orientation
-from Constants import UNKNOWN, MAX_ANGLE
+from Constants import UNKNOWN
 import Map
 
 DISABLED = 0
@@ -262,15 +261,3 @@ class PathRunner:
         self.pathPlanner.setGoalPosition(goal)
         self.currentPath = self.pathPlanner.getFastestRoute()
         logger.debug("Current Path to Goal: " + str(self.currentPath))
-
-    # go forward for x meters (NOT WORKING)
-    def proceedForward(self, meters):
-        self.setStatus(GO_FORWARD)
-        startingAngle = self.getSteeringAngle()
-        start = self.positioning.getActualDistance()
-        stop  = start + meters 
-        while stop - start > 0:
-            self.steeringAngle = 0.0
-        
-        self.steeringAngle = startingAngle
-        

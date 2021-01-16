@@ -1,6 +1,6 @@
 import math
 from Utils import Orientation, Position, logger
-from Constants import CAR_LENGTH, MAX_ANGLE, MAX_SPEED, UNKNOWN
+from Constants import MAX_ANGLE, MAX_SPEED, UNKNOWN
 import Map
 
 WHEEL_RADIUS = 0.020
@@ -191,7 +191,10 @@ class Positioning:
             x = self.position.x
             y = self.position.y
 
-            linearMove = (((speed) * 2 * math.pi * WHEEL_RADIUS) / 25) * 2
+            # 72 = 0.50 m/s * MAX_SPEED [1.8] / 40 step/s / 0.5 m
+            # linearMove = ((0.50 * (speed/MAX_SPEED)) / 40) * 2
+            linearMove = speed/72
+
             precision = 2
 
             turnCoeficent = 1
@@ -199,17 +202,10 @@ class Positioning:
             if abs(steeringAngle) == 0.57:
                 turnCoeficent = 1.2
                 
-
-            
-            logger.debug("X-COMPONENT: " + str(round(self.compass.getXComponent(), precision)))
-            logger.debug("Y-COMPONENT: " + str(round(self.compass.getYComponent(), precision)))
-            newX = x - round(self.compass.getXComponent(), precision) * linearMove * 1.3 * turnCoeficent
-            newY = y + round(self.compass.getYComponent(), precision) * linearMove * 1.3 * turnCoeficent
+            newX = x - round(self.compass.getXComponent(), precision) * linearMove * turnCoeficent
+            newY = y + round(self.compass.getYComponent(), precision) * linearMove * turnCoeficent
         
             newPosition = Position(newX,newY)
-            # wp = Map.getNearestWalkablePosition(newPosition, self.inaccurateOrientation)
-            # if wp != None:
-                # newPosition = wp
 
             self.setPosition(newPosition)
 

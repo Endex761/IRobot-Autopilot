@@ -63,13 +63,13 @@ class Altino:
         
         # path running service
         self.pathRunner = PathRunner(self.positioning, self.pathPlanner, self.lineFollower, self.distanceSensors)
-        self.pathRunner.enable()
+        #♥self.pathRunner.enable()
         
         # set path runner destination
         self.pathRunner.goTo(Position(1, 19))
 
         self.parking = Parking(self.distanceSensors, self.positioning, self.lineFollower)
-        #self.parking.enable()
+        self.parking.enable()
 
         self.manualDrive = ManualDrive(self.keyboard)
         # self.manualDrive.enable()

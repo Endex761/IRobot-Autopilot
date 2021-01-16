@@ -197,6 +197,8 @@ class Parking:
             # get rear and side sensors values
             rear = self.distanceSensors.backCenter.getValue()
             side = 0
+            bside = 0
+            fside = 0
             if self.sideOfParkingLot == RIGHT:
                 side = self.distanceSensors.sideRight.getValue()
                 bside = self.distanceSensors.backRight.getValue()
@@ -220,6 +222,8 @@ class Parking:
         # CENTER status 6
         elif self.status == CENTER:
 
+            bside = 0
+            fside = 0
             if self.sideOfParkingLot == RIGHT:
                 bside = self.distanceSensors.backRight.getValue()
                 fside = self.distanceSensors.frontRight.getValue()

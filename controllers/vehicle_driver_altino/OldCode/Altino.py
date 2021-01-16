@@ -44,7 +44,7 @@ class Altino:
         # navigation
         self.nav = PathPlanner()
         self.nav.setRobotPosition(Position(4, 1))
-        self.nav.setGoalPosition(Position(14, 23))
+        self.nav.setGoalPosition(Position(14, 22))
         self.nav.setRobotOrientation(SOUTH)
         self.nav.printStatus()
 

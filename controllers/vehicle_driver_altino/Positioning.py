@@ -35,10 +35,11 @@ class Positioning:
         x = position.getX()
         y = position.getY()
         if x > 0 and x < Map.HEIGHT - 1:
-            if y > 0 and y < Map.WIDTH - 1:
-                self.position = position
-                return
-        logger.warning("Invalid Position")
+            self.position.setX(position.x)
+        if y > 0 and y < Map.WIDTH - 1:
+            self.position.setY(position.y)
+                
+        #logger.warning("Invalid Position")
     
     # set robot orientation
     def setOrientation(self, orientation):
@@ -212,16 +213,24 @@ class Positioning:
         speed = self.actuators.getSpeed()
 
         if speed != 0:
+
             x = self.position.x
             y = self.position.y
 
             linearMove = (((speed) * 2 * math.pi * WHEEL_RADIUS) / 25) * 2
             precision = 2
+
+            turnCoeficent = 1
+            steeringAngle = self.actuators.getAngle()
+            if abs(steeringAngle) == 0.57:
+                turnCoeficent = 1.2
+                
+
             
             logger.debug("X-COMPONENT: " + str(round(self.compass.getXComponent(), precision)))
             logger.debug("Y-COMPONENT: " + str(round(self.compass.getYComponent(), precision)))
-            newX = x - round(self.compass.getXComponent(), precision) * linearMove * 1.5
-            newY = y + round(self.compass.getYComponent(), precision) * linearMove * 1.5
+            newX = x - round(self.compass.getXComponent(), precision) * linearMove * 1.5 * turnCoeficent
+            newY = y + round(self.compass.getYComponent(), precision) * linearMove * 1.5 * turnCoeficent
         
             newPosition = Position(newX,newY)
             # wp = Map.getNearestWalkablePosition(newPosition, self.inaccurateOrientation)

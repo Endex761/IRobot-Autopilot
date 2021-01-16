@@ -56,15 +56,15 @@ class CollissionAvoidance:
 
         tolerance = 10
         frontThreshold = 700
-        frontSideThreshold = 750
-        sideThreshold = 890
+        frontSideThreshold = 620
+        sideThreshold = 800
 
         logger.debug("SL: " + str(self.sl) + " SR: " + str(self.sr))
         logger.debug("FL: " + str(self.fl) + " FR: " + str(self.fr) + " FC: " + str(self.fc))
         logger.debug("BL: " + str(self.bl) + " BR: " + str(self.br) + " BC: " + str(self.bc))
 
         if self.fc > frontThreshold:
-            tolerance = -1
+            tolerance = 0
         else:
             tolerance = 10
 
@@ -73,10 +73,12 @@ class CollissionAvoidance:
         else:
             self.speed = 0.5
 
-        if self.fl > 750 and self.fr > 750 or self.fc > 750:
+        if self.fl > 850 and self.fr > 850 or self.fc > 850:
             # self.speed = 0.0
             logger.debug("Street is closed")
             self.obstacleDetected = True
+        else:
+            self.obstacleDetected = False
 
         logger.debug("Collision Detection: " + str(self.collisionDetected))
 
@@ -98,12 +100,12 @@ class CollissionAvoidance:
 
         # check if side left obstacle, turn slight right
         elif self.sl > sideThreshold:
-            self.steeringAngle = RIGHT * self.sl / 2000.0
+            self.steeringAngle = RIGHT * self.sl / 4000.0
             self.collisionDetected = True
 
         # check if side right obstacle, turn slight left
         elif self.sr > sideThreshold:
-            self.steeringAngle = LEFT * self.sr / 2000.0
+            self.steeringAngle = LEFT * self.sr / 4000.0
             self.collisionDetected = True
 
         # if no obstacle go straight

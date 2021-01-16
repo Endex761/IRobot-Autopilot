@@ -10,26 +10,32 @@ MANUAL = 4
 # class to handle car motion service
 class Motion: #TODO global planner
     # initialize motion service
-    def __init__(self, actuators, pathRunner, parking, collisionAvoidance, manualDrive):
+    def __init__(self, actuators, pathRunner, parking, collisionAvoidance, manualDrive, externalController):
         self.actuators = actuators
         self.pathRunner = pathRunner
         self.collisionAvoidance = collisionAvoidance
         self.parking = parking
         self.manualDrive = manualDrive
-        self.status = PARKING
+        self.externalController = externalController
+
+        self.status = PATH_FOLLOWING
         self.prevStatus = UNKNOWN
         actuators.setSpeed(0.5)
 
     def update(self):
+        self.updateExternalController()
         collisionImminent = False
         isUTurning = self.pathRunner.isUTurning()
         isParking = self.parking.isParking()
         isParked = self.parking.isParked()
         isSearchingPark = self.parking.isSearchingPark()
         isManualActive = self.manualDrive.isEnabled()
+        isGoalReached = self.pathRunner.isGoalReach()
 
         collisionImminent = self.collisionAvoidance.isCollisionDetected()
         obstacleDetected = self.collisionAvoidance.isObstacleDetected()
+
+        logger.debug("collissionImminent: " + str(collisionImminent) + " obstacleDetected: " + str(obstacleDetected) + " isUTurning: " + str(isUTurning) )
 
         if self.status == PATH_FOLLOWING:
             logger.debug("MOTION: PathFollowing")
@@ -39,15 +45,14 @@ class Motion: #TODO global planner
             if collisionImminent and not isUTurning:
                 self.setStatus(COLLISION_AVOIDANCE)
 
-            # During path find a object that can't be avoid
-            if obstacleDetected and not isUTurning:
-                self.pathRunner.updatePath()
-                collisionImminent = False            
-                self.collisionAvoidance.resetObstacleDetection()
-                self.setStatus(PATH_FOLLOWING)
+            if isGoalReached:
+                self.parking.enable()
+                self.setStatus(PARKING)
+
             
         elif self.status == PARKING:
             logger.debug("MOTION: Parking")
+            self.parking.enable()
             self.updateParking()
 
             if isParked:
@@ -65,8 +70,17 @@ class Motion: #TODO global planner
             if not collisionImminent:
                 self.setPrevStatus()
 
+            # During path find a object that can't be avoid
+            if obstacleDetected and not isUTurning and self.prevStatus == PATH_FOLLOWING:
+                logger.debug("Reset Path")
+                self.pathRunner.updatePath()
+                collisionImminent = False            
+                self.collisionAvoidance.resetObstacleDetection()
+                self.setStatus(PATH_FOLLOWING)
+
         elif self.status == MANUAL:
             logger.debug("MOTION: Manual")
+            self.manualDrive.enable()
             self.updateManualDrive()
         
         else:
@@ -138,7 +152,6 @@ class Motion: #TODO global planner
             logger.debug("Path Runner - Speed: " + str(newSpeed) + " Angle: " + str(newAngle))
             if self.pathRunner.isGoalReach():
                 self.pathRunner.disable()
-                self.parking.enable()
             self.setAngleAndSpeed(newAngle, newSpeed)
 
     # update collision avoidance commands
@@ -155,6 +168,10 @@ class Motion: #TODO global planner
             newAngle = self.manualDrive.getAngle()
             logger.debug("Manual Drive - Speed: " + str(newSpeed) + " Angle: " + str(newAngle))
             self.setAngleAndSpeed(newAngle, newSpeed)
+
+    def updateExternalController(self):
+        if self.externalController.isEnabled():
+            self.status = self.externalController.getMotionStatus()
 
     # set angle and speed on the actuators    
     def setAngleAndSpeed(self, angle, speed):

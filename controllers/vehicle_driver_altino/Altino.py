@@ -1,4 +1,5 @@
 # import devices and serivices to use in the altino toy car
+from ExternalController import ExternalController
 from vehicle import Driver
 from CollisionAvoidance import CollissionAvoidance
 from Utils import Position, logger
@@ -42,7 +43,11 @@ class Altino:
         
         # this ensure sensors are correctly initialized
         self.devicesInitialization()
-        
+
+        # extern keyboard controller
+        self.externalController = ExternalController(self.keyboard)
+        self.externalController.enable()
+
         # collision avoidance service
         self.collisionAvoidance = CollissionAvoidance(self.distanceSensors)
         self.collisionAvoidance.enable()
@@ -58,19 +63,19 @@ class Altino:
         
         # path running service
         self.pathRunner = PathRunner(self.positioning, self.pathPlanner, self.lineFollower, self.distanceSensors)
-        # self.pathRunner.enable()
+        self.pathRunner.enable()
         
         # set path runner destination
-        self.pathRunner.goTo(Position(1, 20))
+        self.pathRunner.goTo(Position(1, 19))
 
         self.parking = Parking(self.distanceSensors, self.positioning, self.lineFollower)
-        self.parking.enable()
+        #self.parking.enable()
 
         self.manualDrive = ManualDrive(self.keyboard)
         # self.manualDrive.enable()
         
         # motion serivice
-        self.motion = Motion(self.actuators, self.pathRunner, self.parking, self.collisionAvoidance, self.manualDrive)
+        self.motion = Motion(self.actuators, self.pathRunner, self.parking, self.collisionAvoidance, self.manualDrive, self.externalController)
 
 
     # run
@@ -80,6 +85,7 @@ class Altino:
         # for each timestep update services
         while self.driver.step() != -1 and self.status == RUN:
             logger.debug("__________ NEW CYCLE _____________")
+            self.externalController.update()
             self.collisionAvoidance.update()
             self.lineFollower.update()
             self.positioning.update()

@@ -1,6 +1,11 @@
-import numpy as np
+
+try:
+    import numpy as np
+except:
+    print("You need to install numpy to run the AStar algorithm.")
+    exit(1)
+    
 import heapq
-import Map
 
 WALL = 10
 

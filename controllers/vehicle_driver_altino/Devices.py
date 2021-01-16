@@ -183,8 +183,8 @@ class Keyboard:
         return key
 
     # return true if char key or his uppercase is pressed
-    def isKeyPressed(self, char):
-        return self.getKey() == ord(char) or self.getKey() == ord(char.upper())
+    def isKeyPressed(self, key ,char):
+        return key == ord(char) or key == ord(char.upper())
 
 
 # position sensor class to handle positon sensor data from wheels encoders

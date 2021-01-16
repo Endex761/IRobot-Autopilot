@@ -58,6 +58,7 @@ class PathRunner:
     # get new fastest path from actual position to goal if set
     def updatePath(self):
         if self.isEnabled():
+            print("Updating path")
             p = self.positioning.getPosition()
             o = self.positioning.getOrientation()
             nearest = Map.getNearestWalkablePosition(p, o)
@@ -108,7 +109,7 @@ class PathRunner:
 
             if isLineLost and currentPath == UNKNOWN:
                 self.speed = 0.0
-            elif isLineLost and currentPath != UNKNOWN and Map.findNearestIntersection(self.positioning.getPosition(), 2) != -1:
+            elif isLineLost and currentPath != UNKNOWN and Map.findNearestIntersection(self.positioning.getPosition(), 1) != -1:
                 logger.log("go to TURN")
                 self.status = TURN
             elif isLineLost and Map.findNearestIntersection(self.positioning.getPosition()) == -1:

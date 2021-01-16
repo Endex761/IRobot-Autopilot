@@ -5,8 +5,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.6857602330444058 0.6245356453844996 0.3737487530668816 4.840389619347868
-  position -0.6700930555417447 4.516024331503953 1.5783272663460752
+  orientation 0.461524353243811 0.7583861476420761 0.46026701210003423 4.435585375157413
+  position -7.229213651168477 14.209692330595956 -0.47320865056049066
   follow "SF71H"
   followType "None"
 }
@@ -22,7 +22,7 @@ RectangleArena {
   }
 }
 RoadIntersection {
-  translation -3.5 0.001 -2.65
+  translation -3.5 0.001 -2.5
   rotation 0 1 0 -0.7853996938995746
   id "Int.1"
   connectedRoadIDs [
@@ -51,7 +51,7 @@ RoadIntersection {
   }
 }
 RoadIntersection {
-  translation 3.5 0.001 -2.65
+  translation 3.5 0.001 -2.5
   rotation 0 1 0 -0.7853996938995746
   name "road intersection(1)"
   id "Int.2"
@@ -81,7 +81,7 @@ RoadIntersection {
   }
 }
 RoadIntersection {
-  translation 1.75 0.001 -2.65
+  translation 1.5 0.001 -2.5
   rotation 0 1 0 -0.7853996938995746
   name "road intersection(2)"
   id "Int.3"
@@ -111,7 +111,7 @@ RoadIntersection {
   }
 }
 RoadIntersection {
-  translation 0 0.001 -2.65
+  translation 0 0.001 -2.5
   rotation 0 1 0 -0.7853996938995746
   name "road intersection(4)"
   id "Int.4"
@@ -141,7 +141,7 @@ RoadIntersection {
   }
 }
 RoadIntersection {
-  translation 0 0.001 2.65
+  translation 0 0.001 2.5
   rotation 0 1 0 -0.7853996938995746
   name "road intersection(5)"
   id "Int.5"
@@ -201,7 +201,7 @@ RoadIntersection {
   }
 }
 RoadIntersection {
-  translation 3.5 0.001 2.65
+  translation 3.5 0.001 2.5
   rotation 0 1 0 -0.7853996938995746
   name "road intersection(11)"
   id "Int.5"
@@ -291,7 +291,7 @@ RoadIntersection {
   }
 }
 RoadIntersection {
-  translation -1.8 0.001 0
+  translation -2 0.001 0
   rotation 0 1 0 -0.7853996938995746
   name "road intersection(6)"
   id "Int.8"
@@ -321,7 +321,7 @@ RoadIntersection {
   }
 }
 RoadIntersection {
-  translation -1.8 0.001 2.65
+  translation -2 0.001 2.5
   rotation 0 1 0 -0.7853996938995746
   name "road intersection(8)"
   id "Int.9"
@@ -351,7 +351,7 @@ RoadIntersection {
   }
 }
 RoadIntersection {
-  translation -1.8 0.001 5.5
+  translation -2 0.001 5.5
   rotation 0 1 0 -0.7853996938995746
   name "road intersection(9)"
   id "Int.10"
@@ -381,7 +381,7 @@ RoadIntersection {
   }
 }
 RoadIntersection {
-  translation 1.75 0.001 -5.5
+  translation 1.5 0.001 -5.5
   rotation 0 1 0 -0.7853996938995746
   name "road intersection(3)"
   id "Int.11"
@@ -411,7 +411,7 @@ RoadIntersection {
   }
 }
 Wall {
-  translation -3.755 0 -2.65
+  translation -3.755 0 -2.5
   rotation 0 1 0 1.5708
   size 0.5 0.05 0.01
   appearance Roughcast {
@@ -422,7 +422,7 @@ Wall {
   }
 }
 Wall {
-  translation 3.755 0 -2.65
+  translation 3.755 0 -2.5
   rotation 0 1 0 1.5708
   name "wall(1)"
   size 0.5 0.05 0.01
@@ -446,7 +446,7 @@ Wall {
   }
 }
 Wall {
-  translation 3.755 0 2.65
+  translation 3.755 0 2.5
   rotation 0 1 0 1.5708
   name "wall(9)"
   size 0.5 0.05 0.01
@@ -458,7 +458,7 @@ Wall {
   }
 }
 Wall {
-  translation 1.75 0 -2.395
+  translation 1.5 0 -2.245
   rotation 0 1 0 -3.1415853071795863
   name "wall(2)"
   size 0.5 0.05 0.01
@@ -470,7 +470,7 @@ Wall {
   }
 }
 Wall {
-  translation -2.69848e-13 0 -2.905
+  translation 1.10196e-06 0 -2.755
   rotation 0 1 0 -3.1415853071795863
   name "wall(4)"
   size 0.5 0.05 0.01
@@ -482,7 +482,7 @@ Wall {
   }
 }
 Wall {
-  translation -1.8 0 -0.255
+  translation -2 0 -0.255
   rotation 0 1 0 -3.1415853071795863
   name "wall(5)"
   size 0.5 0.05 0.01
@@ -494,7 +494,7 @@ Wall {
   }
 }
 Wall {
-  translation -1.8 0 5.755
+  translation -2 0 5.755
   rotation 0 1 0 -3.1415853071795863
   name "wall(6)"
   size 0.5 0.05 0.01
@@ -523,7 +523,7 @@ Nao {
   controller ""
 }
 Wall {
-  translation 1.75 0 -5.755
+  translation 1.5 0 -5.755
   rotation 0 1 0 -3.1415853071795863
   name "wall(3)"
   size 0.5 0.05 0.01
@@ -558,12 +558,12 @@ StraightRoadSegment {
   roadBorderHeight 0.05
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
-  length 4.4
+  length 4.15
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
 StraightRoadSegment {
-  translation -3.25 0.001 -2.65
+  translation -3.25 0.001 -2.5
   rotation 0 1 0 1.5707996938995747
   name "road(12)"
   id "Road2"
@@ -616,12 +616,12 @@ StraightRoadSegment {
   roadBorderHeight 0.05
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
-  length 0.85
+  length 0.65
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
 StraightRoadSegment {
-  translation -1.55 0.001 0
+  translation -1.75 0.001 0
   rotation 0 1 0 1.5707996938995747
   name "road(22)"
   id "Road4"
@@ -645,12 +645,12 @@ StraightRoadSegment {
   roadBorderHeight 0.05
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
-  length 1.3
+  length 1.5
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
 StraightRoadSegment {
-  translation -1.55 0.001 2.65
+  translation -1.75 0.001 2.5
   rotation 0 1 0 1.5707996938995747
   name "road(25)"
   id "Road5"
@@ -675,10 +675,10 @@ StraightRoadSegment {
   roadBorderHeight 0.05
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
-  length 1.3
+  length 1.5
 }
 StraightRoadSegment {
-  translation -1.55 0.001 5.5
+  translation -1.75 0.001 5.5
   rotation 0 1 0 1.5707996938995747
   name "road(31)"
   id "Road6"
@@ -702,10 +702,10 @@ StraightRoadSegment {
   roadBorderHeight 0.05
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
-  length 1.3
+  length 1.5
 }
 StraightRoadSegment {
-  translation -2.9 0.001 2.65
+  translation -2.9 0.001 2.5
   rotation 0 1 0 1.5707996938995747
   name "road(16)"
   id "Road7"
@@ -729,7 +729,7 @@ StraightRoadSegment {
   roadBorderHeight 0.05
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
-  length 0.85
+  length 0.65
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -758,12 +758,12 @@ StraightRoadSegment {
   roadBorderHeight 0.05
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
-  length 0.85
+  length 0.65
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
 StraightRoadSegment {
-  translation 2 0.001 -2.65
+  translation 1.75 0.001 -2.5
   rotation 0 1 0 1.5707996938995747
   name "road(13)"
   id "Road9"
@@ -787,12 +787,12 @@ StraightRoadSegment {
   roadBorderHeight 0.05
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
-  length 1.25
+  length 1.5
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
 StraightRoadSegment {
-  translation 0.25 0.001 -2.65
+  translation 0.25 0.001 -2.5
   rotation 0 1 0 1.5707996938995747
   name "road(17)"
   id "Road10"
@@ -816,7 +816,7 @@ StraightRoadSegment {
   roadBorderHeight 0.05
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
-  length 1.25
+  length 1
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -850,7 +850,7 @@ StraightRoadSegment {
   leftBorderBoundingObject TRUE
 }
 StraightRoadSegment {
-  translation 0.25 0.001 2.65
+  translation 0.25 0.001 2.5
   rotation 0 1 0 1.5707996938995747
   name "road(26)"
   id "Road12"
@@ -879,7 +879,7 @@ StraightRoadSegment {
   leftBorderBoundingObject TRUE
 }
 StraightRoadSegment {
-  translation 2 0.001 -5.5
+  translation 1.75 0.001 -5.5
   rotation 0 1 0 1.5707996938995747
   name "road(14)"
   id "Road13"
@@ -903,7 +903,7 @@ StraightRoadSegment {
   roadBorderHeight 0.05
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
-  length 0.9
+  length 1.15
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -960,42 +960,14 @@ StraightRoadSegment {
   roadBorderHeight 0.05
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
-  length 2
+  length 2.15
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
 StraightRoadSegment {
-  translation -3.5 0.001 -2.4
+  translation -3.5 0.001 -2.25
   name "road(9)"
   id "Road16"
-  width 0.5
-  numberOfLanes 4
-  lines [
-    RoadLine {
-      type "continuous"
-      width 0.005
-    }
-    RoadLine {
-      color 1 1 0
-      type "continuous"
-      width 0.005
-    }
-    RoadLine {
-      type "continuous"
-      width 0.005
-    }
-  ]
-  roadBorderHeight 0.05
-  startingRoadBorderWidth 0.01
-  endingRoadBorderWidth 0.01
-  length 1.8
-  rightBorderBoundingObject TRUE
-  leftBorderBoundingObject TRUE
-}
-StraightRoadSegment {
-  translation -3.5 0.001 3.25
-  name "road(24)"
-  id "Road17"
   width 0.5
   numberOfLanes 4
   lines [
@@ -1021,7 +993,35 @@ StraightRoadSegment {
   leftBorderBoundingObject TRUE
 }
 StraightRoadSegment {
-  translation 3.5 0.001 2.9
+  translation -3.5 0.001 3.1
+  name "road(24)"
+  id "Road17"
+  width 0.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      color 1 1 0
+      type "continuous"
+      width 0.005
+    }
+    RoadLine {
+      type "continuous"
+      width 0.005
+    }
+  ]
+  roadBorderHeight 0.05
+  startingRoadBorderWidth 0.01
+  endingRoadBorderWidth 0.01
+  length 1.8
+  rightBorderBoundingObject TRUE
+  leftBorderBoundingObject TRUE
+}
+StraightRoadSegment {
+  translation 3.5 0.001 2.75
   name "road(30)"
   id "Road18"
   width 0.5
@@ -1044,12 +1044,12 @@ StraightRoadSegment {
   roadBorderHeight 0.05
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
-  length 2
+  length 2.15
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
 StraightRoadSegment {
-  translation 0 0.001 -2.4
+  translation 0 0.001 -2.25
   name "road(15)"
   id "Road19"
   width 0.5
@@ -1072,7 +1072,7 @@ StraightRoadSegment {
   roadBorderHeight 0.05
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
-  length 2.15
+  length 2
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -1100,7 +1100,7 @@ StraightRoadSegment {
   roadBorderHeight 0.05
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
-  length 2.15
+  length 2
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -1128,12 +1128,12 @@ StraightRoadSegment {
   roadBorderHeight 0.05
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
-  length 2.15
+  length 2
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
 StraightRoadSegment {
-  translation -1.8 0.001 0.25
+  translation -2 0.001 0.25
   name "road(21)"
   id "Road22"
   width 0.5
@@ -1156,12 +1156,12 @@ StraightRoadSegment {
   roadBorderHeight 0.05
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
-  length 2.15
+  length 2
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
 StraightRoadSegment {
-  translation -1.8 0.001 2.9
+  translation -2 0.001 2.75
   name "road(27)"
   id "Road23"
   width 0.5
@@ -1184,12 +1184,12 @@ StraightRoadSegment {
   roadBorderHeight 0.05
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
-  length 2.35
+  length 2.5
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
 StraightRoadSegment {
-  translation 0 0.001 2.9
+  translation 0 0.001 2.75
   name "road(32)"
   id "Road24"
   width 0.5
@@ -1212,12 +1212,12 @@ StraightRoadSegment {
   roadBorderHeight 0.05
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
-  length 2.35
+  length 2.5
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
 StraightRoadSegment {
-  translation 3.5 0.001 -2.4
+  translation 3.5 0.001 -2.25
   name "road(11)"
   id "Road25"
   width 0.5
@@ -1240,7 +1240,7 @@ StraightRoadSegment {
   roadBorderHeight 0.05
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
-  length 2.15
+  length 2
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -1268,12 +1268,12 @@ StraightRoadSegment {
   roadBorderHeight 0.05
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
-  length 2
+  length 2.15
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
 StraightRoadSegment {
-  translation 1.75 0.001 -5.25
+  translation 1.5 0.001 -5.25
   name "road(10)"
   id "Road27"
   width 0.5
@@ -1296,7 +1296,7 @@ StraightRoadSegment {
   roadBorderHeight 0.05
   startingRoadBorderWidth 0.01
   endingRoadBorderWidth 0.01
-  length 2.35
+  length 2.5
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
 }
@@ -1375,7 +1375,7 @@ CurvedRoadSegment {
   curvatureRadius 0.6
 }
 CurvedRoadSegment {
-  translation -2.9 0.001 3.25
+  translation -2.9 0.001 3.1
   rotation 0 1 0 3.141592653589793
   name "road(23)"
   id "CurvRoad4"

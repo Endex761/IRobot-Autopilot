@@ -66,7 +66,3 @@ def astar(map, start, goal):
                 heapq.heappush(oheap, (fscore[neighbor], neighbor))
 
     return False
-
-
-
-# print(findPath(Map.MAP, (8,9), (1, 20)))

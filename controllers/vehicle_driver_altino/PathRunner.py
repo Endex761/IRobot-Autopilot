@@ -1,5 +1,5 @@
 from Utils import Position, logger, Orientation
-from Constants import UNKNOWN
+from Constants import DEBUG, UNKNOWN
 import Map
 
 DISABLED = 0
@@ -69,7 +69,7 @@ class PathRunner:
     # get new fastest path from actual position to goal if set
     def updatePath(self):
         if self.isEnabled():
-            print("Updating path")
+            logger.info("Computing new path..")
             p = self.positioning.getPosition()
             o = self.positioning.getOrientation()
             nearest = Map.getNearestWalkablePosition(p, o)
@@ -85,7 +85,10 @@ class PathRunner:
                 Map.setNewObstacle(Position(x + 1, y))
             if o == Orientation.WEST:
                 Map.setNewObstacle(Position(x, y - 1))
-            Map.printMap()
+            
+            if DEBUG:
+                Map.printMap()
+
             self.currentPath = self.pathPlanner.getFastestRoute()
             self.actualTurn = 0
 

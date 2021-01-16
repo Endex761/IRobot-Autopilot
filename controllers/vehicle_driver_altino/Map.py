@@ -58,7 +58,7 @@ def getNearestWalkablePosition(position, orientation):
         logger.debug("Actual position non walkable. " + str(position) + " is unwalkable")
         x = position.getX()
         y = position.getY()
-        logger.warning("ORIENTATION: " + str(orientation))
+        logger.debug("ORIENTATION: " + str(orientation))
         if orientation == Orientation.NORD or orientation == Orientation.SOUTH:
             p = Position(x, y - 1)
             if isWalkable(p):

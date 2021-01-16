@@ -2,6 +2,14 @@
 # is debug enabled
 DEBUG = True
 
+# starting position
+SPX = 8
+SPY = 9
+
+# goal position
+GPX = 1
+GPY = 19
+
 # device timestamp multiplication ratio
 DEVICE_TIMESTEP_MULTIPLIER = 2
 

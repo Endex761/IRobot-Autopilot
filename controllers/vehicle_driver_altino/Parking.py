@@ -82,13 +82,17 @@ class Parking:
         # set reference
         distanceTraveled = self.positioning.getActualDistance()
 
+        side = 0
+        front = 0
+        rear = 0
+        bside = 0
+        fside = 0
+
         if self.status > SEARCH and self.sideOfParkingLot != UNKNOWN:
             # get rear and side sensors values
             rear = self.distanceSensors.backCenter.getValue()
             front = self.distanceSensors.frontCenter.getValue()
-            side = 0
-            bside = 0
-            fside = 0
+            
             if self.sideOfParkingLot == RIGHT:
                 side = self.distanceSensors.sideRight.getValue()
                 bside = self.distanceSensors.backRight.getValue()
@@ -241,26 +245,26 @@ class Parking:
             if abs(bside - fside) < 50 and abs(rear - front) < 80:
                 self.angle = 0.0
                 self.status = STOP
-                logger.warning("TRYING TO STAY CENTER: same distance sides and rear and front!")
+                logger.debug("TRYING TO STAY CENTER: same distance sides and rear and front!")
 
             elif abs(bside - fside) < 50 and rear < 100 and front > 700:
                 self.angle = 0.0
                 self.status = STOP
-                logger.warning("TRYING TO STAY CENTER: there's nothing behind, stay ahead!")
+                logger.debug("TRYING TO STAY CENTER: there's nothing behind, stay ahead!")
 
             elif abs(bside - fside) < 50 and rear < 100 and front > 700:
                 self.angle = 0.0
                 self.status = STOP
-                logger.warning("TRYING TO STAY CENTER: there's nothing behind, stay ahead!")
+                logger.debug("TRYING TO STAY CENTER: there's nothing behind, stay ahead!")
                 
             elif abs(bside - fside) < 50 and front < 100 and rear > 700:
                 self.angle = 0.0
                 self.status = STOP
-                logger.warning("TRYING TO STAY CENTER: there's nothing ahead, stay behind!")
+                logger.debug("TRYING TO STAY CENTER: there's nothing ahead, stay behind!")
 
             elif abs(bside - fside) < 20:
                 self.angle = 0.0
-                logger.warning("TRYING TO STAY CENTER: same distance sides!")
+                logger.debug("TRYING TO STAY CENTER: same distance sides!")
             else:
                 if self.speed > 0:
                     nextAngle = 0.2
@@ -272,7 +276,7 @@ class Parking:
                 else:
                     nextAngle *= -self.sideOfParkingLot
                 self.angle = nextAngle
-                logger.warning("TRYING TO STAY CENTER: NEED TO GO " + ("right" if self.angle > 0 else "left"))
+                logger.debug("TRYING TO STAY CENTER: NEED TO GO " + ("right" if self.angle > 0 else "left"))
 
         # STOP status 8
         elif self.status == STOP:
@@ -281,7 +285,7 @@ class Parking:
 
         # invalid status
         else:
-            logger.warning("Invalid parcking status")
+            logger.debug("Invalid parcking status")
 
     def resetParkingPosition(self):
         self.leftIsEmpty = False

@@ -1,6 +1,7 @@
 from Constants import LEFT, RIGHT
 from Utils import logger
 
+# Collision Avoidance status
 DISABLED = 1
 ENABLED = 2
 
@@ -10,6 +11,7 @@ class CollissionAvoidance:
     def __init__(self, distanceSensors):
         self.distanceSensors = distanceSensors
 
+        # initialize sensors values
         self.fl = 0
         self.fc = 0
         self.fr = 0
@@ -20,7 +22,8 @@ class CollissionAvoidance:
         self.bl = 0
         self.bc = 0
         self.br = 0
-
+        
+        # initialize steering angle and speed
         self.steeringAngle = 0.0
         self.speed = 0.0
 
@@ -59,28 +62,29 @@ class CollissionAvoidance:
         frontSideThreshold = 620
         sideThreshold = 800
 
+        # logging distance sensors
         logger.debug("SL: " + str(self.sl) + " SR: " + str(self.sr))
         logger.debug("FL: " + str(self.fl) + " FR: " + str(self.fr) + " FC: " + str(self.fc))
         logger.debug("BL: " + str(self.bl) + " BR: " + str(self.br) + " BC: " + str(self.bc))
 
+        # if collission imminent lowering the tolerance
         if self.fc > frontThreshold:
             tolerance = 0
         else:
             tolerance = 10
 
+        # if front obstacle reduce speed
         if self.fc > 750:
             self.speed = 0.2
         else:
             self.speed = 0.5
 
+        # if no way to escape, obstacle is detected
         if self.fl > 850 and self.fr > 850 or self.fc > 850:
-            # self.speed = 0.0
-            logger.debug("Street is closed")
+            logger.debug("Obstacle Detected!")
             self.obstacleDetected = True
         else:
             self.obstacleDetected = False
-
-        logger.debug("Collision Detection: " + str(self.collisionDetected))
 
         # check if front left obstacle, turn right
         if self.fl > self.fr + tolerance and (self.fl > frontSideThreshold or self.fc > frontThreshold):
@@ -113,12 +117,14 @@ class CollissionAvoidance:
             self.steeringAngle = self.steeringAngle / 1.5
             self.collisionDetected = False
 
+        # maxing out the steerign angle
         if self.steeringAngle > 1:
             self.steeringAngle = 1
         
         if self.steeringAngle < -1:
             self.steeringAngle = -1
 
+        # reduce speed if collision detected
         if self.collisionDetected:
             self.speed = 0.3
 

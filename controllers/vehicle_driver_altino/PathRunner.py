@@ -22,6 +22,8 @@ class PathRunner:
         self.distanceSensors = distanceSensors
 
         self.status = DISABLED
+        self.prevStatus = UNKNOWN
+
         self.uTurnStatus = UNKNOWN
         self.uTurnGoalOrientation = UNKNOWN
         self.uTurnStartingMeter = UNKNOWN
@@ -47,6 +49,16 @@ class PathRunner:
 
     def setCollisionImminent(self, value):
         self.collisionImminent = value
+
+    def setPrevStatus(self):
+        tempStatus = self.prevStatus
+        self.prevStatus = self.status
+        self.status = tempStatus
+
+    def setStatus(self, status):
+        if self.status != status:
+            self.prevStatus = self.status
+            self.status = status
 
     # update path running service
     def update(self):
@@ -90,13 +102,13 @@ class PathRunner:
         isLineLost = self.lineFollower.isLineLost()
         currentPath = self.currentPath
 
-        logger.debug("Current Status: " + str(self.status))
+        logger.debug("Current Status: " + str(self.status) + " prev Status: " + str(self.prevStatus))
 
         lineFollowerAngle = self.lineFollower.getNewSteeringAngle()
 
         if currentPath != UNKNOWN and self.actualTurn == 0:
             if self.currentPath[self.actualTurn] == U_TURN:
-                self.status = U_TURN
+                self.setStatus(U_TURN)
             self.actualTurn += 1
         
         elif self.status == FOLLOW_LINE :
@@ -110,10 +122,10 @@ class PathRunner:
             if isLineLost and currentPath == UNKNOWN:
                 self.speed = 0.0
             elif isLineLost and currentPath != UNKNOWN and Map.findNearestIntersection(self.positioning.getPosition(), 1) != -1:
-                logger.log("go to TURN")
-                self.status = TURN
+                if self.status != SEARCH_LINE or self.prevStatus != SEARCH_LINE:
+                    self.setStatus(TURN)
             elif isLineLost and Map.findNearestIntersection(self.positioning.getPosition()) == -1:
-                self.status = SEARCH_LINE
+                self.setStatus(SEARCH_LINE)
             
         elif self.status == TURN:
             if  currentPath != UNKNOWN and self.actualTurn < len(currentPath):
@@ -126,14 +138,23 @@ class PathRunner:
             
             if not isLineLost:
                 self.actualTurn += 1
-                self.status = FOLLOW_LINE
+                self.setStatus(FOLLOW_LINE)
 
         elif self.status == SEARCH_LINE:
             self.steeringAngle = self.lineFollower.getSteeringAngleLineSearching()
 
             if not isLineLost:
                 logger.debug("Line was lost and i found it!")
-                self.status = FOLLOW_LINE
+                self.setStatus(FOLLOW_LINE)
+
+            threshold = 500
+            angle = 0.5
+            logger.debug("FRONT LEFT: ")
+            if self.distanceSensors.frontLeft.getValue() > threshold:
+                self.lineFollower.resetLastLineKnownZone(angle)
+            elif self.distanceSensors.frontRight.getValue() > threshold:
+                self.lineFollower.resetLastLineKnownZone(- angle)
+
 
         elif self.status == GO_FORWARD:
             pass
@@ -201,7 +222,7 @@ class PathRunner:
                 self.uTurnGoalOrientation = UNKNOWN
                 self.uTurnStartingMeter = UNKNOWN
                 self.lineFollower.resetLastLineKnownZone(self.steeringAngle)
-                self.status = SEARCH_LINE  
+                self.setStatus(SEARCH_LINE)  
 
 
             
@@ -245,7 +266,7 @@ class PathRunner:
 
     # go forward for x meters (NOT WORKING)
     def proceedForward(self, meters):
-        self.status = GO_FORWARD
+        self.setStatus(GO_FORWARD)
         startingAngle = self.getSteeringAngle()
         start = self.positioning.getActualDistance()
         stop  = start + meters 

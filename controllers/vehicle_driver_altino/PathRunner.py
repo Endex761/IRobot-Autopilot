@@ -6,8 +6,7 @@ DISABLED = 0
 FOLLOW_LINE = 1
 TURN = 2
 SEARCH_LINE = 3
-COLLISION_AVOIDANCE = 4
-GO_FORWARD = 5
+STOP = 4
 U_TURN = 99
 
 # class to handle path running service
@@ -117,8 +116,7 @@ class PathRunner:
 
             self.steeringAngle = lineFollowerAngle
             if self.isGoalReach():
-                self.speed = 0.0
-                logger.info("Destination Reached")
+                self.setStatus(STOP)
 
             if isLineLost and currentPath == UNKNOWN:
                 self.speed = 0.0
@@ -156,24 +154,20 @@ class PathRunner:
             elif self.distanceSensors.frontRight.getValue() > threshold:
                 self.lineFollower.resetLastLineKnownZone(- angle)
 
-
-        elif self.status == GO_FORWARD:
-            pass
-
         elif self.status == U_TURN:    
-            logger.debug("Orientamento attuale: " + str(self.positioning.getOrientation()) + " orientamento goal: " + str(self.uTurnGoalOrientation))        
+            logger.debug("Actual orientation: " + str(self.positioning.getOrientation()) + " goal orientation: " + str(self.uTurnGoalOrientation))        
             self.sensors = self.distanceSensors
             logger.debug("U_TURN: Status: " + str(self.uTurnStatus))
 
             if self.uTurnStatus == UNKNOWN:
-                #controlli se posso fare l'inversione
+                # check if we can do U turn
                 self.uTurnStatus = 1
                 self.steeringAngle = 1
                 self.uTurnGoalOrientation = Orientation((self.positioning.inaccurateOrientation + 2) % 4) 
 
             if self.uTurnStatus == 1:
                 if self.sensors.frontDistance(950) or self.positioning.getOrientation() == ((self.uTurnGoalOrientation + 1) % 4) or self.positioning.getOrientation() == ((self.uTurnGoalOrientation - 1) % 4):
-                    logger.debug("U_TURN: Primo passo completato, vado indietro (Status 1)")
+                    logger.debug("U_TURN: First step complete, going back (Status 1)")
                     self.speed = -0.2
                     self.steeringAngle = -1 * self.steeringAngle
                     self.uTurnStatus = 3
@@ -184,7 +178,7 @@ class PathRunner:
 
             elif self.uTurnStatus == 2:
                 if self.sensors.frontDistance(950):
-                    logger.debug("U_TURN: Primo passo completato, vado indietro (status 2)")
+                    logger.debug("U_TURN: First step complete, going back (status 2)")
                     self.speed = -0.2
                     self.steeringAngle = -1 * self.steeringAngle
                     self.uTurnStatus += 1
@@ -195,7 +189,7 @@ class PathRunner:
 
             elif self.uTurnStatus == 3:
                 if self.sensors.backDistance(950):
-                    logger.debug("U_TURN: Trovato ostacolo dietro, vado avanti")
+                    logger.debug("U_TURN: Obstacle founded behind, going forward")
                     self.speed= 0.2
                     self.steeringAngle = -1 * self.steeringAngle
                     self.uTurnStatus -= 1
@@ -204,8 +198,8 @@ class PathRunner:
                     self.uTurnStatus += 1
 
             else:
-                logger.debug("U_TURN: Manovra completata")
-                logger.debug("U_TURN: Spazio percorso: " + str(self.positioning.getActualDistance() - self.uTurnStartingMeter))
+                logger.debug("U_TURN: Maneuver complete")
+                logger.debug("U_TURN: Distance: " + str(self.positioning.getActualDistance() - self.uTurnStartingMeter))
                 distanzaPercorsa = self.positioning.getActualDistance() - self.uTurnStartingMeter
                 if distanzaPercorsa >= 0:
                     self.steeringAngle = -0.5 * self.steeringAngle
@@ -217,13 +211,18 @@ class PathRunner:
                 # if Map.getValue(self.positioning.getPosition()) == Map.C:
                 self.steeringAngle *= - 5
 
-                logger.debug("U_TURN: Spazio percorso: " + str(distanzaPercorsa) + ", Angolo di sterzata: " + str(self.steeringAngle))
+                logger.debug("U_TURN: Distance: " + str(distanzaPercorsa) + ", sterring angle: " + str(self.steeringAngle))
                 self.speed= 0.5    
                 self.uTurnStatus = UNKNOWN
                 self.uTurnGoalOrientation = UNKNOWN
                 self.uTurnStartingMeter = UNKNOWN
                 self.lineFollower.resetLastLineKnownZone(self.steeringAngle)
                 self.setStatus(SEARCH_LINE)  
+        
+        elif self.status == STOP :
+            self.speed = 0.0
+            logger.info("Destination Reached")
+
 
 
             

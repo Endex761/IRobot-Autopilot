@@ -20,7 +20,8 @@ def findPath(map, start, goal):
 
 
 def heuristic(a, b):
-    return np.sqrt((b[0] - a[0]) ** 2 + (b[1] - a[1]) ** 2)
+    return np.sqrt((b[0] - a[0]) ** 2 + (b[1] - a[1]) ** 2) # gaussian
+    #return (b[0] - a[0]) + (b[1] - a[1]) # manahattan
 
 def astar(map, start, goal):
     array = np.array(map)

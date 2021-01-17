@@ -1,6 +1,6 @@
 # constant definition
 # is debug enabled
-DEBUG = True
+DEBUG = False
 
 # starting position
 SPX = 8

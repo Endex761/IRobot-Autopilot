@@ -6,6 +6,8 @@ PATH_FOLLOWING = 1
 PARKING = 2
 COLLISION_AVOIDANCE = 3
 MANUAL = 4
+STOP = 5
+
 
 # class to handle car motion service
 class Motion: #TODO global planner
@@ -55,8 +57,7 @@ class Motion: #TODO global planner
             self.updateParking()
 
             if isParked:
-                self.setSpeed(0)
-                self.setAngle(0)
+                self.setStatus(STOP)
 
             # During parking find a object that can be avoid
             if collisionImminent and isSearchingPark:
@@ -76,14 +77,21 @@ class Motion: #TODO global planner
                 collisionImminent = False            
                 self.collisionAvoidance.resetObstacleDetection()
                 self.setStatus(PATH_FOLLOWING)
+                
+        elif self.status == STOP:
+            logger.debug("MOTION: Stop")
+            self.setSpeed(0)
+            self.setAngle(0)
+            self.parking.disable()
 
         elif self.status == MANUAL:
             logger.debug("MOTION: Manual")
             self.manualDrive.enable()
-            self.updateManualDrive()
-        
+            self.updateManualDrive()        
+            
         else:
             logger.warning("MOTION STATUS: " + str(self.status))
+            self.setStatus(STOP)
 
     def setPrevStatus(self):
         tempStatus = self.prevStatus

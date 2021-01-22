@@ -156,7 +156,7 @@ class Parking:
         # this ensure that the parking manoeuvre starts after going forward and not as soon as the parking lot is detected
         elif self.status == FORWARD:
             # distance to travel before starting the maneuver
-            distance = 0.12
+            distance = 0.13
             
             # check if distance traveled is greater than distance to travel
             if self.sideOfParkingLot == LEFT:

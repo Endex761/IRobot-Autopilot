@@ -1,10 +1,9 @@
 # constant definition
 # is debug enabled
 DEBUG = False
-
 # starting position
-SPX = 8
-SPY = 9
+SPX = 14
+SPY = 6
 
 # goal position
 GPX = 1

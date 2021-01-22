@@ -115,7 +115,7 @@ class Positioning:
             x = self.position.x
             y = self.position.y
 
-            # 72 = 0.50 m/s * MAX_SPEED [1.8] / 40 step/s / 0.5 m
+            # 72 = 0.50 m/s * speed/MAX_SPEED [1.8] / 40 step/s / 0.5 m
             # linearMove = ((0.50 * (speed/MAX_SPEED)) / 40) * 2
             linearMove = speed/72
 
